@@ -1,0 +1,9 @@
+{
+  "terminal.integrated.fontFamily": "SF Mono, Monaco, Menlo, 'Courier New', monospace",
+  "terminal.integrated.fontSize": 15,
+  "files.autoSave": "afterDelay",
+  "editor.fontSize": 14,
+  "editor.tabSize": 2,
+  "cmake.ignoreCMakeListsMissing": true,
+  "C_Cpp.errorSquiggles": "disabled"
+}
