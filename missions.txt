@@ -1,9 +1,4 @@
-GENERAL -> open source app that lets us add updated street photos, we can furthur add shops, businesses and more.
-the api will cost.
-how it works? type street name, picture, can add relation or not, thats it! its up on the internet and people can
-watch it live and see recent photos of streets.
-the best thing? it will be available in navigation applications that can intergrate the api in their app.
-          
+
 1. Configure server.
 2. Configure Postgresdb.
 3. Configure CMake for project, including testing.
