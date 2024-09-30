@@ -1,7 +1,6 @@
-
 1. Configure server.
 2. Configure Postgresdb.
 3. Configure CMake for project, including testing.
 4. Create Street Model.
 5. Manage a base Template to add the photos.
-6. 
+6. Create Cmake Lists.
