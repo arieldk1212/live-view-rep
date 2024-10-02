@@ -1,3 +1,6 @@
 [submodule "drogon"]
 	path = lib/drogon
 	url = https://github.com/drogonframework/drogon.git
+[submodule "Crow"]
+	path = lib/Crow
+	url = https://github.com/CrowCpp/Crow.git
