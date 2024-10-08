@@ -14,7 +14,7 @@
 #include <random>
 #include <algorithm>
 
-#include "crow/settings.h"
+#include "settings.h"
 
 #if defined(CROW_CAN_USE_CPP17) && !defined(CROW_FILESYSTEM_IS_EXPERIMENTAL)
 #include <filesystem>
