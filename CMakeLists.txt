@@ -8,8 +8,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include_directories(inc)
 
-
-# TARGET_LINK_LIBRARIES( asio)
 find_package(asio REQUIRED)
 include_directories(${asio_DIR})
 target_link_libraries(src PRIVATE asio)
