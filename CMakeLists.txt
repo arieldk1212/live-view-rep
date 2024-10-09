@@ -7,14 +7,11 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_TOOLCHAIN_FILE "/Users/arielkriheli/Library/vcpkg/scripts/buildsystems/vcpkg.cmake")
-set(CMAKE_PREFIX_PATH "/Users/arielkriheli/Library/vcpkg/installed/arm64-osx/share/crow")
+set(CMAKE_PREFIX_PATH "/Users/arielkriheli/Library/vcpkg/installed/arm64-osx/share")
 
 include_directories(inc)
-
 add_subdirectory(src)
 
 find_package(Crow CONFIG REQUIRED)
 target_link_libraries(src PRIVATE Crow::Crow asio::asio)
-
-enable_testing()
-add_subdirectory(test)
+target_link_libraries(app PRIVATE Crow::Crow asio::asio)

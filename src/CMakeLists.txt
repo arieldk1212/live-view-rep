@@ -1,5 +1,7 @@
 set(SOURCES
-server.cpp
+app.cpp
 )
 
 add_library(src ${SOURCES})
+
+add_executable(app ${SOURCES})

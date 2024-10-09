@@ -3,5 +3,3 @@
 3. Configure CMake for project, including testing.
 4. Create Street Model.
 5. Manage a base Template to add the photos.
-6. Create Cmake Lists.
-7. configure vcpkg/cmake(thru submodules).
