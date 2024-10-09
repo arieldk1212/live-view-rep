@@ -6,8 +6,8 @@
   "editor.tabSize": 2,
   "cmake.ignoreCMakeListsMissing": true,
   "C_Cpp.errorSquiggles": "disabled",
-  // "C_Cpp.default.includePath": [
-    // "/Users/arielkriheli/Library/vcpkg/installed/arm64-osx/include",
-    // "${workspaceFolder}/**"
-    // ]
+  "C_Cpp.default.includePath": [
+    "/Users/arielkriheli/Library/vcpkg/installed/arm64-osx/include",
+    "${workspaceFolder}/**"
+  ]
 }
