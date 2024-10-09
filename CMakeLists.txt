@@ -6,14 +6,15 @@ project(liveView LANGUAGES CXX
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CMAKE_TOOLCHAIN_FILE "/Users/arielkriheli/Library/vcpkg/scripts/buildsystems/vcpkg.cmake")
+set(CMAKE_PREFIX_PATH "/Users/arielkriheli/Library/vcpkg/installed/arm64-osx/share/crow")
+
 include_directories(inc)
 
-find_package(asio REQUIRED)
-include_directories(${asio_DIR})
-target_link_libraries(src PRIVATE asio)
-
 add_subdirectory(src)
-add_subdirectory(lib/Crow)
+
+find_package(Crow CONFIG REQUIRED)
+target_link_libraries(src PRIVATE Crow::Crow asio::asio)
 
 enable_testing()
 add_subdirectory(test)
