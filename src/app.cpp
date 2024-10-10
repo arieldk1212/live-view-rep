@@ -1,4 +1,4 @@
-#include "../inc/live_view.h"
+#include "../inc/app.h"
 
 int main () {
   crow::SimpleApp app;

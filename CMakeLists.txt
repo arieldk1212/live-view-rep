@@ -13,5 +13,6 @@ include_directories(inc)
 add_subdirectory(src)
 
 find_package(Crow CONFIG REQUIRED)
-target_link_libraries(src PRIVATE Crow::Crow asio::asio)
-target_link_libraries(app PRIVATE Crow::Crow asio::asio)
+find_package(SOCI CONFIG REQUIRED)
+target_link_libraries(src PRIVATE Crow::Crow asio::asio $<IF:$<TARGET_EXISTS:SOCI::soci_core>,SOCI::soci_core,SOCI::soci_core_static>)
+target_link_libraries(app PRIVATE Crow::Crow asio::asio $<IF:$<TARGET_EXISTS:SOCI::soci_core>,SOCI::soci_core,SOCI::soci_core_static>)
