@@ -1,6 +1,8 @@
 {
   "dependencies": [
     "crow",
-    "libpqxx"
+    "soci",
+    "libpqxx",
+    "openssl"
   ]
 }

@@ -1,0 +1,15 @@
+services:
+
+  backend:
+    build: .
+    platform: linux/amd64
+    ports:
+      - 8080:8080
+    networks:
+      - live-view-network
+    command: bash -c "./src/app"
+  
+networks:
+  live-view-network:
+    driver: bridge
+    
