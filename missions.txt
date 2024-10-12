@@ -5,3 +5,4 @@
 6. add opencv, json.
 7. prob would need to configure grpc.
 8. docker, nginx, postgres image, env file, clang-tidy, ci.
+9. configure dot env for variables.

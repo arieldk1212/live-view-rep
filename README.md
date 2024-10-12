@@ -5,7 +5,7 @@ shhhhhhhhhhh
 ### MacOS
 * docker build --platform linux/amd64 -t live-view .
 * docker run --platform linux/amd64 -p 8080:8080 live-view:latest
-* but we will use the docker-compose.yml -> docker compose up --build or without --build
+* but we will use the docker-compose.yml -> docker compose up --build or without build --parallel
 
 ## Building via CMake
 * download the vcpkg ports in the vcpkg.json
@@ -13,3 +13,4 @@ shhhhhhhhhhh
 * mkdir build in the base project dir
 * cd build && cmake .. && make
 * ./src/app
+* configure postgres service and pg-admin locally - using the same variables.

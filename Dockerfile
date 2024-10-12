@@ -11,6 +11,9 @@ RUN  apt install -y wget; \
   rm -rf cmake.sh;
 
 EXPOSE 8080
+EXPOSE 5432
+EXPOSE 8000
+EXPOSE 6060
 
 WORKDIR /live-view
 
@@ -19,7 +22,7 @@ COPY ./inc/ ./inc/
 COPY main.cpp .
 COPY ./docker/CMakeLists.txt .
 
-RUN rm -rf build/*
+# RUN rm -rf build/*
 WORKDIR /live-view/build
 
 RUN cmake ..
