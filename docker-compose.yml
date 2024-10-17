@@ -2,6 +2,8 @@ services:
 
   backend:
     build: .
+    env_file:
+      - .env
     platform: linux/amd64
     ports:
       - 8080:8080

@@ -2,18 +2,31 @@ FROM gcc:latest
 
 RUN apt update -y; \
     apt upgrade -y; \
-    apt install -y build-essential libboost-all-dev python3; \
-    apt clean -y
+    apt install -y \
+    build-essential \
+    gcc \
+    python3 \
+    zip \
+    curl \
+    unzip \
+    tar \
+    g++ \
+    git \
+    perl \
+    bash \
+    && apt clean -y
+
 ARG CMAKE_VERSION=3.24.2
 RUN  apt install -y wget; \
   wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh -O cmake.sh; \
   sh cmake.sh --prefix=/usr/local/ --exclude-subdir; \
   rm -rf cmake.sh;
 
-EXPOSE 8080
-EXPOSE 5432
-EXPOSE 8000
-EXPOSE 6060
+WORKDIR /usr/local
+RUN git clone https://github.com/microsoft/vcpkg.git
+RUN vcpkg/bootstrap-vcpkg.sh
+
+EXPOSE 8080 5432 8000 6060
 
 WORKDIR /live-view
 
@@ -21,9 +34,14 @@ COPY ./src/ ./src/
 COPY ./inc/ ./inc/
 COPY main.cpp .
 COPY ./docker/CMakeLists.txt .
+COPY ./docker/vcpkg.json .
 
-# RUN rm -rf build/*
+ENV PATH="/usr/local/vcpkg:${PATH}"
+
+RUN export MAKEFLAGS="-j1"
+RUN vcpkg install --triplet x64-linux
+
 WORKDIR /live-view/build
 
-RUN cmake ..
+RUN cmake .. -DCMAKE_TOOLCHAIN_FILE=/usr/local/vcpkg/scripts/buildsystems/vcpkg.cmake
 RUN make
