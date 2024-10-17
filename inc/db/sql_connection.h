@@ -5,7 +5,6 @@
 #include <memory>
 #include <cstdlib>
 #include <pqxx/pqxx>
-#include <libenvpp/env.hpp>
 #include <iostream>
 
 typedef std::map<std::string, std::string> ConnInfo;
@@ -16,7 +15,7 @@ public:
   SqlConnection();
 
 private:
-  // ConnPtr m_sql_connection;
+  ConnPtr m_sql_connection;
   ConnInfo m_connection_info;
   std::string m_connection_string;
 };

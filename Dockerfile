@@ -35,11 +35,11 @@ COPY ./inc/ ./inc/
 COPY main.cpp .
 COPY ./docker/CMakeLists.txt .
 COPY ./docker/vcpkg.json .
+RUN cat vcpkg.json
 
 ENV PATH="/usr/local/vcpkg:${PATH}"
 
-RUN export MAKEFLAGS="-j1"
-RUN vcpkg install --triplet x64-linux
+RUN vcpkg install
 
 WORKDIR /live-view/build
 

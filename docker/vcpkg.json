@@ -1,8 +1,9 @@
 {
   "dependencies": [
+    "openssl",
     "asio",
     "crow",
-    "libpq",
-    "libpqxx"
+    "libpqxx",
+    "libpq"
   ]
 }

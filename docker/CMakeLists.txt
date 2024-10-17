@@ -17,6 +17,5 @@ find_package(asio CONFIG REQUIRED)
 find_package(Crow CONFIG REQUIRED)
 find_package(libpqxx CONFIG REQUIRED)
 
-
 target_link_libraries(src PRIVATE Crow::Crow asio::asio libpqxx::pqxx PostgreSQL::PostgreSQL)
 target_link_libraries(app PRIVATE Crow::Crow asio::asio libpqxx::pqxx PostgreSQL::PostgreSQL)

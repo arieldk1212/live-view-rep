@@ -1,12 +1,6 @@
 #include "../../inc/db/sql_connection.h"
-#include <libenvpp/env.hpp>
 
 SqlConnection::SqlConnection() {
-
-  auto ENV = env::prefix("CONF");
-  const auto log_path_id = ENV.register_variable<std::filesystem::path>("LOG_FILE_PATH");
-
-
 
   m_connection_info.insert({"HOST", std::string{std::getenv("POSTGRES_HOST")}});
   m_connection_info.insert({"PORT", std::string{std::getenv("POSTGRES_PORT")}});
@@ -25,5 +19,5 @@ SqlConnection::SqlConnection() {
   std::cout << connection_string;
   m_connection_string = std::move(connection_string);
 
-  // m_sql_connection = std::make_unique<pqxx::connection>(m_connection_string);
+  m_sql_connection = std::make_unique<pqxx::connection>(m_connection_string);
 }
