@@ -15,12 +15,14 @@ endif()
 include_directories(inc)
 add_subdirectory(src)
 
+find_package(OpenSSL REQUIRED)
+find_package(PostgreSQL REQUIRED)
 find_package(asio CONFIG REQUIRED)
 find_package(Crow CONFIG REQUIRED)
 find_package(libpqxx CONFIG REQUIRED)
-find_package(OpenSSL REQUIRED)
+find_package(libenvpp CONFIG REQUIRED)
 
 include_directories(${OPENSSL_INCLUDE_DIR})
 
-target_link_libraries(src PRIVATE Crow::Crow asio::asio libpqxx::pqxx OpenSSL::SSL OpenSSL::Crypto)
-target_link_libraries(app PRIVATE Crow::Crow asio::asio libpqxx::pqxx OpenSSL::SSL OpenSSL::Crypto)
+target_link_libraries(src PRIVATE Crow::Crow asio::asio libpqxx::pqxx PostgreSQL::PostgreSQL OpenSSL::SSL OpenSSL::Crypto libenvpp::libenvpp)
+target_link_libraries(app PRIVATE Crow::Crow asio::asio libpqxx::pqxx PostgreSQL::PostgreSQL OpenSSL::SSL OpenSSL::Crypto libenvpp::libenvpp)

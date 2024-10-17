@@ -6,4 +6,4 @@
 7. prob would need to configure grpc.
 8. docker, nginx, postgres image, env file, clang-tidy, ci.
 9. configure dot env for variables.
-10. consider replacing CPM with submodules directly for docker..
+10. consider replacing CPM with submodules directly for docker.. -> TO VCPKG!!! (Use idx for example implementation)

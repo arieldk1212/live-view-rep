@@ -1,5 +1,6 @@
 set(SOURCES
 app.cpp
+db/sql_connection.cpp
 )
 
 add_library(src ${SOURCES})

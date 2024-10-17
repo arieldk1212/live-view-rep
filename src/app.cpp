@@ -1,7 +1,9 @@
 #include "../inc/app.h"
 
 int main () {
+
   crow::SimpleApp app;
+  SqlConnection m_sql;
 
   CROW_ROUTE(app, "/")
     ([]() {

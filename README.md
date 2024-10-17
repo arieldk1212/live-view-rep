@@ -12,5 +12,6 @@ shhhhhhhhhhh
 * clone the repo
 * mkdir build in the base project dir
 * cd build && cmake .. && make
+* start the postgres server (if Mac->brew services start postgresql@15)
 * ./src/app
-* configure postgres service and pg-admin locally - using the same variables.
+* configure postgres service and pg-admin locally - using the same variables -> in .env, see .env.example
