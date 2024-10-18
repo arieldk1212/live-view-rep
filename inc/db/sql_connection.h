@@ -1,11 +1,8 @@
 #ifndef SQL_CONNECTION_H
 #define SQL_CONNECTION_H
 
-#include <algorithm>
 #include <memory>
-#include <cstdlib>
 #include <pqxx/pqxx>
-#include <iostream>
 
 typedef std::map<std::string, std::string> ConnInfo;
 typedef std::unique_ptr<pqxx::connection> ConnPtr;

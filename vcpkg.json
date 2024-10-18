@@ -4,6 +4,7 @@
     "crow",
     "libpq",
     "libpqxx",
-    "openssl"
+    "openssl",
+    "spdlog"
   ]
 }

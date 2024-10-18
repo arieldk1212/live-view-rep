@@ -5,7 +5,7 @@ project(liveView LANGUAGES CXX
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20 -g") # g for lldb help
 
 if (APPLE)
   set(CMAKE_TOOLCHAIN_FILE "/Users/$ENV{USER}/Library/vcpkg/scripts/buildsystems/vcpkg.cmake")
@@ -19,9 +19,10 @@ find_package(OpenSSL REQUIRED)
 find_package(PostgreSQL REQUIRED)
 find_package(asio CONFIG REQUIRED)
 find_package(Crow CONFIG REQUIRED)
+find_package(spdlog CONFIG REQUIRED)
 find_package(libpqxx CONFIG REQUIRED)
 
 include_directories(${OPENSSL_INCLUDE_DIR})
 
-target_link_libraries(src PRIVATE Crow::Crow asio::asio libpqxx::pqxx PostgreSQL::PostgreSQL OpenSSL::SSL OpenSSL::Crypto)
-target_link_libraries(app PRIVATE Crow::Crow asio::asio libpqxx::pqxx PostgreSQL::PostgreSQL OpenSSL::SSL OpenSSL::Crypto)
+target_link_libraries(src PRIVATE Crow::Crow asio::asio libpqxx::pqxx PostgreSQL::PostgreSQL OpenSSL::SSL OpenSSL::Crypto spdlog::spdlog)
+target_link_libraries(app PRIVATE Crow::Crow asio::asio libpqxx::pqxx PostgreSQL::PostgreSQL OpenSSL::SSL OpenSSL::Crypto spdlog::spdlog)

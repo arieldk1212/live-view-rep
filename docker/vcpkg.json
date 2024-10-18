@@ -4,6 +4,7 @@
     "asio",
     "crow",
     "libpqxx",
-    "libpq"
+    "libpq",
+    "spdlog"
   ]
 }
