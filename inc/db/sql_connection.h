@@ -4,16 +4,16 @@
 #include <memory>
 #include <pqxx/pqxx>
 
-typedef std::map<std::string, std::string> ConnInfo;
-typedef std::unique_ptr<pqxx::connection> ConnPtr;
+typedef std::map<std::string, std::string> t_conn_info;
+typedef std::unique_ptr<pqxx::connection> t_conn_ptr;
 
 class SqlConnection {
 public:
   SqlConnection();
 
 private:
-  ConnPtr m_sql_connection;
-  ConnInfo m_connection_info;
+  t_conn_ptr m_sql_connection;
+  t_conn_info m_connection_info;
   std::string m_connection_string;
 };
 

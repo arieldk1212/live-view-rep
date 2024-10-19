@@ -6,4 +6,4 @@
 9. configure dot env for variables - thru docker mention .env -> cmake -> program.
 
 
-1. Configure base structure -> connections, loggers.
+1. Configure base structure -> connections, loggers -> after basic class structures.

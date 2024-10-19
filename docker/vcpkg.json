@@ -1,10 +1,9 @@
 {
   "dependencies": [
-    "openssl",
-    "asio",
-    "crow",
-    "libpqxx",
     "libpq",
+    "libpqxx",
+    "openssl",
+    "cpp-httplib",
     "spdlog"
   ]
 }

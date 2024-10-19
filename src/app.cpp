@@ -2,17 +2,13 @@
 
 int main () {
 
-  crow::SimpleApp app;
   SqlConnection m_sql;
+  httplib::Server svr;
   
-
-
-  CROW_ROUTE(app, "/")
-    ([]() {
-        return "Hello world!";
-    });
-    app.bindaddr("127.0.0.1");
-    app.port(8080).run();
+  svr.Get("/life-check", [](const httplib::Request&, httplib::Response& res) {
+    res.set_content("hello", "text/plain");
+  });
+  svr.listen("0.0.0.0", 8080);
 
   return 0;
 }

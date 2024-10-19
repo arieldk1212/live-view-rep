@@ -16,13 +16,12 @@ include_directories(inc)
 add_subdirectory(src)
 
 find_package(OpenSSL REQUIRED)
-find_package(PostgreSQL REQUIRED)
-find_package(asio CONFIG REQUIRED)
-find_package(Crow CONFIG REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
+find_package(httplib CONFIG REQUIRED)
+find_package(PostgreSQL REQUIRED)
 find_package(libpqxx CONFIG REQUIRED)
 
 include_directories(${OPENSSL_INCLUDE_DIR})
 
-target_link_libraries(src PRIVATE Crow::Crow asio::asio libpqxx::pqxx PostgreSQL::PostgreSQL OpenSSL::SSL OpenSSL::Crypto spdlog::spdlog)
-target_link_libraries(app PRIVATE Crow::Crow asio::asio libpqxx::pqxx PostgreSQL::PostgreSQL OpenSSL::SSL OpenSSL::Crypto spdlog::spdlog)
+target_link_libraries(src PRIVATE httplib::httplib libpqxx::pqxx PostgreSQL::PostgreSQL OpenSSL::SSL OpenSSL::Crypto spdlog::spdlog)
+target_link_libraries(app PRIVATE httplib::httplib libpqxx::pqxx PostgreSQL::PostgreSQL OpenSSL::SSL OpenSSL::Crypto spdlog::spdlog)
