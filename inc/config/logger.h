@@ -4,26 +4,24 @@
 #include <vector>
 #include <fstream>
 #include <filesystem>
+#include <mutex>
+#include <thread>
 #include "spdlog/spdlog.h"
 
 static std::vector<std::string> s_log_levels { "debug", "info", "warning", "error", "critical" };
 
+// single ton logger implementation
 class Logger {
-public:    
+public:
+  Logger(Logger&& ) = delete;
+  Logger(const Logger& ) = delete;
 
-	Logger() = delete;
-	Logger(const std::string& logger_name, std::string logger_path);
-	~Logger() = default;
-	
-	Logger(const Logger&) = delete;
-	Logger& operator=(const Logger&) = delete;
-
-	void debug(std::string msg);
-
+  Logger& operator=(Logger&& ) = delete;
+  Logger& operator=(const Logger& ) = delete;
+  
+  static Logger& instance;
 private:
-	std::string m_logger_name;
-	std::filesystem::path m_logger_path;
-	std::vector<std::string> m_logger_files; // INFO: will store the files path.
+  
 };
 
 #endif
