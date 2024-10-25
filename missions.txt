@@ -5,5 +5,4 @@
 8. docker, nginx, postgres image, env file, clang-tidy, ci.
 9. configure dot env for variables - thru docker mention .env -> cmake -> program.
 
-
 1. Configure base structure -> connections, loggers -> after basic class structures.

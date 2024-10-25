@@ -1,15 +1,11 @@
-#include "../../inc/config/logger.h"
+#include "../inc/config/logger.h"
 
-Logger::Logger(const std::string& logger_name, std::string logger_path) {
-  m_logger_name = logger_name;
-  m_logger_name = logger_path;
+#include "spdlog/sinks/stdout_color_sinks.h"
+#include "spdlog/sinks/basic_file_sink.h"
 
-  for (int i = 0; i < s_log_levels.size(); i++) {
-    std::ofstream file(logger_path + s_log_levels[i] + ".log");
 
-  }
-}
+spdlog::logger Logger::s_application_logger;
 
-void Logger::debug(std::string msg) {
-
+void Logger::init() {
+  spdlog::sink_ptr log_sink = std::make_shared<spdlog::sinks::stdout_color_sinks>();
 }

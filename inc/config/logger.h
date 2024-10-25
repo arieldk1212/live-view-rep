@@ -3,14 +3,12 @@
 
 #include <vector>
 #include <fstream>
+#include <memory>
 #include <filesystem>
 #include <mutex>
 #include <thread>
 #include "spdlog/spdlog.h"
 
-static std::vector<std::string> s_log_levels { "debug", "info", "warning", "error", "critical" };
-
-// single ton logger implementation
 class Logger {
 public:
   Logger(Logger&& ) = delete;
@@ -19,10 +17,13 @@ public:
   Logger& operator=(Logger&& ) = delete;
   Logger& operator=(const Logger& ) = delete;
   
-  static Logger& instance;
+  static void init();
+
+  static spdlog::logger& get_application_logger() { return s_application_logger; }
 private:
-  
+  static spdlog::logger s_application_logger;
 };
+
 
 #endif
 
