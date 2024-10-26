@@ -11,12 +11,6 @@
 
 class Logger {
 public:
-  Logger(Logger&& ) = delete;
-  Logger(const Logger& ) = delete;
-
-  Logger& operator=(Logger&& ) = delete;
-  Logger& operator=(const Logger& ) = delete;
-  
   static void init();
 
   static spdlog::logger& get_application_logger() { return s_application_logger; }
@@ -24,8 +18,7 @@ private:
   static spdlog::logger s_application_logger;
 };
 
-
-#endif
+ #endif
 
 // Logger db_logger = new Logger("db-logger", ".logs/db/");
 // db_logger->info("msg"); // @return: cout?, need to write to debug file.
