@@ -1,14 +1,11 @@
 #ifndef LOGGER_H
 #define LOGGER_H
 
-#include <vector>
-#include <fstream>
 #include <memory>
-#include <filesystem>
 #include <mutex>
-#include <thread>
 #include "spdlog/spdlog.h"
 
+/*
 class Logger {
 public:
   static void init();
@@ -17,8 +14,18 @@ public:
 private:
   static spdlog::logger s_application_logger;
 };
+*/
+
+
+class Logger {
+public:
+  enum class Levels { DEBUG };
+
+private:
+  std::string m_LogPath;
+private:
+  static std::unique_ptr<Logger> s_Logger;
+  static std::mutex s_Mutex;
+};
 
  #endif
-
-// Logger db_logger = new Logger("db-logger", ".logs/db/");
-// db_logger->info("msg"); // @return: cout?, need to write to debug file.
