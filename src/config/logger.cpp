@@ -1,16 +1,16 @@
 #include "../inc/config/logger.h"
 
-#include "spdlog/sinks/stdout_color_sinks.h"
-#include "spdlog/sinks/basic_file_sink.h"
-
-
-void Logger::init() {
-  std::vector<spdlog::sink_ptr> log_sinks;
-  log_sinks.emplace_back(std::make_shared<spdlog::sinks::stdout_color_sinks>());
-  log_sinks.emplace_back(std::make_shared<spdlog::sinks::basic_file_sink>("Test.log", true));
-  
-  s_application_logger = std::make_shared<spdlog::logger>("APP", begin(log_sinks), end(log_sinks));
-  spdlog::register_logger(s_application_logger);
-
-
+Logger::Logger() {
+  s_Logger = spdlog::basic_logger_mt("app", "../../logs/app.log");
+  spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%l] %v");
+  s_Logger->set_level(spdlog::level::info);
 }
+
+Logger::~Logger() { spdlog::shutdown(); }
+
+Logger& Logger::GetInstance() {
+  static Logger instance;
+  return instance;
+}
+
+std::shared_ptr<spdlog::logger> Logger::GetLogger() { return s_Logger; }
