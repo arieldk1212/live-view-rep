@@ -4,6 +4,8 @@
 #include <memory>
 #include <pqxx/pqxx>
 
+#include "config/logger.h"
+
 typedef std::map<std::string, std::string> t_conn_info;
 typedef std::unique_ptr<pqxx::connection> t_conn_ptr;
 

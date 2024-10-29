@@ -9,5 +9,6 @@
   "C_Cpp.default.includePath": [
     "/Users/arielkriheli/Library/vcpkg/installed/arm64-osx/include",
     "${workspaceFolder}/**"
-  ]
+  ],
+  "editor.fontFamily": "Menlo, Monaco, 'Courier New', monospace"
 }

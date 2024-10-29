@@ -39,3 +39,4 @@ build
 .*.h.swp
 .*.cpp.swp
 .*.*.swp
+logs

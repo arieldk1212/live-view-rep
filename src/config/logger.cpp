@@ -1,16 +1,16 @@
 #include "../inc/config/logger.h"
 
-Logger::Logger() {
-  s_Logger = spdlog::basic_logger_mt("app", "../../logs/app.log");
-  spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%l] %v");
-  s_Logger->set_level(spdlog::level::info);
+
+void Logger::Init() {
+  spdlog::sink_ptr sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>("../logs/app.log", true);
+  sink->set_pattern("[%T] [%l] %n: %v");
+
+  s_Logger = std::make_shared<spdlog::logger>("APP", sink);
+  spdlog::register_logger(s_Logger);
+  s_Logger->set_level(spdlog::level::trace);
+  s_Logger->flush_on(spdlog::level::trace);
 }
 
-Logger::~Logger() { spdlog::shutdown(); }
+std::shared_ptr<spdlog::logger>& Logger::GetLogger() { return s_Logger; }
 
-Logger& Logger::GetInstance() {
-  static Logger instance;
-  return instance;
-}
-
-std::shared_ptr<spdlog::logger> Logger::GetLogger() { return s_Logger; }
+std::shared_ptr<spdlog::logger> Logger::s_Logger;

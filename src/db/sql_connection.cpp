@@ -1,4 +1,5 @@
 #include "../../inc/db/sql_connection.h"
+#include "config/logger.h"
 
 SqlConnection::SqlConnection() {
   m_connection_info.insert({"HOST", "localhost"});
@@ -14,4 +15,5 @@ SqlConnection::SqlConnection() {
   m_connection_string = std::move(connection_string);
 
   m_sql_connection = std::make_unique<pqxx::connection>(m_connection_string);
+  APP_INFO("DB SUCCESS");
 };
