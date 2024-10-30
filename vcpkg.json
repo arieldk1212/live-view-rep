@@ -3,7 +3,7 @@
     "openssl",
     "libpq",
     "libpqxx",
-    "cpp-httplib",
-    "spdlog"
+    "spdlog",
+    "drogon"
   ]
 }
