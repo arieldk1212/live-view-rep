@@ -1,5 +1,7 @@
 #include "../../inc/config/db_connection.h"
 
+namespace DB {
+
 DBConnection::DBConnection() {
   m_ConnectionInfo.insert({"HOST", "localhost"});
   m_ConnectionInfo.insert({"PORT", "5432"});
@@ -13,6 +15,8 @@ DBConnection::DBConnection() {
     " dbname=" + m_ConnectionInfo["DB"];
   m_ConnectionString = std::move(connection_string);
 
-  m_DBConnection = std::make_unique<pqxx::connection>(m_ConnectionString);
-  APP_INFO("DB SUCCESS");
+  m_DBConnection = std::make_shared<pqxx::connection>(m_ConnectionString);
+  APP_INFO("DB INIT SUCCESS");
 };
+
+}

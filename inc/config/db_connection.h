@@ -6,17 +6,25 @@
 
 #include "config/logger.h"
 
-typedef std::map<std::string, std::string> t_ConnInfo;
-typedef std::unique_ptr<pqxx::connection> t_ConnPtr;
+namespace DB {
+
+typedef std::map<std::string, std::string> DBInfo;
+typedef std::shared_ptr<pqxx::connection> DBPtr;
 
 class DBConnection {
 public:
   DBConnection();
 
+  DBConnection(DBConnection&& ) = delete;
+  DBConnection(const DBConnection& other) = delete;
+  DBConnection& operator=(DBConnection&& ) = delete;
+  DBConnection& operator=(const DBConnection& other) = delete;
+
 private:
-  t_ConnPtr m_DBConnection;
-  t_ConnInfo m_ConnectionInfo;
+  DBPtr m_DBConnection;
+  DBInfo m_ConnectionInfo;
   std::string m_ConnectionString;
 };
+}
 
 #endif

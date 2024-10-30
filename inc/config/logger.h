@@ -3,7 +3,8 @@
 
 #include <memory>
 #include <spdlog/spdlog.h>
-#include <spdlog/sinks/basic_file_sink.h>
+
+typedef std::shared_ptr<spdlog::logger> SpdPtr;
 
 class Logger {
 public:

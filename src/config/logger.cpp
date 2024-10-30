@@ -1,5 +1,8 @@
 #include "../inc/config/logger.h"
 
+#include <spdlog/sinks/basic_file_sink.h>
+
+std::shared_ptr<spdlog::logger> Logger::s_Logger;
 
 void Logger::Init() {
   spdlog::sink_ptr sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>("../logs/app.log", true);
@@ -12,5 +15,3 @@ void Logger::Init() {
 }
 
 std::shared_ptr<spdlog::logger>& Logger::GetLogger() { return s_Logger; }
-
-std::shared_ptr<spdlog::logger> Logger::s_Logger;
