@@ -1,10 +1,10 @@
-#ifndef DB_CONNECTION_H
-#define DB_CONNECTION_H
+#ifndef DB_H
+#define DB_H
 
 #include <memory>
 #include <pqxx/pqxx>
 
-#include "config/logger.h"
+#include "Config/Logger.h"
 
 namespace DB {
 

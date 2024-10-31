@@ -24,4 +24,4 @@ find_package(libpqxx CONFIG REQUIRED)
 include_directories(${OPENSSL_INCLUDE_DIR})
 
 target_link_libraries(src PRIVATE Drogon::Drogon libpqxx::pqxx PostgreSQL::PostgreSQL OpenSSL::SSL OpenSSL::Crypto spdlog::spdlog)
-target_link_libraries(app PRIVATE Drogon::Drogon libpqxx::pqxx PostgreSQL::PostgreSQL OpenSSL::SSL OpenSSL::Crypto spdlog::spdlog)
+target_link_libraries(App PRIVATE Drogon::Drogon libpqxx::pqxx PostgreSQL::PostgreSQL OpenSSL::SSL OpenSSL::Crypto spdlog::spdlog)

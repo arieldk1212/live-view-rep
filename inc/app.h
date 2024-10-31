@@ -2,7 +2,7 @@
 #define APP_H
 
 #include "drogon/drogon.h"
-#include "config/logger.h"
-#include "config/db_connection.h"
+#include "Config/Logger.h"
+#include "Config/DB.h"
 
 #endif
