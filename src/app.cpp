@@ -1,10 +1,11 @@
 #include "../inc/App.h"
 
-int main () {
-
+int main() {
   Logger::Init();
   DB::DBConnection g_DB;
+
   APP_TRACE("APP INITIALIZED");
+  drogon::app().loadConfigFile("../config.json").run();
 
   return 0;
 }
