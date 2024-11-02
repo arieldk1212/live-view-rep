@@ -16,6 +16,19 @@ void Type::DeleteType(const std::string &Type) {
   if (position != m_Type.end()) {
     m_Type.erase(position);
   } else {
-    APP_ERROR(Type + " NOT FOUND IN TYPES");
+    APP_ERROR(Type + " NOT IN TYPES");
   }
+}
+
+void Type::operator=(const Type &other) {
+  if (this->m_Type.size() == other.m_Type.size()) {
+    this->m_Type.clear();
+    for (int i = 0; i < other.m_Type.size(); i++ ) {
+      this->m_Type.push_back(other.m_Type[i]);
+    }
+  } this->m_Type = std::move(other.m_Type);
+}
+
+void Type::operator=(Type &&) {
+  // TODO(): check how to implement it.
 }

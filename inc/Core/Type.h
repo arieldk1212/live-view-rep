@@ -22,8 +22,8 @@ public:
 
   void DeleteType(const std::string &Type);
 
-  Type &operator=(const Type &other);
-  Type &operator=(Type &&);
+  void operator=(const Type &other);
+  void operator=(Type &&);
 
 private:
   StringVector m_Type;

@@ -7,7 +7,6 @@
 class Logger {
 public:
   static void Init();
-
   static std::shared_ptr<spdlog::logger> &GetLogger();
 
 private:
