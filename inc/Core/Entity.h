@@ -3,15 +3,16 @@
 
 #include "Type.h"
 
-template<class T>
-class Entity : public Type {
+template <class T> class Entity {
 public:
-  Entity(const T& Entity, const T& ShortEntity, const T& LongEntity);
+  Entity(const std::string &ShortEntity, const std::string &LongEntity);
+  Entity(int ShortEntity, int LongEntity);
   ~Entity();
+
 private:
-  T m_Entity;
   T m_ShortEntity;
   T m_LongEntity;
+  Type m_EntityType;
 };
 
 #endif

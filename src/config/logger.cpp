@@ -1,6 +1,6 @@
-#include <spdlog/sinks/basic_file_sink.h>
-
 #include "../inc/Config/Logger.h"
+
+#include <spdlog/sinks/basic_file_sink.h>
 
 std::shared_ptr<spdlog::logger> Logger::s_Logger;
 
