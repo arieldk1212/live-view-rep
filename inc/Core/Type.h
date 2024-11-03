@@ -15,14 +15,15 @@ public:
 
   [[nodiscard("returns: type object")]] const StringVector& GetTypeVector() const;
   [[nodiscard("returns: number of elements")]] size_t GetTypeVectorLength() const;
+
   void SetTypeVector(StringVector Type);
 
   void AddType(const std::string &Type);
 
   void DeleteType(const std::string &Type);
 
-  Type &operator=(const Type &other);
-  Type &operator=(Type &&) noexcept;
+  Type &operator=(const Type &other) = default;
+  Type &operator=(Type &&other) noexcept = default;
 
 private:
   StringVector m_Type;
