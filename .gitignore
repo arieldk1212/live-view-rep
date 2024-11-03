@@ -40,3 +40,5 @@ build
 .*.cpp.swp
 .*.*.swp
 logs
+.idea
+cmake-build-debug

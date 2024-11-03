@@ -16,7 +16,7 @@ public:
   DBConnection();
 
   DBConnection(DBConnection&& ) = delete;
-  DBConnection(const DBConnection& other) = delete;
+  DBConnection(const DBConnection &other) = delete;
   DBConnection& operator=(DBConnection&& ) = delete;
   DBConnection& operator=(const DBConnection& other) = delete;
 

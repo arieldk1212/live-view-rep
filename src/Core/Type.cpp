@@ -1,17 +1,17 @@
 #include "../inc/Core/Type.h"
 
-Type::Type(const StringVector &Type) : m_Type(Type) {}
+Type::Type(StringVector Type) : m_Type(std::move(Type)) {}
 
-StringVector Type::GetTypeVector() const { return m_Type; }
+const StringVector &Type::GetTypeVector() const { return m_Type; }
 
-int Type::GetVectorLength() const { return m_Type.size(); }
+size_t Type::GetTypeVectorLength() const { return m_Type.size(); }
 
 void Type::SetTypeVector(StringVector Type) { m_Type = std::move(Type); }
 
 void Type::AddType(const std::string &Type) { m_Type.push_back(Type); }
 
 void Type::DeleteType(const std::string &Type) {
-  std::vector<std::string>::iterator position =
+  std::vector<auto>::iterator position =
       std::remove(m_Type.begin(), m_Type.end(), Type);
   if (position != m_Type.end()) {
     m_Type.erase(position);
@@ -20,15 +20,15 @@ void Type::DeleteType(const std::string &Type) {
   }
 }
 
-void Type::operator=(const Type &other) {
+Type &Type::operator=(const Type &other) {
   if (this->m_Type.size() == other.m_Type.size()) {
     this->m_Type.clear();
-    for (int i = 0; i < other.m_Type.size(); i++ ) {
-      this->m_Type.push_back(other.m_Type[i]);
+    for (const auto &i : other.m_Type) {
+      this->m_Type.push_back(i);
     }
-  } this->m_Type = std::move(other.m_Type);
+  }
+  this->m_Type = other.m_Type;
+  return *this;
 }
 
-void Type::operator=(Type &&) {
-  // TODO(): check how to implement it.
-}
+Type &Type::operator=(Type &&) noexcept { return *this; }

@@ -2,6 +2,8 @@ set(SOURCES
 App.cpp
 Config/Logger.cpp
 Config/DB.cpp
+Core/Entity.cpp
+Core/Type.cpp
 )
 
 add_library(src ${SOURCES})

@@ -9,7 +9,7 @@ DBConnection::DBConnection() {
   m_ConnectionInfo.insert({"USER", "arielkriheli"});
   m_ConnectionInfo.insert({"PASSWORD", "password"});
 
-  const std::string connection_string = "user=" + \
+  std::string connection_string = "user=" + \
     m_ConnectionInfo["USER"] + " password=" + m_ConnectionInfo["PASSWORD"] + \
     " host=" + m_ConnectionInfo["HOST"] + " port=" + m_ConnectionInfo["PORT"] + \
     " dbname=" + m_ConnectionInfo["DB"];
