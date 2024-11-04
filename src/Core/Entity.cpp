@@ -1,13 +1,9 @@
 #include "../inc/Core/Entity.h"
 
-template <class T>
-Entity<T>::Entity(const std::string &ShortEntity, const std::string &LongEntity)
-    : m_ShortEntity(ShortEntity), m_LongEntity(LongEntity) {
+template <class EntityParam>
+Entity<EntityParam>::Entity(EntityParam &&ShortEntity, EntityParam &&LongEntity, Type &&EntityType)
+    : m_ShortEntity(std::forward<EntityParam>(ShortEntity)),
+      m_LongEntity(std::forward<EntityParam>(LongEntity)),
+      m_EntityType(std::move(EntityType)) {
 
-  }
-
-template <class T>
-Entity<T>::Entity(int ShortEntity, int LongEntity)
-    : m_ShortEntity(ShortEntity), m_LongEntity(LongEntity) {
-
-  }
+}

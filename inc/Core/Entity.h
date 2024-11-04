@@ -2,16 +2,16 @@
 #define ENTITY_H
 
 #include "Type.h"
+#include "Sector.h"
 
-template <class T> class Entity {
+template <class EntityParam> class Entity final : public Sector {
 public:
-  Entity(const std::string &ShortEntity, const std::string &LongEntity);
-  Entity(int ShortEntity, int LongEntity);
+  Entity(EntityParam &&ShortEntity, EntityParam &&LongEntity, Type &&EntityType);
   ~Entity();
 
 private:
-  T m_ShortEntity;
-  T m_LongEntity;
+  EntityParam m_ShortEntity;
+  EntityParam m_LongEntity;
   Type m_EntityType;
 };
 

@@ -32,7 +32,6 @@ WORKDIR /live-view
 
 COPY ./src/ ./src/
 COPY ./inc/ ./inc/
-COPY main.cpp .
 COPY ./docker/CMakeLists.txt .
 COPY ./docker/vcpkg.json .
 RUN cat vcpkg.json
