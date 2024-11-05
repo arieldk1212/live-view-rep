@@ -6,7 +6,7 @@ const StringVector &Type::GetTypeVector() const { return m_Type; }
 
 size_t Type::GetTypeVectorLength() const { return m_Type.size(); }
 
-void Type::SetTypeVector(StringVector Type) { m_Type = std::move(Type); }
+void Type::SetTypeVector(StringVector &&Type) { m_Type = std::move(Type); }
 
 void Type::AddType(const std::string &Type) { m_Type.push_back(Type); }
 

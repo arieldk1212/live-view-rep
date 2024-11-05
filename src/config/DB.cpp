@@ -1,7 +1,7 @@
 #include "../../inc/Config/DB.h"
 
 namespace DB {
-
+// TODO: Change to Config variables
 DBConnection::DBConnection() {
   m_ConnectionInfo.insert({"HOST", "localhost"});
   m_ConnectionInfo.insert({"PORT", "5432"});

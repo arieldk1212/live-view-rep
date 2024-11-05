@@ -4,7 +4,9 @@
 #include "Type.h"
 #include "Sector.h"
 
-template <class EntityParam> class Entity final : public Sector {
+// TODO: add logic for the data separation from the full address to entity block.
+
+template <typename EntityParam> class Entity final {
 public:
   Entity(EntityParam &&ShortEntity, EntityParam &&LongEntity, Type &&EntityType);
   ~Entity();
@@ -16,3 +18,9 @@ private:
 };
 
 #endif
+
+/*
+* class Address {
+  std::vector<std::map<Entity entity, Type type>> ConstructedEntity;
+};
+ */
