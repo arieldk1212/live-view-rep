@@ -5,6 +5,7 @@ Config/DB.cpp
 Core/Entity.cpp
 Core/Type.cpp
 Core/UUID.cpp
+Core/Geo.cpp
 )
 
 add_library(src ${SOURCES})
