@@ -8,3 +8,4 @@ Entity<EntityParam>::Entity(EntityParam &&ShortEntity, EntityParam &&LongEntity,
 
 template <typename EntityParam>
 Entity<EntityParam>::~Entity() {}
+
