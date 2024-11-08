@@ -1,7 +1,8 @@
 #include "../../inc/Config/DB.h"
 
+// TODO: Change to Config variables using config.json
+
 namespace DB {
-// TODO: Change to Config variables
 DBConnection::DBConnection() {
   m_ConnectionInfo.insert({"HOST", "localhost"});
   m_ConnectionInfo.insert({"PORT", "5432"});
@@ -16,7 +17,7 @@ DBConnection::DBConnection() {
   m_ConnectionString = std::move(connection_string);
 
   m_DBConnection = std::make_shared<pqxx::connection>(m_ConnectionString);
-  APP_INFO("DB INIT SUCCESS");
+  APP_INFO("POSTGRESQL DATABASE INITIALIZED");
 };
 
 }

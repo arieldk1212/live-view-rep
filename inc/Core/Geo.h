@@ -3,7 +3,8 @@
 
 #include <string>
 
-// TODO: init the private fields for lat/lon
+// TODO: init the private fields for lat/lon.
+// TODO: Create the plus codes class, maybe use pure virtual class for Location.
 
 class Geometry {
 public:

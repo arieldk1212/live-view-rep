@@ -1,5 +1,6 @@
 set(SOURCES
 App.cpp
+Address.cpp
 Config/Logger.cpp
 Config/DB.cpp
 Core/Entity.cpp
