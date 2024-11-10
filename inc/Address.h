@@ -6,7 +6,12 @@
 template <typename EntityParam> class AbstractAddress : public Entity <EntityParam> {
 public:
   AbstractAddress();
-private:
+
+  virtual void SetUUID();
+};
+
+template <typename EntityParam> class Address : public AbstractAddress <EntityParam> {
+
 };
 
 #endif //ADDRESS_H
