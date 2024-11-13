@@ -4,7 +4,7 @@
 #include <memory>
 #include <pqxx/pqxx>
 
-#include "Config/Logger.h"
+#include "Logger.h"
 
 namespace DB {
 

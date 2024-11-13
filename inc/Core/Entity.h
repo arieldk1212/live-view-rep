@@ -13,10 +13,10 @@
 
 class AbstractEntity {
 public:
-  virtual ~AbstractEntity();
+  virtual ~AbstractEntity() = 0;
 
-  virtual void AddressSeparationToEntities();
-  virtual void AddressEntityRemoval();
+  virtual void AddressSeparationToEntities() = 0;
+  virtual void AddressEntityRemoval() = 0;
 };
 
 template <typename EntityParam> class Entity : public AbstractEntity {
