@@ -12,7 +12,7 @@ class Type {
 public:
   explicit Type(StringVector Type);
 
-  [[nodiscard("returns: type object")]] const StringVector& GetTypeVector() const;
+  [[nodiscard("returns: type object")]] const StringVector &GetTypeVector() const;
   [[nodiscard("returns: number of elements")]] size_t GetTypeVectorLength() const;
 
   void SetTypeVector(StringVector &&Type);

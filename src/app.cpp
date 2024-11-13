@@ -8,5 +8,4 @@ int main() {
   APP_INFO("APP INITIALIZED");
   APP_TRACE("APP RUNNING..");
 
-  drogon::app().loadConfigFile("../config.json").run();
 }

@@ -18,11 +18,9 @@ include_directories(${OPENSSL_INCLUDE_DIR})
 find_package(OpenSSL REQUIRED)
 find_package(PostgreSQL REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
-find_package(Drogon CONFIG REQUIRED)
 find_package(libpqxx CONFIG REQUIRED)
 
 set(PROJECT_LIBRARIES
-Drogon::Drogon
 libpqxx::pqxx
 PostgreSQL::PostgreSQL
 OpenSSL::SSL
