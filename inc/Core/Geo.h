@@ -6,10 +6,10 @@
 // TODO: init the private fields for lat/lon.
 // TODO: Create the plus codes class, maybe use pure virtual class for Location.
 
-class Geometry {
+class Geo {
 public:
-  Geometry();
-  ~Geometry() = default;
+  Geo();
+  ~Geo() = default;
 
   std::string FormattedGeo();
 
