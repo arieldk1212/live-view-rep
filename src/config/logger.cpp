@@ -3,10 +3,14 @@
 std::shared_ptr<spdlog::logger> Logger::s_AppLogger;
 std::shared_ptr<spdlog::logger> Logger::s_SystemLogger;
 
-void Logger::Init() {
+void Logger::Init(std::string path) {
+  std::optional<std::string> Path = std::move(path);
+  // std::string p_Path = Path.value_or("../logs/");
+  std::string p_Path = std::move(static_cast<std::string>(Path.value_or("../logs/")));
+
   // INFO: App Logger Init
   spdlog::sink_ptr app_sink =
-      std::make_shared<spdlog::sinks::basic_file_sink_mt>("../logs/app.log",
+      std::make_shared<spdlog::sinks::basic_file_sink_mt>(p_Path + "app.log",
                                                           true);
   app_sink->set_pattern("[%T] [%l] %n: %v");
   s_AppLogger = std::make_shared<spdlog::logger>("APP", app_sink);
@@ -16,7 +20,7 @@ void Logger::Init() {
 
   // INFO: System Logger Init
   spdlog::sink_ptr system_sink =
-      std::make_shared<spdlog::sinks::basic_file_sink_mt>("../logs/sys.log",
+      std::make_shared<spdlog::sinks::basic_file_sink_mt>(p_Path + "sys.log",
                                                           true);
   system_sink->set_pattern("[%T] [%l] %n: %v");
   s_SystemLogger = std::make_shared<spdlog::logger>("SYSTEM", system_sink);
