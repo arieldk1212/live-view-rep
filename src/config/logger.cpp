@@ -7,7 +7,7 @@ void Logger::Init(std::string &&path) {
   // INFO: Set "" for default path (../logs).
   std::string p_Path;
   if (path == "") {
-    p_Path = "../logs/";
+    p_Path = "../backend-logs/";
   } else {
     p_Path = std::move(path);
   }
