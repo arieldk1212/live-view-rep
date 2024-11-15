@@ -14,4 +14,6 @@ public:
   }
 };
 
+// TODO: street, road, business loggers..
+
 #endif

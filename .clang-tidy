@@ -1,0 +1,5 @@
+Checks: 'clang-analyzer-*,llvm-*,cppcoreguidelines-*,concurrency-*,performance-*'
+HeaderFileExtensions: ['h']
+ImplementationFileExtensions: ['cpp']
+FormatStyle: LLVM
+InheritParentConfig: true
