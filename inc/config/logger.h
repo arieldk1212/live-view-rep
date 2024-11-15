@@ -2,9 +2,9 @@
 #define LOGGER_H
 
 #include <memory>
-#include <string>
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/spdlog.h>
+#include <string>
 
 class Logger {
 public:

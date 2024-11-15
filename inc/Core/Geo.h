@@ -8,14 +8,14 @@
 
 class Geo {
 public:
-  Geo();
-  ~Geo() = default;
+	Geo();
+	~Geo() = default;
 
-  std::string FormattedGeo();
+	std::string FormattedGeo();
 
 private:
-  std::string m_Longitude;
-  std::string m_Latitude;
+	std::string m_Longitude;
+	std::string m_Latitude;
 };
 
 #endif // GEO_H

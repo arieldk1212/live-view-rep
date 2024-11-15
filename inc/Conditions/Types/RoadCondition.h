@@ -26,6 +26,7 @@ public:
   void RoadConditionType() override {
     m_ConstructionRoadCondition = m_RoadConditionType + " - in Construction.";
   }
+
 private:
   std::string m_ConstructionRoadCondition;
 };

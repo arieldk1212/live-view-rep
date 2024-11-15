@@ -3,3 +3,6 @@ HeaderFileExtensions: ['h']
 ImplementationFileExtensions: ['cpp']
 FormatStyle: LLVM
 InheritParentConfig: true
+CheckOptions:
+  cppcoreguidelines-pro-bounds-constant-array-index.IncludeStyle: llvm
+  cppcoreguidelines-init-variables.IncludeStyle: llvm
