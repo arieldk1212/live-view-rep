@@ -2,14 +2,13 @@
 #define LOGGER_H
 
 #include <memory>
-#include <optional>
 #include <string>
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/spdlog.h>
 
 class Logger {
 public:
-  static void Init(std::string path = "");
+  static void Init(std::string &&path);
   static std::shared_ptr<spdlog::logger> &GetAppLogger();
   static std::shared_ptr<spdlog::logger> &GetSystemLogger();
 

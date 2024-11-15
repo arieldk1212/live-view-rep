@@ -1,9 +1,8 @@
 #include "../inc/App.h"
-#include "Config/Logger.h"
 
 int main() {
   // TODO: need to figure out how to pass an empty string..
-  Logger::Init();
+  Logger::Init("");
   APP_INFO("APP LOGGER INITIALIZED");
   SYSTEM_INFO("SYSTEM LOGGER INITIALIZED");
   APP_INFO("APP INITIALIZED");

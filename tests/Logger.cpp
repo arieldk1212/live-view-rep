@@ -2,7 +2,7 @@
 
 int main() {
   
-  Logger::Init("");
+  Logger::Init("logs/");
   APP_ERROR("Test");
   APP_INFO("Test");
   APP_TRACE("Test");

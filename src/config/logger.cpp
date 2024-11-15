@@ -3,10 +3,14 @@
 std::shared_ptr<spdlog::logger> Logger::s_AppLogger;
 std::shared_ptr<spdlog::logger> Logger::s_SystemLogger;
 
-void Logger::Init(std::string path) {
-  std::optional<std::string> Path = std::move(path);
-  // std::string p_Path = Path.value_or("../logs/");
-  std::string p_Path = std::move(static_cast<std::string>(Path.value_or("../logs/")));
+void Logger::Init(std::string &&path) {
+  // INFO: Set "" for default path (../logs).
+  std::string p_Path;
+  if (path == "") {
+    p_Path = "../logs/";
+  } else {
+    p_Path = std::move(path);
+  }
 
   // INFO: App Logger Init
   spdlog::sink_ptr app_sink =
