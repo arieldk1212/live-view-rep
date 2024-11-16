@@ -6,3 +6,4 @@ InheritParentConfig: true
 CheckOptions:
   cppcoreguidelines-pro-bounds-constant-array-index.IncludeStyle: llvm
   cppcoreguidelines-init-variables.IncludeStyle: llvm
+  cppcoreguidelines-special-member-functions.AllowSoleDefaultDtor: true

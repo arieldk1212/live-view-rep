@@ -14,6 +14,7 @@ typedef std::shared_ptr<pqxx::connection> DBPtr;
 class DBConnection {
 public:
   DBConnection();
+  ~DBConnection() = default;
 
   DBConnection(DBConnection &&) = delete;
   DBConnection(const DBConnection &other) = delete;
