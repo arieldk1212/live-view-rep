@@ -11,9 +11,12 @@ public:
 
 class AddressLogger final : public InstanceLogger {
 public:
-	void log(std::string &&data) override {
-		// TODO: insert logic here
-	}
+	void log(std::string &&data) override;
+};
+
+class BusinessLogger final : public InstanceLogger {
+public:
+	void log(std::string &&data) override;
 };
 
 // TODO: street, road, business loggers..

@@ -13,18 +13,18 @@ typedef std::shared_ptr<pqxx::connection> DBPtr;
 
 class DBConnection {
 public:
-  DBConnection();
-  ~DBConnection() = default;
+	DBConnection();
+	~DBConnection() = default;
 
-  DBConnection(DBConnection &&) = delete;
-  DBConnection(const DBConnection &other) = delete;
-  DBConnection &operator=(DBConnection &&) = delete;
-  DBConnection &operator=(const DBConnection &other) = delete;
+	DBConnection(DBConnection &&) = delete;
+	DBConnection(const DBConnection &other) = delete;
+	DBConnection &operator=(DBConnection &&) = delete;
+	DBConnection &operator=(const DBConnection &other) = delete;
 
 private:
-  DBPtr m_DBConnection;
-  DBInfo m_ConnectionInfo;
-  std::string m_ConnectionString;
+	DBPtr m_DBConnection;
+	DBInfo m_ConnectionInfo;
+	std::string m_ConnectionString;
 };
 } // namespace DB
 

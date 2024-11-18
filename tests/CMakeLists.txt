@@ -1,4 +1,4 @@
-set(LOGGER_TEST Logger.cpp)
+set(LOGGER_TEST Config/Logger/Logger.cpp)
 
 add_library(
 tests

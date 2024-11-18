@@ -13,23 +13,23 @@
 
 class AbstractEntity {
 public:
-  virtual ~AbstractEntity() = 0;
+	virtual ~AbstractEntity() = 0;
 
-  virtual void AddressSeparationToEntities() = 0;
-  virtual void AddressEntityRemoval() = 0;
+	virtual void AddressSeparationToEntities() = 0;
+	virtual void AddressEntityRemoval() = 0;
 };
 
 template <typename EntityParam> class Entity : public AbstractEntity {
 public:
-  Entity(EntityParam &&ShortEntity, EntityParam &&LongEntity,
-         Type &&EntityType);
-  // Entity(Address Address);
-  ~Entity() override;
+	Entity(EntityParam &&ShortEntity, EntityParam &&LongEntity,
+				 Type &&EntityType);
+	// Entity(Address Address);
+	~Entity() override;
 
 private:
-  EntityParam m_ShortEntity;
-  EntityParam m_LongEntity;
-  Type m_EntityType;
+	EntityParam m_ShortEntity;
+	EntityParam m_LongEntity;
+	Type m_EntityType;
 };
 
 #endif
