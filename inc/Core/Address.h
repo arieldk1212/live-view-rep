@@ -1,7 +1,7 @@
 #ifndef ADDRESS_H
 #define ADDRESS_H
 
-#include "Core/Entity.h"
+#include "Entity.h"
 
 template <typename EntityParam> class AbstractAddress : public Entity <EntityParam> {
 public:

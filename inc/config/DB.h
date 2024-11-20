@@ -21,6 +21,11 @@ public:
 	DBConnection &operator=(DBConnection &&) = delete;
 	DBConnection &operator=(const DBConnection &other) = delete;
 
+	void CreateTable(const std::string &TableName);
+	void WriteToTable(const std::string &TableName, const std::string &Data);
+	bool TableExists(const std::string &TableName);
+	void DeleteTable(const std::string &TabelName);
+
 private:
 	DBPtr m_DBConnection;
 	DBInfo m_ConnectionInfo;

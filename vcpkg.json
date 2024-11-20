@@ -3,6 +3,7 @@
     "openssl",
     "libpq",
     "libpqxx",
-    "spdlog"
+    "spdlog",
+    "catch2"
   ]
 }

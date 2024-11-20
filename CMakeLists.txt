@@ -21,6 +21,7 @@ find_package(OpenSSL REQUIRED)
 find_package(PostgreSQL REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
 find_package(libpqxx CONFIG REQUIRED)
+find_package(Catch2 CONFIG REQUIRED)
 
 set(PROJECT_LIBRARIES
 libpqxx::pqxx
@@ -28,6 +29,7 @@ PostgreSQL::PostgreSQL
 OpenSSL::SSL
 OpenSSL::Crypto
 spdlog::spdlog
+Catch2::Catch2 Catch2::Catch2WithMain
 )
 
 add_subdirectory(src)
