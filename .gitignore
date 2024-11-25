@@ -43,3 +43,4 @@ logs
 .idea
 cmake-build-debug
 .vscode
+backend-logs

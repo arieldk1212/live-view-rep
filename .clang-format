@@ -1,5 +1,5 @@
-BasedOnStyle: LLVM
-UseTab: Always
-TabWidth: 2
-IndentWidth: 2
 Language: Cpp
+Standard: Cpp11
+BasedOnStyle: LLVM
+UseTab: Never
+IndentWidth: 2
