@@ -2,7 +2,8 @@ set(SOURCES
 App.cpp
 Address.cpp
 Config/Logger.cpp
-Config/DB.cpp
+Config/Database.cpp
+Config/DatabaseManager.cpp
 Core/Entity.cpp
 Core/Type.cpp
 Core/UUID.cpp

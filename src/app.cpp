@@ -7,5 +7,4 @@ int main() {
   APP_INFO("APP INITIALIZED");
   SYSTEM_INFO("SYSTEM INITIALIZED");
 
-  DB::DBConnection g_DB;
 }

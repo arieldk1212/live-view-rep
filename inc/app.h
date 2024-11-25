@@ -2,6 +2,6 @@
 #define APP_H
 
 #include "Config/Logger.h"
-#include "Config/DB.h"
+#include "Config/DatabaseManager.h"
 
 #endif
