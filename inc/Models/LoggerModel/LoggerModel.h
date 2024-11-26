@@ -1,9 +1,9 @@
 #ifndef LOGGER_MODEL_H
 #define LOGGER_MODEL_H
 
-#include "../DBModel.h"
+#include "../AbstractDatabaseModel.h"
 
-class LoggerModel : public DBModel {
+class LoggerModel : public AbstractDatabaseModel {
 public:
 private:
   std::string m_LogFile;

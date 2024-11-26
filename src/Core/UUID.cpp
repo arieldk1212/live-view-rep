@@ -7,3 +7,5 @@ static std::uniform_int_distribution<uint64_t> s_UniformDistribution;
 UUID::UUID(uint64_t UUID) : m_UUID(UUID) {}
 
 UUID::UUID() : m_UUID(s_UniformDistribution(s_Engine)) {}
+
+uint64_t UUID::GetUUID() const { return m_UUID; }

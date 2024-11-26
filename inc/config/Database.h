@@ -3,6 +3,11 @@
 
 #include <pqxx/pqxx>
 
+/*
+* This header file shouldn't be used directly!
+*/
+
+
 class DatabaseConnection {
 public:
   explicit DatabaseConnection(const std::string &ConnectionString);
