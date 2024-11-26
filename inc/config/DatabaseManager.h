@@ -11,12 +11,7 @@ public:
   DatabaseManager();
   ~DatabaseManager();
 
-  void CreateTable(const std::string &TableName);
-  void WriteToTable(const std::string &TableName, const std::string &Data);
-  bool TableExists(const std::string &TableName);
-  void DeleteTable(const std::string &TabelName);
-
-private:
+ private:
   std::shared_ptr<DatabaseConnection> m_DatabaseManager;
   std::string m_DatabaseConnectionString;
 };

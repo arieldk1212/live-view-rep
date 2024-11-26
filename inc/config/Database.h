@@ -12,6 +12,8 @@ public:
   pqxx::result Query(const std::string &Query);
   void Execute(const std::string &Query);
 
+  // TODO: create more Database related Methods ofr tables and more.
+
 private:
   bool m_IsConnected;
   pqxx::connection m_DatabaseConnection;
