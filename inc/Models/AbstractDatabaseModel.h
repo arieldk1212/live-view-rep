@@ -7,9 +7,7 @@
 class AbstractDatabaseModel {
 public:
 	virtual ~AbstractDatabaseModel() = 0;
-	// TODO: maybe add in id field
-	virtual void GenerateUUID();
-	
+	virtual bool HasPrimaryKey();
 };
 
 #endif
