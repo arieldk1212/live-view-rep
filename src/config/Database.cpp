@@ -17,15 +17,15 @@ void DatabaseConnection::Commit() {
 
 pqxx::result DatabaseConnection::Query(const std::string &Query) {
   pqxx::result result;
-  if (!IsDatabaseConnected()) {
+  if (IsDatabaseConnected()) {
+    result = m_DatabaseWorker.exec(Query);
     return std::move(result);
   }
-  result = m_DatabaseWorker.exec(Query);
-  return std::move(result);
+  return result;
 }
 
-void DatabaseConnection::Execute(const std::string &query) {
+void DatabaseConnection::Execute(const std::string &Query) {
   if (IsDatabaseConnected()) {
-    m_DatabaseWorker.exec(query);
+    m_DatabaseWorker.exec(Query);
   }
 }

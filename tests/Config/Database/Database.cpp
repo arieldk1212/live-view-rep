@@ -4,6 +4,6 @@
 TEST(Database, DatabaseConnectionTest) {
   std::shared_ptr<DatabaseManager> Manager =
     std::make_shared<DatabaseManager>();
-  bool Result = Manager->ValidateDatabase();
-  EXPECT_EQ(Result, false);
+  bool Result = Manager->DatabaseConnectionValidation();
+  EXPECT_EQ(Result, true);
 }

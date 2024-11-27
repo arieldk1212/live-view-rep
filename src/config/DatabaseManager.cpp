@@ -8,6 +8,10 @@ DatabaseManager::DatabaseManager() {
       std::make_shared<DatabaseConnection>(m_DatabaseConnectionString);
 }
 
-bool DatabaseManager::ValidateDatabase() {
+bool DatabaseManager::DatabaseConnectionValidation() {
   return m_DatabaseManager->IsDatabaseConnected();
+}
+
+pqxx::result DatabaseManager::Query(const std::string &query) {
+  
 }

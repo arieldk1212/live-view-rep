@@ -14,10 +14,9 @@ public:
 
   bool IsDatabaseConnected();
 
-  void Commit();
-  pqxx::result Query(const std::string &Query);
-  void Execute(const std::string &Query);
-  // TODO: create more Database related Methods ofr tables and more.
+  void Commit(); // INFO: makes sure every change is stated.
+  pqxx::result Query(const std::string &Query); // INFO: query, like GET.
+  void Execute(const std::string &Query); // INFO: execute queries.
 
 private:
   pqxx::connection m_DatabaseConnection;

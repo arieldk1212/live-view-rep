@@ -21,5 +21,4 @@ int main() {
 	SYSTEM_DEBUG("Test");
 	SYSTEM_WARNING("Test");
 
-	return 0;
 }

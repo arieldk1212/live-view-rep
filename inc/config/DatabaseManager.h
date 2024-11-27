@@ -4,16 +4,30 @@
 #include "Database.h"
 #include "Logger.h"
 
-#include <memory>
+// TODO: consider vector of shared_ptrs to avoid errors, consider non-default
+// ctor, consider threading.
 
-class DatabaseManager {
+class DatabaseMethods {
+  /*
+   * this class is responsible for decleration of General Database Methods.
+   */
+public:
+  virtual ~DatabaseMethods() = 0;
+  virtual pqxx::result Query(const std::string &query);
+};
+
+class DatabaseManager : public DatabaseMethods {
+  /*
+   * this class is responsible for handling the user's actions for the Database.
+   */
 public:
   DatabaseManager();
-  ~DatabaseManager() = default;
+  ~DatabaseManager() override = default;
 
-  bool ValidateDatabase();
+  bool DatabaseConnectionValidation();
+  pqxx::result Query(const std::string &query) override;
 
- private:
+private:
   std::shared_ptr<DatabaseConnection> m_DatabaseManager;
   std::string m_DatabaseConnectionString;
 };
