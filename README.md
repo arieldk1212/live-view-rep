@@ -15,3 +15,4 @@ shhhhhhhhhhh
 * start the postgres server (if Mac->brew services start postgresql@15)
 * ./src/app
 * configure postgres service and pg-admin locally - using the same variables -> in .env, see .env.example
+* ctest -R <test_name>
