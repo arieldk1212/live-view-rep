@@ -4,6 +4,7 @@
     "libpq",
     "libpqxx",
     "spdlog",
-    "catch2"
+    "catch2",
+    "gtest"
   ]
 }

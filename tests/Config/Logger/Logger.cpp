@@ -1,6 +1,8 @@
-#include "../../..//inc/Config/Logger.h"
+#define CATCH_CONFIG_MAIN 
 
+#include "../../../inc/Config/Logger.h"
 #include "../../Test.h"
+
 
 int main() {
 

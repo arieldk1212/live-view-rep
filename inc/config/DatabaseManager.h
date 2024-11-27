@@ -9,7 +9,9 @@
 class DatabaseManager {
 public:
   DatabaseManager();
-  ~DatabaseManager();
+  ~DatabaseManager() = default;
+
+  bool ValidateDatabase();
 
  private:
   std::shared_ptr<DatabaseConnection> m_DatabaseManager;

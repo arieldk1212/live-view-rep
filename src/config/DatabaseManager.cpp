@@ -7,3 +7,7 @@ DatabaseManager::DatabaseManager() {
   m_DatabaseManager =
       std::make_shared<DatabaseConnection>(m_DatabaseConnectionString);
 }
+
+bool DatabaseManager::ValidateDatabase() {
+  return m_DatabaseManager->IsDatabaseConnected();
+}
