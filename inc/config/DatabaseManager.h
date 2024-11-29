@@ -7,7 +7,7 @@
 // TODO: consider vector of shared_ptrs to avoid errors, consider non-default
 // ctor, consider threading.
 
-class DatabaseManager{
+class DatabaseManager {
   /*
    * this class is responsible for handling the user's actions for the Database.
    */
@@ -17,7 +17,7 @@ public:
 
   bool DatabaseConnectionValidation();
   pqxx::result Query(const std::string &query);
-  
+
 private:
   std::shared_ptr<DatabaseConnection> m_DatabaseManager;
   std::string m_DatabaseConnectionString;

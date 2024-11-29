@@ -2,11 +2,12 @@
 #define DATABASE_H
 
 #include <pqxx/pqxx>
-#include <string_view>
 
 /*
-* This header file shouldn't be used directly!
-*/
+ * This header file shouldn't be used directly!
+ */
+
+class DatabaseManager;
 
 class DatabaseConnection {
 public:
@@ -15,12 +16,16 @@ public:
 
   bool IsDatabaseConnected();
 
+private:
+  pqxx::connection m_DatabaseConnection;
+  pqxx::work m_DatabaseWorker{m_DatabaseConnection};
+
+private:
   pqxx::result Query(const std::string &Query);
   void Commit();
 
 private:
-  pqxx::connection m_DatabaseConnection;
-  pqxx::work m_DatabaseWorker{m_DatabaseConnection};
+  friend class DatabaseManager;
 };
 
 #endif

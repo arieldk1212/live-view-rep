@@ -1,6 +1,7 @@
 #include "../../inc/Config/DatabaseManager.h"
 
 DatabaseManager::DatabaseManager() {
+  // TODO: change this to a generic connection string.
   std::string ConnectionString = "user=arielkriheli password=password "
                                  "host=localhost port=5432 dbname=arielkriheli";
   m_DatabaseConnectionString = std::move(ConnectionString);
@@ -13,9 +14,6 @@ bool DatabaseManager::DatabaseConnectionValidation() {
 }
 
 pqxx::result DatabaseManager::Query(const std::string &query) {
-  /*
-   * this function is created for "PUSH/PUT/PATCH" queries.
-   */
   auto Response = m_DatabaseManager->Query(query);
   m_DatabaseManager->Commit();
   return std::move(Response);
