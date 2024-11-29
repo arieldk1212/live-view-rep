@@ -55,3 +55,19 @@ TEST(Database, DatabaseGetValuesFromRowInTableQuery) {
   }
   EXPECT_EQ(values.size(), 4); // INFO: only 1 row with id = 1.
 }
+
+TEST(Database, DatabaseDeleteRowQuery) {
+  std::shared_ptr<DatabaseManager> Manager =
+      std::make_shared<DatabaseManager>();
+  std::string command = "delete from logger where id = '3'";
+  auto response = Manager->Query(command);
+  EXPECT_EQ(response.capacity(), 0);
+}
+
+TEST(Database, DatabaseDropTableQuery) {
+  std::shared_ptr<DatabaseManager> Manager =
+      std::make_shared<DatabaseManager>();
+  std::string command = "drop table logger";
+  auto response = Manager->Query(command);
+  EXPECT_EQ(response.capacity(), 0); // INFO: only 1 row with id = 1.
+}

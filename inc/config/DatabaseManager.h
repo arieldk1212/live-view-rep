@@ -13,7 +13,7 @@ class DatabaseManager {
    */
 public:
   DatabaseManager();
-  ~DatabaseManager() = default;
+  ~DatabaseManager();
 
   bool DatabaseConnectionValidation();
   pqxx::result Query(const std::string &query);
@@ -22,5 +22,18 @@ private:
   std::shared_ptr<DatabaseConnection> m_DatabaseManager;
   std::string m_DatabaseConnectionString;
 };
+
+// try {
+//   stuff
+// }
+// catch (pqxx::sql_error const &e) {
+//   std::cerr << "SQL error: " << e.what();
+//   std::cerr << "Query was: " << e.query();
+//   return 2;
+// }
+// catch (std::exception const &e) {
+//   std::cerr << "Error: " << e.what() << std::endl;
+//   return 1;
+// }
 
 #endif
