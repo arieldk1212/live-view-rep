@@ -9,23 +9,15 @@ bool DatabaseConnection::IsDatabaseConnected() {
   return m_DatabaseConnection.is_open();
 }
 
+pqxx::result DatabaseConnection::Query(const std::string &Query) {
+  if (IsDatabaseConnected()) {
+    return m_DatabaseWorker.exec(Query);
+  }
+  return {};
+}
+
 void DatabaseConnection::Commit() {
   if (IsDatabaseConnected()) {
     m_DatabaseWorker.commit();
-  }
-}
-
-pqxx::result DatabaseConnection::Query(const std::string &Query) {
-  pqxx::result result;
-  if (IsDatabaseConnected()) {
-    result = m_DatabaseWorker.exec(Query);
-    return std::move(result);
-  }
-  return result;
-}
-
-std::string_view DatabaseConnection::Execute(const std::string_view &Command) {
-  if (IsDatabaseConnected()) {
-    m_DatabaseWorker.exec(Command);
   }
 }

@@ -15,9 +15,8 @@ public:
 
   bool IsDatabaseConnected();
 
-  void Commit(); // INFO: makes sure every change is stated.
-  pqxx::result Query(const std::string &Query); // INFO: query, like GET.
-  std::string_view Execute(const std::string_view &Query); // INFO: execute queries.
+  pqxx::result Query(const std::string &Query);
+  void Commit();
 
 private:
   pqxx::connection m_DatabaseConnection;

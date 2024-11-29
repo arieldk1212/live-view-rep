@@ -8,12 +8,18 @@ TEST(Database, DatabaseConnectionTest) {
   EXPECT_EQ(Result, true);
 }
 
-TEST(Database, DatabaseExecuteQuery) {
+TEST(Database, DatabaseCreateTableQuery) {
   std::shared_ptr<DatabaseManager> Manager =
     std::make_shared<DatabaseManager>();
   std::string command = "create table if not exists logger(id serial primary key, logfile text, timestamp text, msg text)";
-  std::string_view response;
-  response = Manager->Execute(command);
-  std::cout << response;
-  EXPECT_EQ(response.data(), "") << " was " << response;
+  auto response = Manager->Query(command);
+  EXPECT_EQ(response.query(), command);
+}
+
+TEST(Database, DatabaseInsertTableQuery) {
+  std::shared_ptr<DatabaseManager> Manager =
+    std::make_shared<DatabaseManager>();
+  std::string command = "insert into logger (logfile, timestamp, msg) values ('test', 'now', 'testttt');";
+  auto response = Manager->Query(command);
+  EXPECT_EQ(response.query(), command);
 }
