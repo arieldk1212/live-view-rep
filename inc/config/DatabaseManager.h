@@ -12,21 +12,24 @@ class DatabaseMethods {
    * this class is responsible for decleration of General Database Methods.
    */
 public:
-  virtual ~DatabaseMethods() = 0;
-  virtual pqxx::result Query(const std::string &query);
+  virtual ~DatabaseMethods() = default;
+  virtual pqxx::result Query(const std::string &query) = 0;
+  virtual std::string_view Execute(const std::string &command) = 0;
+  virtual std::string_view Execute(const std::string_view &command) = 0;
 };
 
-class DatabaseManager : public DatabaseMethods {
+class DatabaseManager{
   /*
    * this class is responsible for handling the user's actions for the Database.
    */
 public:
   DatabaseManager();
-  ~DatabaseManager() override = default;
+  ~DatabaseManager() = default;
 
   bool DatabaseConnectionValidation();
-  pqxx::result Query(const std::string &query) override;
-
+  pqxx::result Query(const std::string &query);
+  std::string_view Execute(const std::string &command);
+  
 private:
   std::shared_ptr<DatabaseConnection> m_DatabaseManager;
   std::string m_DatabaseConnectionString;

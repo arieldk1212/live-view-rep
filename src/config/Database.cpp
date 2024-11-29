@@ -24,8 +24,8 @@ pqxx::result DatabaseConnection::Query(const std::string &Query) {
   return result;
 }
 
-void DatabaseConnection::Execute(const std::string &Query) {
+std::string_view DatabaseConnection::Execute(const std::string_view &Command) {
   if (IsDatabaseConnected()) {
-    m_DatabaseWorker.exec(Query);
+    m_DatabaseWorker.exec(Command);
   }
 }

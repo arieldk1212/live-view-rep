@@ -2,6 +2,7 @@
 #define DATABASE_H
 
 #include <pqxx/pqxx>
+#include <string_view>
 
 /*
 * This header file shouldn't be used directly!
@@ -16,7 +17,7 @@ public:
 
   void Commit(); // INFO: makes sure every change is stated.
   pqxx::result Query(const std::string &Query); // INFO: query, like GET.
-  void Execute(const std::string &Query); // INFO: execute queries.
+  std::string_view Execute(const std::string_view &Query); // INFO: execute queries.
 
 private:
   pqxx::connection m_DatabaseConnection;
