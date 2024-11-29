@@ -10,4 +10,12 @@ public:
 	virtual bool HasPrimaryKey();
 };
 
+template <typename T>
+class DatabaseModelFields {
+public:
+
+private:
+
+};
+
 #endif

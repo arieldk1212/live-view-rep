@@ -6,6 +6,7 @@
 
 // TODO: consider vector of shared_ptrs to avoid errors, consider non-default
 // ctor, consider threading.
+// TODO: add generic methods like insert, delete, update, get.
 
 class DatabaseManager {
   /*

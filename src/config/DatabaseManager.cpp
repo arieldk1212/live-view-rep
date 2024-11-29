@@ -1,7 +1,7 @@
 #include "../../inc/Config/DatabaseManager.h"
+#include "Config/Logger.h"
 
 DatabaseManager::DatabaseManager() {
-  // SYSTEM_TRACE("DATABASE CONNECTION ESTABLISHED"); // INFO: database tests not working when this enabled..
   // TODO: change this to a generic connection string.
   std::string ConnectionString = "user=arielkriheli password=password "
                                  "host=localhost port=5432 dbname=arielkriheli";
@@ -11,7 +11,7 @@ DatabaseManager::DatabaseManager() {
 }
 
 DatabaseManager::~DatabaseManager() {
-  // SYSTEM_TRACE("DATABASE CONNECTION DESTROYED"); // INFO: also this..
+  SYSTEM_CRITICAL("DATABASE CONNECTION DESTROYED");
 }
 
 bool DatabaseManager::DatabaseConnectionValidation() {
