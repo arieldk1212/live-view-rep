@@ -19,7 +19,15 @@ bool DatabaseManager::DatabaseConnectionValidation() {
 }
 
 pqxx::result DatabaseManager::Query(const std::string &query) {
-  auto Response = m_DatabaseManager->Query(query);
-  m_DatabaseManager->Commit();
-  return std::move(Response);
+  try {
+    auto Response = m_DatabaseManager->Query(query);
+    m_DatabaseManager->Commit();
+    return std::move(Response);
+  } catch (pqxx::sql_error const &error) {
+    std::cerr << "Query Error -> " << error.what();
+    return {};
+  } catch (std::exception const &error) {
+    std::cerr << "Error -> " << error.what();
+    return {};
+  }
 }

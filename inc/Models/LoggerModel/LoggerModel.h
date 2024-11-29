@@ -3,8 +3,10 @@
 
 #include "../AbstractDatabaseModel.h"
 
-class LoggerModel : public AbstractDatabaseModel {
+class LoggerModel : public Query<class T> {
 public:
+  ~LoggerModel() override;
+
 private:
   UUID m_LoggerUUID;
   std::string m_LogFile;

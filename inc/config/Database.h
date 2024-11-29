@@ -2,6 +2,7 @@
 #define DATABASE_H
 
 #include <pqxx/pqxx>
+#include <iostream>
 
 /*
  * This header file shouldn't be used directly!
