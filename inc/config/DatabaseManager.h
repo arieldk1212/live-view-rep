@@ -14,7 +14,7 @@ class DatabaseManager {
    */
 public:
   DatabaseManager();
-  ~DatabaseManager();
+  ~DatabaseManager() = default;
 
   bool DatabaseConnectionValidation();
   pqxx::result Query(const std::string &query);

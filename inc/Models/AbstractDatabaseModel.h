@@ -35,4 +35,5 @@ private:
 // TODO: Create basic model -> AbstractModel, then from that create an
 // DatabaseModel with basic fields, then we add query for decoration.
 
+// TODO: maybe create a model of queries to create insert or update method easier.
 #endif

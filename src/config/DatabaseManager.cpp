@@ -10,10 +10,6 @@ DatabaseManager::DatabaseManager() {
       std::make_shared<DatabaseConnection>(m_DatabaseConnectionString);
 }
 
-DatabaseManager::~DatabaseManager() {
-  SYSTEM_CRITICAL("DATABASE CONNECTION DESTROYED");
-}
-
 bool DatabaseManager::DatabaseConnectionValidation() {
   return m_DatabaseManager->IsDatabaseConnected();
 }
@@ -27,7 +23,7 @@ pqxx::result DatabaseManager::Query(const std::string &query) {
     std::cerr << "Query Error -> " << error.what();
     return {};
   } catch (std::exception const &error) {
-    std::cerr << "Error -> " << error.what();
+    std::cerr << "General Error -> " << error.what();
     return {};
   }
 }
