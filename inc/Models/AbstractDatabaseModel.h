@@ -17,13 +17,14 @@ public:
 template <class T> class Query : public AbstractDatabaseModel {
 public:
   Query(const T &FieldType, const T &FieldValue);
-  virtual ~Query() override = default;
+  virtual ~Query() = default;
 
   void SerializeQuery();
 
 private:
-  std::unordered_map<T, T> m_QueryFields; // Example: text -> text value.
+  int m_QuerySize;
   std::string m_QueryString;
+  std::unordered_map<T, T> m_QueryFields; // Example: text -> text value.
 };
 
 // INFO: DatabaseModel to basic methods for executing queries, than query
@@ -36,4 +37,7 @@ private:
 // DatabaseModel with basic fields, then we add query for decoration.
 
 // TODO: maybe create a model of queries to create insert or update method easier.
+
+// TODO: add generic methods like insert, delete, update, get.
+
 #endif

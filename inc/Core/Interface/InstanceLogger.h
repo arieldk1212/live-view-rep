@@ -3,6 +3,8 @@
 
 #include <string>
 
+// TODO: write this into database, when accessible.
+
 class InstanceLogger {
 public:
 	virtual ~InstanceLogger();

@@ -4,9 +4,7 @@
 #include "Database.h"
 #include "Logger.h"
 
-// TODO: consider vector of shared_ptrs to avoid errors, consider non-default
-// ctor, consider threading.
-// TODO: add generic methods like insert, delete, update, get.
+// TODO: Create vector of shared_ptr's, threading.
 
 class DatabaseManager {
   /*
