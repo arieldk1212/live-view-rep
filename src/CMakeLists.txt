@@ -1,4 +1,4 @@
-set(SOURCES
+list(APPEND sources
 App.cpp
 Address.cpp
 Config/Logger.cpp
@@ -10,9 +10,8 @@ Core/UUID.cpp
 Core/Geo.cpp
 )
 
-add_library(src STATIC ${SOURCES})
+add_library(src STATIC ${sources})
 
-# add_executable(App App.cpp)
-add_executable(App ${SOURCES})
+add_executable(App ${sources})
 
-target_link_libraries(App PRIVATE src ${PROJECT_LIBRARIES})
+target_link_libraries(App PRIVATE src ${project_libraries})

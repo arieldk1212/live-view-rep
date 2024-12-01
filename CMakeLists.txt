@@ -22,7 +22,7 @@ find_package(PostgreSQL REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
 find_package(libpqxx CONFIG REQUIRED)
 
-set(PROJECT_LIBRARIES
+list(APPEND project_libraries
 libpqxx::pqxx
 PostgreSQL::PostgreSQL
 OpenSSL::SSL
@@ -34,5 +34,5 @@ add_subdirectory(src)
 enable_testing()
 add_subdirectory(tests)
 
-target_link_libraries(src PRIVATE ${PROJECT_LIBRARIES})
-target_link_libraries(tests PRIVATE ${PROJECT_LIBRARIES})
+target_link_libraries(src PRIVATE ${project_libraries})
+target_link_libraries(tests PRIVATE ${project_libraries})
