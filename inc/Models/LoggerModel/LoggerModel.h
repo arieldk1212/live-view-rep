@@ -1,11 +1,11 @@
 #ifndef LOGGER_MODEL_H
 #define LOGGER_MODEL_H
 
-#include "../AbstractDatabaseModel.h"
+#include "../DatabaseModel.h"
 
-class LoggerModel : public Query<class T> {
+class LoggerModel {
 public:
-  ~LoggerModel() override;
+  ~LoggerModel();
 
 private:
   UUID m_LoggerUUID;
