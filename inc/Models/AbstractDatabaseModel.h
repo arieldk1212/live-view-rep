@@ -30,5 +30,9 @@ private:
 // class to define the fields and relate to a child Specific object
 // model to quick insert data, than logger model for example to then execute
 // neccessary data into the postgresdb.
+// make a query decorator!!!
+
+// TODO: Create basic model -> AbstractModel, then from that create an
+// DatabaseModel with basic fields, then we add query for decoration.
 
 #endif
