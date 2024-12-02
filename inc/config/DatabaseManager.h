@@ -11,18 +11,26 @@
 
 class DatabaseManager {
   /*
-   * this class is responsible for handling the user's actions for the Database.
+   * class is responsible for handling the user's actions for the Database.
    */
 public:
   DatabaseManager();
-  ~DatabaseManager() = default;
+  ~DatabaseManager();
+
+  struct DatabaseActions {
+    void Create();
+    void Read();
+    void Insert();
+    void Update();
+    void Delete();
+  };
 
   bool DatabaseConnectionValidation();
-  pqxx::result Query(const std::string &query); // TODO: move to DatabaseModel.
+  pqxx::result Query(const std::string &query);
 
 private:
   std::shared_ptr<DatabaseConnection> m_DatabaseManager;
-  std::vector<std::shared_ptr<DatabaseModel<class T>>> m_DatabaseModels;
+  std::vector<std::shared_ptr<DatabaseModel>> m_DatabaseModels;
   std::string m_DatabaseConnectionString;
 };
 

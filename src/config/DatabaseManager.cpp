@@ -4,10 +4,11 @@ DatabaseManager::DatabaseManager() {
   // TODO: change this to a generic connection string.
   m_DatabaseConnectionString = "user=arielkriheli password=password "
                                "host=localhost port=5432 dbname=arielkriheli";
-
   m_DatabaseManager =
       std::make_shared<DatabaseConnection>(m_DatabaseConnectionString);
 }
+
+DatabaseManager::~DatabaseManager() { m_DatabaseModels.clear(); }
 
 bool DatabaseManager::DatabaseConnectionValidation() {
   return m_DatabaseManager->IsDatabaseConnected();
