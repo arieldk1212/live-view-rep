@@ -7,7 +7,7 @@
 
 template <class T> class DatabaseModel {
 public:
-  DatabaseModel();
+  DatabaseModel(); // TODO: upon new model creation, create a new table in the db.
   ~DatabaseModel() = default;
 
   struct QueryActions {
