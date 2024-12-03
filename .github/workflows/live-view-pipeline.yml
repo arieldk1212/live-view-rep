@@ -23,7 +23,7 @@ jobs:
           ${{ github.workspace }}/vcpkg/bootstrap-vcpkg.sh
 
     - name: Install vcpkg Dependencies
-      run:  ./vcpkg/vcpkg install --feature-flags=manifests
+      run:  ${{ github.workspace }}/vcpkg/vcpkg install --feature-flags=manifests
 
     - name: Configure CMake
       run: cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build \
