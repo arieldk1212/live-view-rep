@@ -18,12 +18,17 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Install vcpkg
-      run:  |
-        git clone https://github.com/microsoft/vcpkg.git
-        ./vcpkg/bootstrap-vcpkg.sh
+    - name: List files and directories
+      run: |
+        echo "Current Directory: $(pwd)"
+        ls -la
+        ls -la src/
 
-    - name: Install Dependencies
+    - name: Install vcpkg
+      run: git clone https://github.com/microsoft/vcpkg.git
+          ./vcpkg/bootstrap-vcpkg.sh
+
+    - name: Install vcpkg Dependencies
       run:  ./vcpkg/vcpkg install --feature-flags=manifests
 
     - name: Configure CMake
@@ -38,6 +43,6 @@ jobs:
       working-directory: ${{ github.workspace }}
 
     - name: Test
-      run: ctest --output-on-failure -C ${{ env.BUILD_TYPE }}
+      run: ctest --output-on-failure --extra-verbose -C ${{ env.BUILD_TYPE }}
       working-directory: ${{ github.workspace }}/build
 
