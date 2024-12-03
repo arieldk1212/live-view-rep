@@ -29,7 +29,7 @@ jobs:
       working-directory: ${{ github.workspace }}
 
     - name: Configure CMake
-      run: cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build \
+      run: cd build && cmake .. \
                 -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
                 -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
                 -DCMAKE_PREFIX_PATH= ${{ github.workspace }}/vcpkg/installed/arm64-osx/share
