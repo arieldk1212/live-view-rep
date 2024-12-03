@@ -38,7 +38,11 @@ jobs:
       run: make -j 4
       working-directory: ${{ github.workspace }}/build
 
-    - name: Test
+    - name: Test All
       run: ctest --output-on-failure --extra-verbose
+      working-directory: ${{ github.workspace }}/build
+
+    - name: Test Specifig
+      run: ctest --output-on-failure --extra-verbose -R UUID
       working-directory: ${{ github.workspace }}/build
 
