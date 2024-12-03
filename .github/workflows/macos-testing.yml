@@ -1,4 +1,4 @@
-name: Live View Pipeline
+name: macos-testing
 
 on:
   push:
@@ -7,7 +7,6 @@ on:
     branches: [ "main" ]
 
 env:
-  BUILD_TYPE: Release
   CMAKE_TOOLCHAIN_FILE: ${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
   CMAKE_PREFIX_PATH: ${{ github.workspace }}/vcpkg/installed/arm64-osx/share
 
@@ -22,24 +21,21 @@ jobs:
       run: |
           git clone https://github.com/microsoft/vcpkg.git
           ./vcpkg/bootstrap-vcpkg.sh
-      working-directory: ${{ github.workspace }}
-
-    - name: Install vcpkg Dependencies
-      run:  ./vcpkg/vcpkg install --feature-flags=manifests
+          ./vcpkg/vcpkg install --feature-flags=manifests
       working-directory: ${{ github.workspace }}
 
     - name: Configure CMake
-      run: cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build \
+      run: mkdir build && cd build && cmake .. \
                 -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
                 -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
                 -DCMAKE_PREFIX_PATH= ${{ github.workspace }}/vcpkg/installed/arm64-osx/share
       working-directory: ${{ github.workspace }}
 
-    - name: Build
-      run: cmake --build ${{ github.workspace }}/build --config ${{ env.BUILD_TYPE }}
-      working-directory: ${{ github.workspace }}
+    - name: Build CMake
+      run: make -j 4
+      working-directory: ${{ github.workspace }}/build
 
     - name: Test
-      run: ctest --output-on-failure --extra-verbose -C ${{ env.BUILD_TYPE }}
+      run: ctest --output-on-failure --extra-verbose
       working-directory: ${{ github.workspace }}/build
 
