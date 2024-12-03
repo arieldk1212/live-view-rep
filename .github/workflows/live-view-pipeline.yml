@@ -28,8 +28,8 @@ jobs:
     - name: Configure CMake
       run: cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build \
                 -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
-                -DCMAKE_TOOLCHAIN_FILE=${{ env.CMAKE_TOOLCHAIN_FILE }}
-                -DCMAKE_PREFIX_PATH=${{ env.CMAKE_PREFIX_PATH }}
+                -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
+                -DCMAKE_PREFIX_PATH= ${{ github.workspace }}/vcpkg/installed/arm64-osx/share
       working-directory: ${{ github.workspace }}
 
     - name: Build
