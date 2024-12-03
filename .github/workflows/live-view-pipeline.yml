@@ -18,7 +18,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - uses: lukka/get-cmake@latest
 
     - name: Restore from cache and setup vcpkg
       run:  ${{ github.workspace }}/vcpkg/vcpkg install --dry-run
