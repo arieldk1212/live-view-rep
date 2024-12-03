@@ -13,9 +13,12 @@ env:
 jobs:
   build:
     runs-on: macos-latest
-
     steps:
+
     - uses: actions/checkout@v4
+
+    - name: Install dependencies Homebrew
+        run: brew install autoconf
 
     - name: Install vcpkg
       run: |
