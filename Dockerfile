@@ -1,21 +1,26 @@
 FROM ubuntu:22.04
 
-RUN apt-get update && \
-    apt-get upgrade && \
-    apt-get install \
-        python3 \
-        curl \
-        zip \
-        unzip \
-        tar \
-        git \
-        bash \
-        g++ \
-        libstdc++ \
-        libc-dev 
+RUN apt update -y; \
+    apt upgrade -y; \
+    apt install -y \
+    build-essential \
+    gcc \
+    python3 \
+    zip \
+    curl \
+    unzip \
+    tar \
+    g++ \
+    git \
+    perl \
+    bash \
+    && apt clean -y
 
 ARG CMAKE_VERSION=3.24.2
-RUN curl -L https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.tar.gz | tar --strip-components=1 -xz -C /usr/local
+RUN  apt install -y wget; \
+    wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh -O cmake.sh; \
+    sh cmake.sh --prefix=/usr/local/ --exclude-subdir; \
+    rm -rf cmake.sh;
 
 WORKDIR /usr/local
 RUN git clone https://github.com/microsoft/vcpkg.git && \
