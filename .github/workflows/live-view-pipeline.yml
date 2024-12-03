@@ -9,8 +9,6 @@ on:
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
-  CMAKE_TOOLCHAIN_FILE: /Users/$ENV{USER}/Library/vcpkg/scripts/buildsystems/vcpkg.cmake
-  CMAKE_PREFIX_PATH: /Users/$ENV{USER}/Library/vcpkg/installed/arm64-osx/share
 
 jobs:
   build:
@@ -19,7 +17,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Restore from cache and setup vcpkg
+    - name: Install vcpkg
       run:  ${{ github.workspace }}/vcpkg/vcpkg install --dry-run
 
     - name: Configure CMake
