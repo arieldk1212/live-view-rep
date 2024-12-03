@@ -20,7 +20,8 @@ jobs:
     - name: Install Homebrew Dependencies & Start Postgresql Server
       run: |
           brew install autoconf postgresql@14
-          brew services start postgresql@14
+          brew services start postgresql@14 
+          # need to init the user settings
 
     - name: Install vcpkg
       run: |
