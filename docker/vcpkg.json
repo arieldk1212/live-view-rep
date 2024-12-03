@@ -1,9 +1,0 @@
-{
-  "dependencies": [
-    "libpq",
-    "libpqxx",
-    "openssl",
-    "cpp-httplib",
-    "spdlog"
-  ]
-}
