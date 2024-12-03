@@ -18,7 +18,7 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: Install dependencies Homebrew
-        run: brew install autoconf
+      run: brew install autoconf
 
     - name: Install vcpkg
       run: |
