@@ -24,8 +24,8 @@ jobs:
       working-directory: ${{ github.workspace }}
 
     - name: Install vcpkg Dependencies
-      run:  ./vcpkg install --feature-flags=manifests
-      working-directory: ${{ github.workspace }}/vcpkg
+      run:  ./vcpkg/vcpkg install --feature-flags=manifests
+      working-directory: ${{ github.workspace }}
 
     - name: Configure CMake
       run: cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build \
