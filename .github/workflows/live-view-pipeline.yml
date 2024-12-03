@@ -25,9 +25,9 @@ jobs:
       run:  ./vcpkg/vcpkg install --feature-flags=manifests
 
     - name: Configure CMake
-        run: cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build \
-                    -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
-                    -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
+      run: cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build \
+                -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+                -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
     working-directory: ${{ github.workspace }}
 
     - name: Build
