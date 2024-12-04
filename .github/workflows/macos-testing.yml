@@ -1,0 +1,50 @@
+name: macos-testing
+
+on:
+  push:
+    branches: [ "main"]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  CMAKE_TOOLCHAIN_FILE: ${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
+  CMAKE_PREFIX_PATH: ${{ github.workspace }}/vcpkg/installed/arm64-osx/share
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+
+    - uses: actions/checkout@v4
+
+    - name: Install Homebrew Dependencies & Start Postgresql Server
+      run: |
+          brew install autoconf postgresql@14
+          brew services start postgresql@14 
+          # need to init the user settings
+
+    - name: Install vcpkg
+      run: |
+          git clone https://github.com/microsoft/vcpkg.git
+          ./vcpkg/bootstrap-vcpkg.sh
+          ./vcpkg/vcpkg install --feature-flags=manifests
+      working-directory: ${{ github.workspace }}
+
+    - name: Configure CMake
+      run: mkdir build && cd build && cmake .. \
+                -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+                -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
+                -DCMAKE_PREFIX_PATH= ${{ github.workspace }}/vcpkg/installed/arm64-osx/share
+      working-directory: ${{ github.workspace }}
+
+    - name: Build CMake
+      run: make -j 4
+      working-directory: ${{ github.workspace }}/build
+
+    - name: Test Specific
+      run: ctest --output-on-failure --extra-verbose -R UUID
+      working-directory: ${{ github.workspace }}/build
+
+    - name: Test All
+      run: ctest --output-on-failure --extra-verbose
+      working-directory: ${{ github.workspace }}/build
