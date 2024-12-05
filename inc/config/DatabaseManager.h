@@ -17,14 +17,15 @@ public:
   DatabaseManager();
   ~DatabaseManager();
 
+  bool DatabaseConnectionValidation();
+  pqxx::result Query(const std::string &Query);
+
   void Create(const std::string &query);
   void Read();
   void Update();
   void Delete();
 
-  bool DatabaseConnectionValidation();
-  pqxx::result Query(const std::string &Query);
-  void AddModel(const std::string &ModelName, StringMap ModelFields);
+  void AddModel(const std::string &ModelName, const StringMap &ModelFields);
 
 private:
   std::shared_ptr<DatabaseConnection> m_DatabaseManager;

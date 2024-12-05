@@ -1,4 +1,6 @@
 #include "../../inc/Config/DatabaseManager.h"
+#include "Models/DatabaseModel.h"
+#include <memory>
 
 DatabaseManager::DatabaseManager() {
   // TODO: change this to a generic connection string.
@@ -26,4 +28,10 @@ pqxx::result DatabaseManager::Query(const std::string &query) {
     std::cerr << "General Error -> " << error.what();
     return {};
   }
+}
+
+void DatabaseManager::AddModel(const std::string &ModelName,
+                               const StringMap &ModelFields) {
+  m_DatabaseModels.emplace_back(
+      std::make_shared<DatabaseModel>(ModelName, ModelFields));
 }

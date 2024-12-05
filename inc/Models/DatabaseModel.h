@@ -5,13 +5,12 @@
 
 #include <map>
 
-typedef std::unordered_map<std::string, std::string> StringMap;
+typedef std::map<std::string, std::string> StringMap;
 
 class DatabaseModel {
 public:
-  DatabaseModel(
-      const std::string &ModelTabelName); // TODO: upon new model creation,
-                                          // create a new table in the db.
+  DatabaseModel(const std::string &ModelTabelName,
+                const StringMap &ModelFields);
   ~DatabaseModel() = default;
 
   std::string StringSerialization();
@@ -21,10 +20,10 @@ public:
   void InsertField(const std::string &FieldType, const std::string &FieldValue);
   DatabaseModel &GetDatabaseModel() const; // INFO: for vector iteration.
 
-private:
+public:
   std::string m_DatabaseModelString;
   std::string m_DatabaseModelTableName;
-  std::map<std::string, std::string> m_DatabaseModelFields;
+  StringMap m_DatabaseModelFields;
 };
 
 #endif
