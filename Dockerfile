@@ -4,6 +4,10 @@ RUN apt update -y; \
     apt upgrade -y; \
     apt install -y \
     build-essential \
+    autoconf \
+    pkg-config \
+    bison \
+    flex \
     gcc \
     python3 \
     zip \
@@ -24,7 +28,7 @@ RUN  apt install -y wget; \
 
 WORKDIR /usr/local
 RUN git clone https://github.com/microsoft/vcpkg.git && \
-    vcpkg/bootstrap-vcpkg.sh
+    ./vcpkg/bootstrap-vcpkg.sh
 
 EXPOSE 8080 5432 
 
@@ -32,6 +36,7 @@ WORKDIR /live-view
 
 COPY ./src/ ./src/
 COPY ./inc/ ./inc/
+COPY ./tests/ ./tests/
 COPY ./CMakeLists.txt .
 COPY ./vcpkg.json .
 

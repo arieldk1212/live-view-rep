@@ -9,8 +9,7 @@ typedef std::map<std::string, std::string> StringMap;
 
 class DatabaseModel {
 public:
-  DatabaseModel(const std::string &ModelTabelName,
-                const StringMap &ModelFields);
+  DatabaseModel(const std::string &ModelTabelName, const StringMap &ModelFields);
   ~DatabaseModel() = default;
 
   std::string StringSerialization();
@@ -20,7 +19,7 @@ public:
   void InsertField(const std::string &FieldType, const std::string &FieldValue);
   DatabaseModel &GetDatabaseModel() const; // INFO: for vector iteration.
 
-public:
+private:
   std::string m_DatabaseModelString;
   std::string m_DatabaseModelTableName;
   StringMap m_DatabaseModelFields;
