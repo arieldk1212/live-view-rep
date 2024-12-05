@@ -17,16 +17,14 @@ public:
   DatabaseManager();
   ~DatabaseManager();
 
-  struct DatabaseActions {
-    void Create();
-    void Read();
-    void Insert();
-    void Update();
-    void Delete();
-  };
+  void Create(const std::string &query);
+  void Read();
+  void Update();
+  void Delete();
 
   bool DatabaseConnectionValidation();
-  pqxx::result Query(const std::string &query);
+  pqxx::result Query(const std::string &Query);
+  void AddModel(const std::string &ModelName, StringMap ModelFields);
 
 private:
   std::shared_ptr<DatabaseConnection> m_DatabaseManager;

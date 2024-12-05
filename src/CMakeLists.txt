@@ -8,6 +8,7 @@ Core/Entity.cpp
 Core/Type.cpp
 Core/UUID.cpp
 Core/Geo.cpp
+Models/DatabaseModel.cpp
 )
 
 add_library(src STATIC ${sources})
