@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM gcc:latest
 
 RUN apt update -y; \
     apt upgrade -y; \
@@ -10,6 +10,7 @@ RUN apt update -y; \
     flex \
     gcc \
     python3 \
+    libc6 \
     zip \
     curl \
     unzip \
@@ -27,8 +28,8 @@ RUN  apt install -y wget; \
     rm -rf cmake.sh;
 
 WORKDIR /usr/local
-RUN git clone https://github.com/microsoft/vcpkg.git && \
-    ./vcpkg/bootstrap-vcpkg.sh
+RUN git clone https://github.com/microsoft/vcpkg.git
+RUN ./vcpkg/bootstrap-vcpkg.sh
 
 EXPOSE 8080 5432 
 
@@ -46,5 +47,5 @@ RUN vcpkg install
 
 WORKDIR /live-view/build
 
-RUN cmake .. -DCMAKE_TOOLCHAIN_FILE=/usr/local/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_PREFIX_PATH=/usr/local/vcpkg/installed/arm64-osx/share -DCMAKE_BUILD_TYPE=Release
+RUN cmake .. -DCMAKE_TOOLCHAIN_FILE=/usr/local/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_PREFIX_PATH=/usr/local/vcpkg/installed/arm64-osx/share -DCMAKE_BUILD_TYPE=Debug
 RUN make
