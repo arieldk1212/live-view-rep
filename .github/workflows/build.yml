@@ -21,4 +21,4 @@ jobs:
 
     - name: Build Dockerfile
       # run: docker buildx build .
-      run: COMPOSE_DOCKER_CLI_BUILD=1 docker compose build
+      run: COMPOSE_DOCKER_CLI_BUILD=1 docker-compose build
