@@ -18,11 +18,10 @@ jobs:
 
     - name: Install docker
       run: |
-        brew install --cask docker virtualbox
-        brew install docker-compose docker-buildx docker-machine
-        docker-machine create --driver virtualbox default
-        docker-machine restart
+        brew install docker docker-compose docker-buildx
+        brew install colima
+        colima start
 
     - name: Build Dockerfile
-      # run: docker buildx build .
-      run: COMPOSE_DOCKER_CLI_BUILD=1 docker-compose build
+      run: docker-buildx build . --platform linux/arm64
+      # run: COMPOSE_DOCKER_CLI_BUILD=1 docker-compose build
