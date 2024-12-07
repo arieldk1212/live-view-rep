@@ -15,6 +15,10 @@ jobs:
     steps:
 
     - uses: actions/checkout@v4
+
+    - name: Install docker
+      run: brew install docker
+
     - name: Build Dockerfile
-      # run: docker buildx build . --platform linux/amd64
-      run: COMPOSE_DOCKER_CLI_BUILD=1 docker compose build
+      run: docker buildx build . --platform linux/amd64
+      # run: COMPOSE_DOCKER_CLI_BUILD=1 docker compose build
