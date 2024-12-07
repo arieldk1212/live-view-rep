@@ -1,9 +1,9 @@
 name: build
 
 on:
-  push:
-  pull_request:
-    branches: [ "main" ]
+  # push:
+  # pull_request:
+    # branches: [ "main" ]
 
 env:
   DOCKER_COMPOSE_FILE_NAME: docker-compose.yml
@@ -19,8 +19,6 @@ jobs:
     - name: Install docker
       run: |
         brew install docker docker-compose docker-buildx
-        brew install colima
-        colima start
 
     - name: Build Dockerfile
       run: docker-buildx build . --platform linux/arm64
