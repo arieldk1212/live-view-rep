@@ -20,5 +20,5 @@ jobs:
       run: brew install docker docker-buildx docker-compose
 
     - name: Build Dockerfile
-      run: docker buildx build .
-      # run: COMPOSE_DOCKER_CLI_BUILD=1 docker compose build
+      # run: docker buildx build .
+      run: COMPOSE_DOCKER_CLI_BUILD=1 docker compose build
