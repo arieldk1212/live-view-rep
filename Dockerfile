@@ -1,4 +1,4 @@
-FROM gcc:latest
+FROM gcc:12.4.0-bookworm
 
 RUN apt update -y; \
     apt upgrade -y; \
