@@ -77,6 +77,4 @@ TEST(DatabaseModel, DatabaseModelCreation) {
       std::make_shared<DatabaseManager>();
   StringMap Fields;
   Manager->AddModel("Address", Fields);
-  // TODO: add another field, remove, delete field,
-  // then crud the model in the db itself.
 }

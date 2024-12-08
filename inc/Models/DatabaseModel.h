@@ -9,19 +9,21 @@ using StringMap = std::map<std::string, std::string>;
 
 class DatabaseModel {
 public:
-  DatabaseModel(const std::string &ModelTabelName, const StringMap &ModelFields);
+  DatabaseModel(const std::string &ModelName, const StringMap &ModelFields);
   ~DatabaseModel() = default;
 
-  std::string StringSerialization();
+  std::string GetModelName() const;
   std::string QuerySerialization();
-  uint64_t GetObjectUUID();
+  std::string ModelFieldsSerialization();
+  std::string ModelSerialization();
 
+  void ClearFields();
   void InsertField(const std::string &FieldType, const std::string &FieldValue);
-  DatabaseModel &GetDatabaseModel() const; // INFO: for vector iteration.
+  void ClearAndInsertFields(const StringMap &ModelFields);
 
 private:
-  std::string m_DatabaseModelString;
-  std::string m_DatabaseModelTableName;
+private:
+  std::string m_DatabaseModelName;
   StringMap m_DatabaseModelFields;
 };
 
