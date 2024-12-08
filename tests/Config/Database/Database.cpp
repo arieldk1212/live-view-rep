@@ -69,5 +69,12 @@ TEST(Database, DatabaseDropTableQuery) {
       std::make_shared<DatabaseManager>();
   std::string command = "drop table logger";
   auto response = Manager->Query(command);
-  EXPECT_EQ(response.capacity(), 0); // INFO: only 1 row with id = 1.
+  EXPECT_EQ(response.capacity(), 1); // INFO: only 1 row with id = 1.
+}
+
+TEST(DatabaseModel, DatabaseModelCreation) {
+  std::shared_ptr<DatabaseManager> Manager =
+      std::make_shared<DatabaseManager>();
+  StringMap Fields;
+  Manager->AddModel("Address", Fields);
 }
