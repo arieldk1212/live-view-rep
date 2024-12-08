@@ -26,7 +26,7 @@ void DatabaseModel::ClearFields() { m_DatabaseModelFields.clear(); }
 
 void DatabaseModel::InsertField(const std::string &FieldType,
                                 const std::string &FieldValue) {
-  m_DatabaseModelFields.insert(FieldType, FieldValue);
+  m_DatabaseModelFields.emplace(FieldType, FieldValue);
 }
 
 void DatabaseModel::ClearAndInsertFields(const StringMap &ModelFields) {
