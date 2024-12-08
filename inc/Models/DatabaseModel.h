@@ -5,7 +5,7 @@
 
 #include <map>
 
-typedef std::map<std::string, std::string> StringMap;
+using StringMap = std::map<std::string, std::string>;
 
 class DatabaseModel {
 public:
