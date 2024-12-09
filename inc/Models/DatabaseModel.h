@@ -20,7 +20,6 @@ public:
   void ClearAndInsertFields(const StringMap &ModelFields);
 
 private:
-private:
   std::string m_DatabaseModelName;
   StringMap m_DatabaseModelFields;
 };

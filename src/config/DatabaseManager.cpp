@@ -57,7 +57,7 @@ void DatabaseManager::AddField(const std::string &ModelName,
   GetModel(ModelName)->InsertField(FieldName, FieldType);
 }
 
-void DatabaseManager::SwapFields(const std::string &ModelName,
+void DatabaseManager::SwapAllFields(const std::string &ModelName,
                                  const StringMap &ModelFields) {
   GetModel(ModelName)->ClearAndInsertFields(ModelFields);
 }

@@ -9,9 +9,18 @@
 
 // TODO: Create vector of shared_ptr's, threading.
 
+// class DatabaseFields {
+//   // INFO: Consider this Instance, for handling DB fields cleaner.
+// public:
+//   DatabaseFields(StringMap map) : map(map) {}
+// private:
+//   StringMap map;
+// };
+
 class DatabaseManager {
   /*
-   * class is responsible for handling the user's actions for the Database.
+   * class is responsible for handling the user's actions for the database &
+   * models.
    */
 public:
   DatabaseManager();
@@ -24,13 +33,14 @@ public:
 
   void AddModel(const std::string &ModelName, const StringMap &ModelFields);
   void AddField(const std::string &ModelName, const std::string &FieldName,
-                 const std::string &FieldType);
-  void SwapFields(const std::string &ModelName, const StringMap &ModelFields);
+                const std::string &FieldType);
+  void SwapAllFields(const std::string &ModelName,
+                     const StringMap &ModelFields);
   std::string PrintModel(const std::string &ModelName);
 
-  void Create(const std::string &query);
-  void Read();
-  void Update();
+  void Create(const std::string &Query); // INFO: Creates a new table in db.
+  void Read();                           // INFO: "GET" from db
+  void Update();                         //...
   void Delete();
   pqxx::result Query(const std::string &Query);
 

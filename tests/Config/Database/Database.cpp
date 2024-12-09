@@ -125,7 +125,7 @@ TEST(DatabaseModel, DatabaseModelSwapFields) {
 
   StringMap PostFields;
   PostFields.emplace("PostAddressName", "text");
-  Manager->SwapFields("Address", PostFields);
+  Manager->SwapAllFields("Address", PostFields);
   std::string PostResponse = Manager->PrintModel("Address");
 
   EXPECT_STRNE(PreResponse.c_str(), PostResponse.c_str());
