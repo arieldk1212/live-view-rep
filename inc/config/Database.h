@@ -6,9 +6,9 @@
 class DatabaseManager;
 
 class DatabaseConnection {
-/*
- * This header file shouldn't be used directly!
- */
+  /*
+   * This header file shouldn't be used directly!
+   */
 public:
   explicit DatabaseConnection(const std::string &ConnectionString);
   ~DatabaseConnection();

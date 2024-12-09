@@ -22,20 +22,6 @@ DatabaseManager::GetModel(const std::string &ModelName) {
   return (*this)[ModelName];
 }
 
-pqxx::result DatabaseManager::Query(const std::string &query) {
-  try {
-    auto Response = m_DatabaseManager->Query(query);
-    m_DatabaseManager->Commit();
-    return std::move(Response);
-  } catch (pqxx::sql_error const &error) {
-    std::cerr << "Query Error -> " << error.what();
-    return {};
-  } catch (std::exception const &error) {
-    std::cerr << "General Error -> " << error.what();
-    return {};
-  }
-}
-
 std::shared_ptr<DatabaseModel> &
 DatabaseManager::operator[](const std::string &ModelName) {
   for (auto &Model : m_DatabaseModels) {
@@ -64,4 +50,20 @@ void DatabaseManager::SwapAllFields(const std::string &ModelName,
 
 std::string DatabaseManager::PrintModel(const std::string &ModelName) {
   return std::move(GetModel(ModelName)->ModelSerialization());
+}
+
+void DatabaseManager::Create(const std::string &TableName) {};
+
+pqxx::result DatabaseManager::Query(const std::string &query) {
+  try {
+    auto Response = m_DatabaseManager->Query(query);
+    m_DatabaseManager->Commit();
+    return std::move(Response);
+  } catch (pqxx::sql_error const &error) {
+    std::cerr << "Query Error -> " << error.what();
+    return {};
+  } catch (std::exception const &error) {
+    std::cerr << "General Error -> " << error.what();
+    return {};
+  }
 }
