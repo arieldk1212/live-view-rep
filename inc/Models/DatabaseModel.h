@@ -12,13 +12,11 @@ public:
   DatabaseModel(const std::string &ModelName, const StringMap &ModelFields);
   ~DatabaseModel() = default;
 
-  std::string GetModelName() const;
-  std::string QuerySerialization();
-  std::string ModelFieldsSerialization();
+  const std::string GetModelName() const;
   std::string ModelSerialization();
 
   void ClearFields();
-  void InsertField(const std::string &FieldType, const std::string &FieldValue);
+  void InsertField(const std::string &FieldName, const std::string &FieldType);
   void ClearAndInsertFields(const StringMap &ModelFields);
 
 private:

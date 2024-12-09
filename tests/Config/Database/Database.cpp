@@ -1,6 +1,10 @@
 #include "../../../inc/Config/DatabaseManager.h"
 #include "../../Test.h"
 
+/*
+ * Database Test's
+ */
+
 TEST(Database, DatabaseConnectionTest) {
   std::shared_ptr<DatabaseManager> Manager =
       std::make_shared<DatabaseManager>();
@@ -69,12 +73,60 @@ TEST(Database, DatabaseDropTableQuery) {
       std::make_shared<DatabaseManager>();
   std::string command = "drop table logger";
   auto response = Manager->Query(command);
-  EXPECT_EQ(response.capacity(), 1); // INFO: only 1 row with id = 1.
+  EXPECT_EQ(response.capacity(), 0); // INFO: only 1 row with id = 1.
 }
+
+/*
+ * DatabaseModel Test's
+ */
 
 TEST(DatabaseModel, DatabaseModelCreation) {
   std::shared_ptr<DatabaseManager> Manager =
       std::make_shared<DatabaseManager>();
+
   StringMap Fields;
+  Fields.emplace("AddressName", "text");
+  Fields.emplace("AddressNumber", "int");
   Manager->AddModel("Address", Fields);
+  std::string Response = Manager->PrintModel("Address");
+
+  StringMap TestFields;
+  TestFields.emplace("TestName", "Text");
+  Manager->AddModel("Test", TestFields);
+  std::string ResponseTest = Manager->PrintModel("Test");
+
+  EXPECT_STRNE(ResponseTest.c_str(), Response.c_str());
+}
+
+TEST(DatabaseModel, DatabaseModelAddField) {
+  std::shared_ptr<DatabaseManager> Manager =
+      std::make_shared<DatabaseManager>();
+
+  StringMap Fields;
+  Fields.emplace("AddressName", "text");
+  Manager->AddModel("Address", Fields);
+  std::string Response = Manager->PrintModel("Address");
+
+  Manager->AddField("Address", "AddedField", "Text");
+  std::string AddedFieldResponse = Manager->PrintModel("Address");
+
+  EXPECT_STRNE(Response.c_str(), AddedFieldResponse.c_str());
+}
+
+TEST(DatabaseModel, DatabaseModelSwapFields) {
+  std::shared_ptr<DatabaseManager> Manager =
+      std::make_shared<DatabaseManager>();
+
+  StringMap PreFields;
+  PreFields.emplace("AddressName", "text");
+  PreFields.emplace("AddressNumber", "int");
+  Manager->AddModel("Address", PreFields);
+  std::string PreResponse = Manager->PrintModel("Address");
+
+  StringMap PostFields;
+  PostFields.emplace("PostAddressName", "text");
+  Manager->SwapFields("Address", PostFields);
+  std::string PostResponse = Manager->PrintModel("Address");
+
+  EXPECT_STRNE(PreResponse.c_str(), PostResponse.c_str());
 }

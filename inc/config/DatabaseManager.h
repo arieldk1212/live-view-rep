@@ -18,6 +18,15 @@ public:
   ~DatabaseManager();
 
   bool DatabaseConnectionValidation();
+  std::shared_ptr<DatabaseModel> GetModel(const std::string &ModelName);
+
+  std::shared_ptr<DatabaseModel> &operator[](const std::string &ModelName);
+
+  void AddModel(const std::string &ModelName, const StringMap &ModelFields);
+  void AddField(const std::string &ModelName, const std::string &FieldName,
+                 const std::string &FieldType);
+  void SwapFields(const std::string &ModelName, const StringMap &ModelFields);
+  std::string PrintModel(const std::string &ModelName);
 
   void Create(const std::string &query);
   void Read();
@@ -25,17 +34,10 @@ public:
   void Delete();
   pqxx::result Query(const std::string &Query);
 
-  std::string PrintModel(const std::string &ModelName);
-  void AddModel(const std::string &ModelName, const StringMap &ModelFields);
-  void ChangeModelFields(const std::string &ModelName,
-                         const StringMap &ModelFields);
-
-  std::shared_ptr<DatabaseModel> &operator[](const std::string &ModelName);
-
 private:
+  std::string m_DatabaseConnectionString;
   std::shared_ptr<DatabaseConnection> m_DatabaseManager;
   std::vector<std::shared_ptr<DatabaseModel>> m_DatabaseModels;
-  std::string m_DatabaseConnectionString;
 };
 
 #endif

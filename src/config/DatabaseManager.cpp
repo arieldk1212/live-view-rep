@@ -3,6 +3,7 @@
 #include <memory>
 
 DatabaseManager::DatabaseManager()
+// TODO: replace this ctor into a generic one
     : m_DatabaseConnectionString{
           "user=arielkriheli password=password "
           "host=localhost port=5432 dbname=arielkriheli"} {
@@ -14,6 +15,11 @@ DatabaseManager::~DatabaseManager() { m_DatabaseModels.clear(); }
 
 bool DatabaseManager::DatabaseConnectionValidation() {
   return m_DatabaseManager->IsDatabaseConnected();
+}
+
+std::shared_ptr<DatabaseModel>
+DatabaseManager::GetModel(const std::string &ModelName) {
+  return (*this)[ModelName];
 }
 
 pqxx::result DatabaseManager::Query(const std::string &query) {
@@ -39,17 +45,23 @@ DatabaseManager::operator[](const std::string &ModelName) {
   }
 }
 
-std::string DatabaseManager::PrintModel(const std::string &ModelName) {
-  return std::move((*this)[ModelName]->ModelSerialization());
-}
-
 void DatabaseManager::AddModel(const std::string &ModelName,
                                const StringMap &ModelFields) {
   m_DatabaseModels.emplace_back(
       std::make_shared<DatabaseModel>(ModelName, ModelFields));
 }
 
-void DatabaseManager::ChangeModelFields(const std::string &ModelName,
-                                        const StringMap &ModelFields) {
-  (*this)[ModelName]->ClearAndInsertFields(ModelFields);
+void DatabaseManager::AddField(const std::string &ModelName,
+                               const std::string &FieldName,
+                               const std::string &FieldType) {
+  GetModel(ModelName)->InsertField(FieldName, FieldType);
+}
+
+void DatabaseManager::SwapFields(const std::string &ModelName,
+                                 const StringMap &ModelFields) {
+  GetModel(ModelName)->ClearAndInsertFields(ModelFields);
+}
+
+std::string DatabaseManager::PrintModel(const std::string &ModelName) {
+  return std::move(GetModel(ModelName)->ModelSerialization());
 }

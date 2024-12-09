@@ -5,28 +5,23 @@ DatabaseModel::DatabaseModel(const std::string &ModelName,
                              const StringMap &ModelFields)
     : m_DatabaseModelName{ModelName}, m_DatabaseModelFields{ModelFields} {}
 
-std::string DatabaseModel::GetModelName() const { return m_DatabaseModelName; }
-
-std::string DatabaseModel::ModelFieldsSerialization() {
-  std::string Response = "";
-  for (auto &[key, value] : m_DatabaseModelFields) {
-    Response += "Type: " + key + " Value: " + m_DatabaseModelFields[key];
-  }
-  return std::move(Response);
-}
+const std::string DatabaseModel::GetModelName() const { return m_DatabaseModelName; }
 
 std::string DatabaseModel::ModelSerialization() {
   std::string Response;
-  Response = "Model Name: " + m_DatabaseModelName + "\n";
-  Response += "Model Fields: " + std::move(ModelFieldsSerialization()) + ".\n";
+  Response = "Model Name: " + m_DatabaseModelName + " ";
+  Response += "Fields: ";
+  for (auto &[key, value] : m_DatabaseModelFields) {
+    Response += key + " - " + m_DatabaseModelFields[key] + " ";
+  }
   return std::move(Response);
 }
 
 void DatabaseModel::ClearFields() { m_DatabaseModelFields.clear(); }
 
-void DatabaseModel::InsertField(const std::string &FieldType,
-                                const std::string &FieldValue) {
-  m_DatabaseModelFields.emplace(FieldType, FieldValue);
+void DatabaseModel::InsertField(const std::string &FieldName,
+                                const std::string &FieldType) {
+  m_DatabaseModelFields.emplace(FieldName, FieldType);
 }
 
 void DatabaseModel::ClearAndInsertFields(const StringMap &ModelFields) {
