@@ -52,7 +52,9 @@ std::string DatabaseManager::PrintModel(const std::string &ModelName) {
   return std::move(GetModel(ModelName)->ModelSerialization());
 }
 
-void DatabaseManager::Create(const std::string &TableName) {};
+void DatabaseManager::Create(const std::string &TableName) {
+
+};
 
 pqxx::result DatabaseManager::Query(const std::string &query) {
   try {
