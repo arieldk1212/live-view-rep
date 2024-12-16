@@ -10,8 +10,8 @@ int main() {
   std::shared_ptr<DatabaseManager> Database =
       std::make_shared<DatabaseManager>();
   bool DatabaseStatus = Database->DatabaseConnectionValidation();
-  Database->Query("insert into logger (logfile, timestamp, msg) values "
-                  "('test', 'now', 'testttt');");
+  // Database->Query("insert into logger (logfile, timestamp, msg) values "
+                  // "('test', 'now', 'testttt');");
   if (DatabaseStatus) {
     SYSTEM_INFO("DATABASE CONNECTION ESTABLISHED"); // TODO: test dtor in prod
   }

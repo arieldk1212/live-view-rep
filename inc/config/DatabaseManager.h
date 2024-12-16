@@ -38,11 +38,13 @@ public:
                      const StringMap &ModelFields);
   std::string PrintModel(const std::string &ModelName);
 
-  void Create(const std::string &TableName); // INFO: Creates a new table in db.
-  void Read();                               // INFO: "GET" from db
-  void Update();                             //...
-  void Delete();
+private:
   pqxx::result Query(const std::string &Query);
+  void Create(const std::string &TableName, const StringMap &TableFields);
+  void CreateFields();
+  void Read();
+  void Update();
+  void Delete();
 
 private:
   std::string m_DatabaseConnectionString;

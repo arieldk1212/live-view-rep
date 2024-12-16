@@ -3,6 +3,7 @@
 
 #include "../Core/UUID.h"
 
+#include <algorithm>
 #include <map>
 
 using StringMap = std::map<std::string, std::string>;
@@ -14,6 +15,7 @@ public:
 
   const std::string GetModelName() const;
   std::string ModelSerialization();
+  std::string QuerySerialization();
 
   void ClearFields();
   void InsertField(const std::string &FieldName, const std::string &FieldType);

@@ -3,7 +3,7 @@
 #include <memory>
 
 DatabaseManager::DatabaseManager()
-// TODO: replace this ctor into a generic one
+    // TODO: replace this ctor into a generic one
     : m_DatabaseConnectionString{
           "user=arielkriheli password=password "
           "host=localhost port=5432 dbname=arielkriheli"} {
@@ -35,6 +35,7 @@ void DatabaseManager::AddModel(const std::string &ModelName,
                                const StringMap &ModelFields) {
   m_DatabaseModels.emplace_back(
       std::make_shared<DatabaseModel>(ModelName, ModelFields));
+  Create(ModelName, ModelFields);
 }
 
 void DatabaseManager::AddField(const std::string &ModelName,
@@ -44,17 +45,13 @@ void DatabaseManager::AddField(const std::string &ModelName,
 }
 
 void DatabaseManager::SwapAllFields(const std::string &ModelName,
-                                 const StringMap &ModelFields) {
+                                    const StringMap &ModelFields) {
   GetModel(ModelName)->ClearAndInsertFields(ModelFields);
 }
 
 std::string DatabaseManager::PrintModel(const std::string &ModelName) {
   return std::move(GetModel(ModelName)->ModelSerialization());
 }
-
-void DatabaseManager::Create(const std::string &TableName) {
-
-};
 
 pqxx::result DatabaseManager::Query(const std::string &query) {
   try {
@@ -69,3 +66,9 @@ pqxx::result DatabaseManager::Query(const std::string &query) {
     return {};
   }
 }
+
+void DatabaseManager::Create(const std::string &TableName,
+                             const StringMap &TableFields) {
+  std::string Template = "create table if not exists " + TableName;
+  auto Response = Query(Template);
+};

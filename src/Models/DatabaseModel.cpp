@@ -4,7 +4,9 @@ DatabaseModel::DatabaseModel(const std::string &ModelName,
                              const StringMap &ModelFields)
     : m_DatabaseModelName{ModelName}, m_DatabaseModelFields{ModelFields} {}
 
-const std::string DatabaseModel::GetModelName() const { return m_DatabaseModelName; }
+const std::string DatabaseModel::GetModelName() const {
+  return m_DatabaseModelName;
+}
 
 std::string DatabaseModel::ModelSerialization() {
   std::string Response;
@@ -15,6 +17,14 @@ std::string DatabaseModel::ModelSerialization() {
   }
   return std::move(Response);
 }
+
+std::string ToLower(std::string &&String) {
+  std::string Response = std::move(String);
+  std::transform(Response.begin(), Response.end(), Response.begin(), ::tolower);
+  return std::move(Response);
+}
+
+std::string DatabaseModel::QuerySerialization() { std::string Response; }
 
 void DatabaseModel::ClearFields() { m_DatabaseModelFields.clear(); }
 
