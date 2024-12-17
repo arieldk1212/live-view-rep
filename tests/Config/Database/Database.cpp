@@ -1,5 +1,6 @@
 #include "../../../inc/Config/DatabaseManager.h"
 #include "../../Test.h"
+#include <gtest/gtest.h>
 
 /*
  * Database Test's
@@ -129,4 +130,17 @@ TEST(DatabaseModel, DatabaseModelSwapFields) {
   std::string PostResponse = Manager->PrintModel("Address");
 
   EXPECT_STRNE(PreResponse.c_str(), PostResponse.c_str());
+}
+
+TEST(DatabaseModel, DatabaseModelCreateMethodTest) {
+  std::shared_ptr<DatabaseManager> Manager =
+      std::make_shared<DatabaseManager>();
+
+  StringMap Fields;
+  Fields.emplace("AddressNumber", "int");
+  Fields.emplace("AddressName", "text");
+  auto MethodResponse = Manager->AddModel("Address", Fields);
+  std::string Response = Manager->PrintModel("Address");
+
+  EXPECT_EQ(MethodResponse.query().size(), 12);
 }

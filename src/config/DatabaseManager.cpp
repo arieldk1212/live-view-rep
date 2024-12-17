@@ -17,6 +17,19 @@ bool DatabaseManager::DatabaseConnectionValidation() {
   return m_DatabaseManager->IsDatabaseConnected();
 }
 
+std::string DatabaseManager::ToLower(std::string &&String) {
+  std::transform(String.begin(), String.end(), String.begin(), ::tolower);
+  return std::move(String);
+}
+
+std::string DatabaseManager::QuerySerialization(const StringMap &ModelFields) {
+  std::string Response;
+  for (const auto &[key, value] : ModelFields) {
+    Response.append(key).append(" ").append(value).append(" ");
+  }
+  return std::move(ToLower(std::move(Response)));
+}
+
 std::shared_ptr<DatabaseModel>
 DatabaseManager::GetModel(const std::string &ModelName) {
   return (*this)[ModelName];
@@ -29,13 +42,15 @@ DatabaseManager::operator[](const std::string &ModelName) {
       return Model;
     }
   }
+  throw std::out_of_range("Model not found: " + ModelName);
 }
 
-void DatabaseManager::AddModel(const std::string &ModelName,
-                               const StringMap &ModelFields) {
+pqxx::result DatabaseManager::AddModel(const std::string &ModelName,
+                                       const StringMap &ModelFields) {
   m_DatabaseModels.emplace_back(
       std::make_shared<DatabaseModel>(ModelName, ModelFields));
-  Create(ModelName, ModelFields);
+  auto Response = Create(ModelName, ModelFields);
+  return Response;
 }
 
 void DatabaseManager::AddField(const std::string &ModelName,
@@ -67,8 +82,13 @@ pqxx::result DatabaseManager::Query(const std::string &query) {
   }
 }
 
-void DatabaseManager::Create(const std::string &TableName,
-                             const StringMap &TableFields) {
-  std::string Template = "create table if not exists " + TableName;
-  auto Response = Query(Template);
+pqxx::result DatabaseManager::Create(const std::string &TableName,
+                                     const StringMap &TableFields) {
+  std::string Template = "create table if not exists " + TableName + "(" +
+                         QuerySerialization(TableFields) + ")";
+  return Query(Template);
 };
+
+/*
+ * need to fix the fields on create
+ */

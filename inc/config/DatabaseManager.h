@@ -27,11 +27,13 @@ public:
   ~DatabaseManager();
 
   bool DatabaseConnectionValidation();
-  std::shared_ptr<DatabaseModel> GetModel(const std::string &ModelName);
+  std::string ToLower(std::string &&String);
+  std::string QuerySerialization(const StringMap &ModelFields);
 
+  std::shared_ptr<DatabaseModel> GetModel(const std::string &ModelName);
   std::shared_ptr<DatabaseModel> &operator[](const std::string &ModelName);
 
-  void AddModel(const std::string &ModelName, const StringMap &ModelFields);
+  pqxx::result AddModel(const std::string &ModelName, const StringMap &ModelFields);
   void AddField(const std::string &ModelName, const std::string &FieldName,
                 const std::string &FieldType);
   void SwapAllFields(const std::string &ModelName,
@@ -40,7 +42,7 @@ public:
 
 private:
   pqxx::result Query(const std::string &Query);
-  void Create(const std::string &TableName, const StringMap &TableFields);
+  pqxx::result Create(const std::string &TableName, const StringMap &TableFields);
   void CreateFields();
   void Read();
   void Update();

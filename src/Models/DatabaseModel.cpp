@@ -18,14 +18,6 @@ std::string DatabaseModel::ModelSerialization() {
   return std::move(Response);
 }
 
-std::string ToLower(std::string &&String) {
-  std::string Response = std::move(String);
-  std::transform(Response.begin(), Response.end(), Response.begin(), ::tolower);
-  return std::move(Response);
-}
-
-std::string DatabaseModel::QuerySerialization() { std::string Response; }
-
 void DatabaseModel::ClearFields() { m_DatabaseModelFields.clear(); }
 
 void DatabaseModel::InsertField(const std::string &FieldName,
