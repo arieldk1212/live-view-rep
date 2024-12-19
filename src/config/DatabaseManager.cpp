@@ -17,17 +17,12 @@ bool DatabaseManager::DatabaseConnectionValidation() {
   return m_DatabaseManager->IsDatabaseConnected();
 }
 
-std::string DatabaseManager::ToLower(std::string &&String) {
-  std::transform(String.begin(), String.end(), String.begin(), ::tolower);
-  return std::move(String);
-}
-
 std::string DatabaseManager::QuerySerialization(const StringMap &ModelFields) {
   std::string Response;
   for (const auto &[key, value] : ModelFields) {
     Response.append(key).append(" ").append(value).append(" ");
   }
-  return std::move(ToLower(std::move(Response)));
+  return std::move(Response);
 }
 
 std::shared_ptr<DatabaseModel>

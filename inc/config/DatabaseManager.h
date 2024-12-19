@@ -27,7 +27,6 @@ public:
   ~DatabaseManager();
 
   bool DatabaseConnectionValidation();
-  std::string ToLower(std::string &&String);
   std::string QuerySerialization(const StringMap &ModelFields);
 
   std::shared_ptr<DatabaseModel> GetModel(const std::string &ModelName);

@@ -139,6 +139,7 @@ TEST(DatabaseModel, DatabaseModelCreateMethodTest) {
   StringMap Fields;
   Fields.emplace("AddressNumber", "int");
   Fields.emplace("AddressName", "text");
+  Fields.emplace("FullAddress", "text");
   auto MethodResponse = Manager->AddModel("Address", Fields);
   std::string Response = Manager->PrintModel("Address");
 
