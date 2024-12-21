@@ -1,9 +1,6 @@
 #include "../../inc/Config/DatabaseManager.h"
-#include "Models/DatabaseModel.h"
-#include <memory>
 
 DatabaseManager::DatabaseManager()
-    // TODO: replace this ctor into a generic one
     : m_DatabaseConnectionString{
           "user=arielkriheli password=password "
           "host=localhost port=5432 dbname=arielkriheli"} {
@@ -22,7 +19,7 @@ std::string DatabaseManager::QuerySerialization(const StringMap &ModelFields) {
   for (const auto &[key, value] : ModelFields) {
     Response.append(key).append(" ").append(value).append(" ");
   }
-  return std::move(Response);
+  return Response;
 }
 
 std::shared_ptr<DatabaseModel>
@@ -60,30 +57,26 @@ void DatabaseManager::SwapAllFields(const std::string &ModelName,
 }
 
 std::string DatabaseManager::PrintModel(const std::string &ModelName) {
-  return std::move(GetModel(ModelName)->ModelSerialization());
+  return GetModel(ModelName)->ModelSerialization();
 }
 
 pqxx::result DatabaseManager::Query(const std::string &query) {
   try {
     auto Response = m_DatabaseManager->Query(query);
     m_DatabaseManager->Commit();
-    return std::move(Response);
+    return Response;
   } catch (pqxx::sql_error const &error) {
-    std::cerr << "Query Error -> " << error.what();
+    APP_ERROR("Query Error -> " + std::string(error.what()));
     return {};
   } catch (std::exception const &error) {
-    std::cerr << "General Error -> " << error.what();
+    APP_ERROR("General Error -> " + std::string(error.what()));
     return {};
   }
 }
 
 pqxx::result DatabaseManager::Create(const std::string &TableName,
                                      const StringMap &TableFields) {
-  std::string Template = "create table if not exists " + TableName + "(" +
+  std::string query = "create table if not exists " + TableName + "(" +
                          QuerySerialization(TableFields) + ")";
-  return Query(Template);
+  return Query(query);
 };
-
-/*
- * need to fix the fields on create
- */

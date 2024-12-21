@@ -6,9 +6,20 @@
 #include <spdlog/spdlog.h>
 #include <string>
 
+/**
+ * @class Logger
+ * @brief A static class (singleton) for initializing and accessing application
+ * and system loggers.
+ */
+
 class Logger {
 public:
-  static void Init(std::string &&path);
+  /**
+   * @brief Initialize the logger with the given path.
+   * @param path the directory path to store the log files, if empty, defaults
+   * to "../backend-logs/".
+   */
+  static void Init(const std::string &path);
   static std::shared_ptr<spdlog::logger> &GetAppLogger();
   static std::shared_ptr<spdlog::logger> &GetSystemLogger();
 
@@ -17,6 +28,10 @@ private:
   static std::shared_ptr<spdlog::logger> s_SystemLogger;
 };
 
+/**
+ * @brief Via CMakeLists.txt at root directory, or #define at App.cpp at src directory.
+ */
+#ifdef ENABLE_LOGGING
 #define APP_INFO(...) Logger::GetAppLogger()->info(__VA_ARGS__)
 #define APP_TRACE(...) Logger::GetAppLogger()->trace(__VA_ARGS__)
 #define APP_DEBUG(...) Logger::GetAppLogger()->debug(__VA_ARGS__)
@@ -30,5 +45,20 @@ private:
 #define SYSTEM_ERROR(...) Logger::GetSystemLogger()->error(__VA_ARGS__)
 #define SYSTEM_WARNING(...) Logger::GetSystemLogger()->warn(__VA_ARGS__)
 #define SYSTEM_CRITICAL(...) Logger::GetSystemLogger()->critical(__VA_ARGS__)
+#else
+#define APP_INFO(...) (void)0
+#define APP_TRACE(...) (void)0 
+#define APP_DEBUG(...) (void)0
+#define APP_ERROR(...) (void)0
+#define APP_WARNING(...) (void)0
+#define APP_CRITICAL(...) (void)0
+
+#define SYSTEM_INFO(...) (void)0
+#define SYSTEM_TRACE(...) (void)0
+#define SYSTEM_DEBUG(...) (void)0
+#define SYSTEM_ERROR(...) (void)0
+#define SYSTEM_WARNING(...) (void)0
+#define SYSTEM_CRITICAL(...) (void)0
+#endif
 
 #endif

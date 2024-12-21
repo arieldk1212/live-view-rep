@@ -7,23 +7,22 @@
 
 #include <iostream>
 
-// TODO: Create vector of shared_ptr's, threading.
-
-// class DatabaseFields {
-//   // INFO: Consider this Instance, for handling DB fields cleaner.
-// public:
-//   DatabaseFields(StringMap map) : map(map) {}
-// private:
-//   StringMap map;
-// };
-
+/**
+ * @class DatabaseManager
+ * @brief Manges the database models and operations.
+ */
 class DatabaseManager {
-  /*
-   * class is responsible for handling the user's actions for the database &
-   * models.
-   */
 public:
+  /**
+   * @brief Constructs the DatabaseManager object, according to the database's
+   * connection string.
+   */
   DatabaseManager();
+  /**
+   * @brief Deconstructs the DatabaseManager object, clearing the database
+   * models.
+   * @todo Probably need to change the way it deconstructs.
+   */
   ~DatabaseManager();
 
   bool DatabaseConnectionValidation();
@@ -32,16 +31,28 @@ public:
   std::shared_ptr<DatabaseModel> GetModel(const std::string &ModelName);
   std::shared_ptr<DatabaseModel> &operator[](const std::string &ModelName);
 
-  pqxx::result AddModel(const std::string &ModelName, const StringMap &ModelFields);
+  pqxx::result AddModel(const std::string &ModelName,
+                        const StringMap &ModelFields);
   void AddField(const std::string &ModelName, const std::string &FieldName,
                 const std::string &FieldType);
   void SwapAllFields(const std::string &ModelName,
                      const StringMap &ModelFields);
   std::string PrintModel(const std::string &ModelName);
 
+  /**
+   * @brief this function in resposible for migrating certain changes for an
+   * exsiting table.
+   *
+   * @param TableName - string, name of the table.
+   * @param TableFields - StringMap, new fields of the table.
+   * @todo implement and probably add option to delete previous data.
+   */
+  void MigrateTable(const std::string &TableName, const StringMap &TableFields);
+
 private:
   pqxx::result Query(const std::string &Query);
-  pqxx::result Create(const std::string &TableName, const StringMap &TableFields);
+  pqxx::result Create(const std::string &TableName,
+                      const StringMap &TableFields);
   void CreateFields();
   void Read();
   void Update();

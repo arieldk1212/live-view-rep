@@ -13,8 +13,8 @@ public:
   DatabaseModel(const std::string &ModelName, const StringMap &ModelFields);
   ~DatabaseModel() = default;
 
-  const std::string GetModelName() const;
-  std::string ModelSerialization();
+  const std::string &GetModelName() const;
+  std::string ModelSerialization() const;
 
   void ClearFields();
   void InsertField(const std::string &FieldName, const std::string &FieldType);

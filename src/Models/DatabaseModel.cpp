@@ -4,18 +4,18 @@ DatabaseModel::DatabaseModel(const std::string &ModelName,
                              const StringMap &ModelFields)
     : m_DatabaseModelName{ModelName}, m_DatabaseModelFields{ModelFields} {}
 
-const std::string DatabaseModel::GetModelName() const {
+const std::string &DatabaseModel::GetModelName() const {
   return m_DatabaseModelName;
 }
 
-std::string DatabaseModel::ModelSerialization() {
+std::string DatabaseModel::ModelSerialization() const {
   std::string Response;
   Response = "Model Name: " + m_DatabaseModelName + " ";
   Response += "Fields: ";
   for (auto &[key, value] : m_DatabaseModelFields) {
-    Response += key + " - " + m_DatabaseModelFields[key] + " ";
+    Response.append(key).append(" - ").append(value).append(" ");
   }
-  return std::move(Response);
+  return Response;
 }
 
 void DatabaseModel::ClearFields() { m_DatabaseModelFields.clear(); }
