@@ -3,6 +3,7 @@
 
 #include "../Core/UUID.h"
 
+#include <algorithm>
 #include <map>
 
 using StringMap = std::map<std::string, std::string>;
@@ -12,16 +13,13 @@ public:
   DatabaseModel(const std::string &ModelName, const StringMap &ModelFields);
   ~DatabaseModel() = default;
 
-  std::string GetModelName() const;
-  std::string QuerySerialization();
-  std::string ModelFieldsSerialization();
-  std::string ModelSerialization();
+  const std::string &GetModelName() const;
+  std::string ModelSerialization() const;
 
   void ClearFields();
-  void InsertField(const std::string &FieldType, const std::string &FieldValue);
+  void InsertField(const std::string &FieldName, const std::string &FieldType);
   void ClearAndInsertFields(const StringMap &ModelFields);
 
-private:
 private:
   std::string m_DatabaseModelName;
   StringMap m_DatabaseModelFields;
