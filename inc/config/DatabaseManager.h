@@ -6,6 +6,26 @@
 #include "Logger.h"
 
 #include <iostream>
+#include <memory>
+#include <mutex>
+
+/**
+ * @brief this class is reponsible for the database connection pool, currently
+ * still in development.
+ * @todo implement this class, adjust connections accordingly, study about pool's more.
+ */
+class DatabaseConnectionPoolManager {
+public:
+  void CreateConnection();
+  void AddConnection(std::shared_ptr<DatabaseConnection> Connection);
+  void RemoveConnection(std::shared_ptr<DatabaseConnection> Connection);
+  std::shared_ptr<DatabaseConnection> LockConnection();
+
+private:
+  std::string m_DatabaseConnectionString;
+  std::vector<std::unique_ptr<DatabaseConnection>> m_DatabaseConnectionPool;
+  std::mutex m_DatabaseConnectionPoolMutex;
+};
 
 /**
  * @class DatabaseManager
@@ -60,6 +80,11 @@ private:
 
 private:
   std::string m_DatabaseConnectionString;
+  /**
+   * @brief to create the connection pool we need, create a new connection, add,
+   * remove, lock.
+   */
+  // std::shared_ptr<DatabasePoolManager> m_DatabaseManager;
   std::shared_ptr<DatabaseConnection> m_DatabaseManager;
   std::vector<std::shared_ptr<DatabaseModel>> m_DatabaseModels;
 };

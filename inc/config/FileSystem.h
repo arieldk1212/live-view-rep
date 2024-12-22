@@ -6,20 +6,26 @@
 #include <filesystem>
 #include <fstream>
 #include <iterator>
-#include <map>
+#include <nlohmann/json.hpp>
 #include <string>
 
-using StringMap = std::map<std::string, std::string>;
+using Json = nlohmann::json;
 
+/**
+ * @todo create a session for dev database, test database, wrap this class into a session class.
+ */
 class FileSystem {
 public:
-  FileSystem(const std::filesystem::path &FilePath);
+  explicit FileSystem(const std::filesystem::path &FilePath);
   ~FileSystem() = default;
+
+  Json GetData() const;
+  std::string ToString() const;
 
 private:
   std::filesystem::path m_FilePath;
   std::string m_FileName;
-  std::string m_FileDataString;
+  Json m_Data;
 };
 
 #endif
