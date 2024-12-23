@@ -1,9 +1,7 @@
 #include "../../inc/Config/DatabaseManager.h"
 
-DatabaseManager::DatabaseManager()
-    : m_DatabaseConnectionString{
-          "user=arielkriheli password=password "
-          "host=localhost port=5432 dbname=arielkriheli"} {
+DatabaseManager::DatabaseManager(const std::string &DatabaseConnectionString)
+    : m_DatabaseConnectionString(DatabaseConnectionString) {
   m_DatabaseManager =
       std::make_shared<DatabaseConnection>(m_DatabaseConnectionString);
 }
@@ -77,6 +75,6 @@ pqxx::result DatabaseManager::Query(const std::string &query) {
 pqxx::result DatabaseManager::Create(const std::string &TableName,
                                      const StringMap &TableFields) {
   std::string query = "create table if not exists " + TableName + "(" +
-                         QuerySerialization(TableFields) + ")";
+                      QuerySerialization(TableFields) + ")";
   return Query(query);
 };

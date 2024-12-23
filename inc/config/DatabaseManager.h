@@ -37,7 +37,7 @@ public:
    * @brief Constructs the DatabaseManager object, according to the database's
    * connection string.
    */
-  DatabaseManager();
+  DatabaseManager(const std::string &DatabaseConnectionString);
   /**
    * @brief Deconstructs the DatabaseManager object, clearing the database
    * models.

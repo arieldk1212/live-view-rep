@@ -3,12 +3,16 @@
 
 #include <memory>
 
-class Database : public ::testing::Test {
+class DatabaseTest : public ::testing::Test {
 protected:
   std::shared_ptr<DatabaseManager> Manager;
   StringMap TestFieldsFirst;
   StringMap TestFieldsSecond;
 
+  /**
+   * @brief make error due to not passing db connections string in the ctor
+   * @todo fix it
+   */
   void SetUp() override { Manager = std::make_shared<DatabaseManager>(); }
 
   void TearDown() override {
@@ -18,12 +22,12 @@ protected:
   }
 };
 
-TEST_F(Database, DatabaseConnectionTest) {
+TEST_F(DatabaseTest, DatabaseConnectionTest) {
   bool Result = Manager->DatabaseConnectionValidation();
   EXPECT_TRUE(Result);
 }
 
-TEST_F(Database, DatabaseModelCreation) {
+TEST_F(DatabaseTest, DatabaseModelCreation) {
   TestFieldsFirst.emplace("AddressName", "text");
   TestFieldsFirst.emplace("AddressNumber", "int");
   Manager->AddModel("Address", TestFieldsFirst);
@@ -36,7 +40,7 @@ TEST_F(Database, DatabaseModelCreation) {
   EXPECT_STRNE(ResponseTest.c_str(), Response.c_str());
 }
 
-TEST_F(Database, DatabaseModelAddField) {
+TEST_F(DatabaseTest, DatabaseModelAddField) {
   TestFieldsFirst.emplace("AddressName", "text");
   Manager->AddModel("Address", TestFieldsFirst);
   std::string Response = Manager->PrintModel("Address");
@@ -47,7 +51,7 @@ TEST_F(Database, DatabaseModelAddField) {
   EXPECT_STRNE(Response.c_str(), AddedFieldResponse.c_str());
 }
 
-TEST_F(Database, DatabaseModelSwapFields) {
+TEST_F(DatabaseTest, DatabaseModelSwapFields) {
   TestFieldsFirst.emplace("AddressName", "text");
   TestFieldsFirst.emplace("AddressNumber", "int");
   Manager->AddModel("Address", TestFieldsFirst);
@@ -60,7 +64,7 @@ TEST_F(Database, DatabaseModelSwapFields) {
   EXPECT_STRNE(PreResponse.c_str(), PostResponse.c_str());
 }
 
-TEST_F(Database, DatabaseModelCreateMethodTest) {
+TEST_F(DatabaseTest, DatabaseModelCreateMethodTest) {
   TestFieldsFirst = {{"id", "SERIAL PRIMARY KEY"},
                      {"addressname", "VARCHAR(100)"},
                      {"addresslocation", "VARCHAR(100)"},
