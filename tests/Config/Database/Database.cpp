@@ -1,3 +1,4 @@
+#include "../../../inc/Config/Config.h"
 #include "../../../inc/Config/DatabaseManager.h"
 #include "../../Test.h"
 
@@ -11,9 +12,11 @@ protected:
 
   /**
    * @brief make error due to not passing db connections string in the ctor
-   * @todo fix it
+   * @todo fix it, just use extern on the config
    */
-  void SetUp() override { Manager = std::make_shared<DatabaseManager>(); }
+  void SetUp() override {
+    Manager = std::make_shared<DatabaseManager>();
+  }
 
   void TearDown() override {
     Manager.reset();

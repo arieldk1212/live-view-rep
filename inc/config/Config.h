@@ -34,7 +34,8 @@ public:
   const std::string DatabaseToString() const;
 
   /**
-   * @brief returns a read-only of the TestDatabaseConnectionString from config.json
+   * @brief returns a read-only of the TestDatabaseConnectionString from
+   * config.json
    * @return const std::string
    */
   const std::string TestDatabaseToString() const;
@@ -45,5 +46,13 @@ private:
   std::filesystem::path m_FilePath;
   Json m_Data;
 };
+
+// class ConfigSession {
+// public:
+//   ConfigSession(const std::shared_ptr<Config> &Config) : m_Config(Config) {}
+
+// private:
+//   std::shared_ptr<Config> m_Config;
+// };
 
 #endif

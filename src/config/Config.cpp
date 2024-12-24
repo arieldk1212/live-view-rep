@@ -7,10 +7,10 @@ Config::Config(const std::filesystem::path &FilePath)
     try {
       m_Data = Json::parse(f);
     } catch (const Json::exception &e) {
-      SYSTEM_ERROR("File Opening Error - " + e.what());
+      SYSTEM_ERROR("FILE ERROR - PARSE - " + e.what());
     }
   } catch (const std::exception &e) {
-    SYSTEM_ERROR("File Not Found - " + e.what());
+    SYSTEM_ERROR("FILE PATH ERROR - STREAM - " + e.what());
   }
 }
 
@@ -34,7 +34,7 @@ const std::string Config::DatabaseToString() const {
         .append("dbname=")
         .append(m_Data["DATABASE"]["dbname"]);
   } catch (const Json::exception &e) {
-    SYSTEM_ERROR("Config File Error - " + e.what());
+    SYSTEM_ERROR("CONFIG FILE ERROR - DATABASE - " + e.what());
   }
   return Data;
 }
@@ -43,25 +43,29 @@ const std::string Config::TestDatabaseToString() const {
   std::string Data;
   try {
     Data.append("user=")
-        .append(m_Data["DATABASE"]["username"])
+        .append(m_Data["TEST_DATABASE"]["username"])
         .append(" ")
         .append("password=")
-        .append(m_Data["DATABASE"]["password"])
+        .append(m_Data["TEST_DATABASE"]["password"])
         .append(" ")
         .append("host=")
-        .append(m_Data["DATABASE"]["host"])
+        .append(m_Data["TEST_DATABASE"]["host"])
         .append(" ")
         .append("port=")
-        .append(m_Data["DATABASE"]["port"])
+        .append(m_Data["TEST_DATABASE"]["port"])
         .append(" ")
         .append("dbname=")
-        .append(m_Data["DATABASE"]["dbname"]);
+        .append(m_Data["TEST_DATABASE"]["dbname"]);
   } catch (const Json::exception &e) {
-    SYSTEM_ERROR("Config File Error - " + e.what());
+    SYSTEM_ERROR("CONFIG FILE ERROR - TEST_DATABASE - " + e.what());
   }
   return Data;
 }
 
 const std::string Config::LoggingPathToString() const {
-  return std::string(m_Data["LOGGING"]["PATH"]);
+  try {
+    return std::string(m_Data["LOGGING"]["PATH"]);
+  } catch (const Json::exception &e) {
+    SYSTEM_ERROR("CONFIG FILE ERROR - LOGGING - " + e.what());
+  }
 }
