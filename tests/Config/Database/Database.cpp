@@ -1,4 +1,3 @@
-#include "../../../inc/Config/Config.h"
 #include "../../../inc/Config/DatabaseManager.h"
 #include "../../Test.h"
 
@@ -10,12 +9,11 @@ protected:
   StringMap TestFieldsFirst;
   StringMap TestFieldsSecond;
 
-  /**
-   * @brief make error due to not passing db connections string in the ctor
-   * @todo fix it, just use extern on the config
-   */
   void SetUp() override {
-    Manager = std::make_shared<DatabaseManager>();
+    GlobalConfig::InitGlobalConfig("../../config.json");
+    std::string TestDatabaseConnectionString =
+        GlobalConfig::g_Config->DatabaseToString();
+    Manager = std::make_shared<DatabaseManager>(TestDatabaseConnectionString);
   }
 
   void TearDown() override {

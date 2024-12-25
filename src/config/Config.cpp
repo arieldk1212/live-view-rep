@@ -1,7 +1,6 @@
 #include "../../inc/Config/Config.h"
 
-Config::Config(const std::filesystem::path &FilePath)
-    : m_FilePath{FilePath} {
+Config::Config(const std::filesystem::path &FilePath) : m_FilePath{FilePath} {
   try {
     std::ifstream f(m_FilePath);
     try {
@@ -33,10 +32,11 @@ const std::string Config::DatabaseToString() const {
         .append(" ")
         .append("dbname=")
         .append(m_Data["DATABASE"]["dbname"]);
+    return Data;
   } catch (const Json::exception &e) {
     SYSTEM_ERROR("CONFIG FILE ERROR - DATABASE - " + e.what());
+    return "";
   }
-  return Data;
 }
 
 const std::string Config::TestDatabaseToString() const {
@@ -56,10 +56,11 @@ const std::string Config::TestDatabaseToString() const {
         .append(" ")
         .append("dbname=")
         .append(m_Data["TEST_DATABASE"]["dbname"]);
+    return Data;
   } catch (const Json::exception &e) {
     SYSTEM_ERROR("CONFIG FILE ERROR - TEST_DATABASE - " + e.what());
+    return "";
   }
-  return Data;
 }
 
 const std::string Config::LoggingPathToString() const {
@@ -67,5 +68,6 @@ const std::string Config::LoggingPathToString() const {
     return std::string(m_Data["LOGGING"]["PATH"]);
   } catch (const Json::exception &e) {
     SYSTEM_ERROR("CONFIG FILE ERROR - LOGGING - " + e.what());
+    return "";
   }
 }

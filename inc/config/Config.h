@@ -47,12 +47,4 @@ private:
   Json m_Data;
 };
 
-// class ConfigSession {
-// public:
-//   ConfigSession(const std::shared_ptr<Config> &Config) : m_Config(Config) {}
-
-// private:
-//   std::shared_ptr<Config> m_Config;
-// };
-
 #endif
