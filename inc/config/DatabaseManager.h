@@ -62,7 +62,6 @@ public:
   /**
    * @brief this function in resposible for migrating certain changes for an
    * exsiting table.
-   *
    * @param TableName - string, name of the table.
    * @param TableFields - StringMap, new fields of the table.
    * @todo implement and probably add option to delete previous data.
