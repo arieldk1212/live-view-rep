@@ -15,7 +15,11 @@ bool DatabaseManager::DatabaseConnectionValidation() {
 std::string DatabaseManager::QuerySerialization(const StringMap &ModelFields) {
   std::string Response;
   for (const auto &[key, value] : ModelFields) {
-    Response.append(key).append(" ").append(value).append(" ");
+    Response.append(key).append(" ").append(value).append(", ");
+  }
+  if (!ModelFields.empty()) {
+    Response.pop_back();
+    Response.pop_back();
   }
   return Response;
 }
@@ -58,16 +62,17 @@ std::string DatabaseManager::PrintModel(const std::string &ModelName) {
   return GetModel(ModelName)->ModelSerialization();
 }
 
-pqxx::result DatabaseManager::Query(const std::string &query) {
+pqxx::result DatabaseManager::Query(const std::string &TableName ,const std::string &query) {
   try {
     auto Response = m_DatabaseManager->Query(query);
     m_DatabaseManager->Commit();
+    APP_INFO("SQL TABLE CREATED - " + TableName);
     return Response;
-  } catch (pqxx::sql_error const &error) {
-    APP_ERROR("Query Error -> " + std::string(error.what()));
+  } catch (pqxx::sql_error const &e) {
+    APP_ERROR("QUERY ERROR AT TABLE - " + TableName + " " + std::string(e.what()));
     return {};
-  } catch (std::exception const &error) {
-    APP_ERROR("General Error -> " + std::string(error.what()));
+  } catch (std::exception const &e) {
+    APP_ERROR("GENERAL ERROR - " + std::string(e.what()));
     return {};
   }
 }
@@ -75,6 +80,6 @@ pqxx::result DatabaseManager::Query(const std::string &query) {
 pqxx::result DatabaseManager::Create(const std::string &TableName,
                                      const StringMap &TableFields) {
   std::string query = "create table if not exists " + TableName + "(" +
-                      QuerySerialization(TableFields) + ")";
-  return Query(query);
+                      QuerySerialization(TableFields) + ");";
+  return Query(TableName, query);
 };

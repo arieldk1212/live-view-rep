@@ -10,10 +10,15 @@ const std::string &DatabaseModel::GetModelName() const {
 
 std::string DatabaseModel::ModelSerialization() const {
   std::string Response;
-  Response = "Model Name: " + m_DatabaseModelName + " ";
-  Response += "Fields: ";
+  Response.append("Model Name: ")
+      .append(m_DatabaseModelName)
+      .append(" ")
+      .append("Fields: ");
   for (auto &[key, value] : m_DatabaseModelFields) {
     Response.append(key).append(" - ").append(value).append(" ");
+  }
+  if (!m_DatabaseModelFields.empty()) {
+    Response.pop_back();
   }
   return Response;
 }

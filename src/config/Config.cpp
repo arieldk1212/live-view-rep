@@ -6,10 +6,10 @@ Config::Config(const std::filesystem::path &FilePath) : m_FilePath{FilePath} {
     try {
       m_Data = Json::parse(f);
     } catch (const Json::exception &e) {
-      SYSTEM_ERROR("FILE ERROR - PARSE - " + e.what());
+      SYSTEM_ERROR("FILE ERROR - PARSE - " + std::string(e.what()));
     }
   } catch (const std::exception &e) {
-    SYSTEM_ERROR("FILE PATH ERROR - STREAM - " + e.what());
+    SYSTEM_ERROR("FILE PATH ERROR - STREAM - " + std::string(e.what()));
   }
 }
 
@@ -34,7 +34,7 @@ const std::string Config::DatabaseToString() const {
         .append(m_Data["DATABASE"]["dbname"]);
     return Data;
   } catch (const Json::exception &e) {
-    SYSTEM_ERROR("CONFIG FILE ERROR - DATABASE - " + e.what());
+    SYSTEM_ERROR("CONFIG FILE ERROR - DATABASE - " + std::string(e.what()));
     return "";
   }
 }
@@ -58,7 +58,7 @@ const std::string Config::TestDatabaseToString() const {
         .append(m_Data["TEST_DATABASE"]["dbname"]);
     return Data;
   } catch (const Json::exception &e) {
-    SYSTEM_ERROR("CONFIG FILE ERROR - TEST_DATABASE - " + e.what());
+    SYSTEM_ERROR("CONFIG FILE ERROR - TEST_DATABASE - " + std::string(e.what()));
     return "";
   }
 }
@@ -67,7 +67,7 @@ const std::string Config::LoggingPathToString() const {
   try {
     return std::string(m_Data["LOGGING"]["PATH"]);
   } catch (const Json::exception &e) {
-    SYSTEM_ERROR("CONFIG FILE ERROR - LOGGING - " + e.what());
+    SYSTEM_ERROR("CONFIG FILE ERROR - LOGGING - " + std::string(e.what()));
     return "";
   }
 }

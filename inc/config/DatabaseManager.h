@@ -10,9 +10,11 @@
 #include <mutex>
 
 /**
+ * @class DatabaseConnectionPoolManager
  * @brief this class is reponsible for the database connection pool, currently
  * still in development.
- * @todo implement this class, adjust connections accordingly, study about pool's more.
+ * @todo implement this class, adjust connections accordingly, study about
+ * pool's more.
  */
 class DatabaseConnectionPoolManager {
 public:
@@ -69,13 +71,13 @@ public:
   void MigrateTable(const std::string &TableName, const StringMap &TableFields);
 
 private:
-  pqxx::result Query(const std::string &Query);
+  pqxx::result Query(const std::string &TableName, const std::string &Query);
   pqxx::result Create(const std::string &TableName,
                       const StringMap &TableFields);
-  void CreateFields();
-  void Read();
-  void Update();
-  void Delete();
+  pqxx::result CreateFields();
+  pqxx::result Read();
+  pqxx::result Update();
+  pqxx::result Delete();
 
 private:
   std::string m_DatabaseConnectionString;
