@@ -31,7 +31,7 @@ private:
 
 /**
  * @class DatabaseManager
- * @brief Manges the database models and operations.
+ * @brief Manges the database models and operations, in front of the db itself.
  */
 class DatabaseManager {
 public:
@@ -53,8 +53,22 @@ public:
   std::shared_ptr<DatabaseModel> GetModel(const std::string &ModelName);
   std::shared_ptr<DatabaseModel> &operator[](const std::string &ModelName);
 
+  /**
+   * @brief creates a new DatabaseModel object, creates a new table in the
+   * database with the given parameters.
+   * @param ModelName string, Model/Table name.
+   * @param ModelFields StringMap, fields of the Model/Table.
+   * @return pqxx::result the result of the query.
+   */
   pqxx::result AddModel(const std::string &ModelName,
                         const StringMap &ModelFields);
+  /**
+   * @brief adds fields to an existing table.
+   * @param ModelName string, name of the model/table.
+   * @param FieldName string, the field name.
+   * @param FieldType string, the field type.
+   * @todo create the UpdateTable method and then add it to this function.
+   */
   void AddField(const std::string &ModelName, const std::string &FieldName,
                 const std::string &FieldType);
   void SwapAllFields(const std::string &ModelName,
@@ -71,13 +85,17 @@ public:
   void MigrateTable(const std::string &TableName, const StringMap &TableFields);
 
 private:
+  /**
+   * @brief private db CRUD related methods, they connect only with the model
+   * editor above and in DatabaseModel.
+   */
   pqxx::result Query(const std::string &TableName, const std::string &Query);
-  pqxx::result Create(const std::string &TableName,
-                      const StringMap &TableFields);
+  pqxx::result CreateTable(const std::string &TableName,
+                           const StringMap &TableFields);
+  pqxx::result UpdateTable();
+  pqxx::result GetTable();
+  pqxx::result DeleteTable();
   pqxx::result CreateFields();
-  pqxx::result Read();
-  pqxx::result Update();
-  pqxx::result Delete();
 
 private:
   std::string m_DatabaseConnectionString;

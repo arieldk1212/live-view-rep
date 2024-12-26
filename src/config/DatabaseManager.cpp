@@ -43,7 +43,7 @@ pqxx::result DatabaseManager::AddModel(const std::string &ModelName,
                                        const StringMap &ModelFields) {
   m_DatabaseModels.emplace_back(
       std::make_shared<DatabaseModel>(ModelName, ModelFields));
-  auto Response = Create(ModelName, ModelFields);
+  auto Response = CreateTable(ModelName, ModelFields);
   return Response;
 }
 
@@ -77,9 +77,13 @@ pqxx::result DatabaseManager::Query(const std::string &TableName ,const std::str
   }
 }
 
-pqxx::result DatabaseManager::Create(const std::string &TableName,
+pqxx::result DatabaseManager::CreateTable(const std::string &TableName,
                                      const StringMap &TableFields) {
   std::string query = "create table if not exists " + TableName + "(" +
                       QuerySerialization(TableFields) + ");";
   return Query(TableName, query);
 };
+
+pqxx::result DatabaseManager::UpdateTable() {
+
+}
