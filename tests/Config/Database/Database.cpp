@@ -66,17 +66,19 @@ TEST_F(DatabaseTest, DatabaseModelSwapFields) {
 }
 
 TEST_F(DatabaseTest, DatabaseModelCreateMethodTest) {
-  // TestFieldsFirst.emplace("created_at", "timestamp");
-  // TestFieldsFirst.emplace("addressnumber", "int");
+  /**
+   * @brief can also be written like so ->
+   *    TestFieldsFirst.emplace("created_at", "timestamp");
+   *    TestFieldsFirst.emplace("addressnumber", "int");
+   */
   TestFieldsFirst.insert({
-    {"id", "serial primary key"},
-    {"addressname", "varchar(100)"},
-    {"addresslocation", "varchar(100)"},
-    {"addressnumber", "int"},
+      {"id", "serial primary key"},
+      {"addressname", "varchar(100)"},
+      {"addresslocation", "varchar(100)"},
+      {"addressnumber", "int"},
   });
 
   auto MethodResponse = Manager->AddModel("Address", TestFieldsFirst);
-  std::string Response = Manager->PrintModel("Address");
 
   EXPECT_NE(MethodResponse.query().size(), 0);
 }

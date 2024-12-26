@@ -1,4 +1,5 @@
 #include "../../inc/Config/DatabaseManager.h"
+#include "Config/Database.h"
 
 DatabaseManager::DatabaseManager(const std::string &DatabaseConnectionString)
     : m_DatabaseConnectionString(DatabaseConnectionString) {
@@ -59,17 +60,19 @@ void DatabaseManager::SwapAllFields(const std::string &ModelName,
 }
 
 std::string DatabaseManager::PrintModel(const std::string &ModelName) {
-  return GetModel(ModelName)->ModelSerialization();
+  return GetTable(ModelName);
 }
 
-pqxx::result DatabaseManager::Query(const std::string &TableName ,const std::string &query) {
+pqxx::result DatabaseManager::Query(const std::string &TableName,
+                                    const std::string &query) {
   try {
     auto Response = m_DatabaseManager->Query(query);
     m_DatabaseManager->Commit();
     APP_INFO("SQL TABLE CREATED - " + TableName);
     return Response;
   } catch (pqxx::sql_error const &e) {
-    APP_ERROR("QUERY ERROR AT TABLE - " + TableName + " " + std::string(e.what()));
+    APP_ERROR("QUERY ERROR AT TABLE - " + TableName + " " +
+              std::string(e.what()));
     return {};
   } catch (std::exception const &e) {
     APP_ERROR("GENERAL ERROR - " + std::string(e.what()));
@@ -78,12 +81,31 @@ pqxx::result DatabaseManager::Query(const std::string &TableName ,const std::str
 }
 
 pqxx::result DatabaseManager::CreateTable(const std::string &TableName,
-                                     const StringMap &TableFields) {
-  std::string query = "create table if not exists " + TableName + "(" +
-                      QuerySerialization(TableFields) + ");";
+                                          const StringMap &TableFields) {
+  std::string query;
+  query.append("create table if not exists ")
+      .append(TableName)
+      .append("(")
+      .append(QuerySerialization(TableFields))
+      .append(")");
   return Query(TableName, query);
 };
 
-pqxx::result DatabaseManager::UpdateTable() {
-
+std::string DatabaseManager::GetTable(const std::string &TableName) {
+  return GetModel(TableName)->ModelSerialization();
 }
+
+pqxx::result DatabaseManager::UpdateTable(const std::string &TableName,
+                                          const std::string &Method,
+                                          const std::string &Query) {
+  std::string query;
+  query.append("alter role ")
+      .append(TableName)
+      .append(" ")
+      .append(Method)
+      .append(" ")
+      .append(Query)
+      .append(";");
+}
+
+pqxx::result DatabaseManager::DeleteTable() {}

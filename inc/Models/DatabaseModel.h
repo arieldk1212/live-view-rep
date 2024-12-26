@@ -2,6 +2,7 @@
 #define DATABASE_MODEL_H
 
 #include "../Core/UUID.h"
+#include "../Config/Logger.h"
 
 #include <algorithm>
 #include <map>
@@ -33,6 +34,12 @@ public:
    * @param FieldType - string, type of the field.
    */
   void InsertField(const std::string &FieldName, const std::string &FieldType);
+  /**
+   * @brief removes an existing field in an existing model.
+   * @param FieldName string, name of the field to remove.
+   * @param FieldType string, type of the field to remove.
+   */
+  void RemoveField(const std::string &FieldName, const std::string &FieldType);
   /**
    * @brief clears and insert the new fields.
    * @param ModelFields - StringMap, the new fields.

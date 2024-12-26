@@ -9,24 +9,18 @@
 #include <memory>
 #include <mutex>
 
-/**
- * @class DatabaseConnectionPoolManager
- * @brief this class is reponsible for the database connection pool, currently
- * still in development.
- * @todo implement this class, adjust connections accordingly, study about
- * pool's more.
- */
-class DatabaseConnectionPoolManager {
+class DatabaseManagerMethods {
 public:
-  void CreateConnection();
-  void AddConnection(std::shared_ptr<DatabaseConnection> Connection);
-  void RemoveConnection(std::shared_ptr<DatabaseConnection> Connection);
-  std::shared_ptr<DatabaseConnection> LockConnection();
-
-private:
-  std::string m_DatabaseConnectionString;
-  std::vector<std::unique_ptr<DatabaseConnection>> m_DatabaseConnectionPool;
-  std::mutex m_DatabaseConnectionPoolMutex;
+  virtual pqxx::result AddModel(const std::string &ModelName,
+                                const StringMap &ModelFields);
+  virtual void AddField(const std::string &ModelName,
+                        const std::string &FieldName,
+                        const std::string &FieldType);
+  virtual void SwapAllFields(const std::string &ModelName,
+                             const StringMap &ModelFields);
+  virtual void RemoveField();
+  virtual void RemoveTable();
+  virtual std::string PrintModel(const std::string &ModelName);
 };
 
 /**
@@ -43,9 +37,18 @@ public:
   /**
    * @brief Deconstructs the DatabaseManager object, clearing the database
    * models.
-   * @todo Probably need to change the way it deconstructs.
+   * @todo Probably need to change the way it deconstructs, maybe when model
+   * deleted run delete in sql
    */
   ~DatabaseManager();
+
+  struct DatabaseCommands {
+    std::string UpdateAdd = "add";
+    std::string UpdateDropColumn = "drop column";
+    std::string UpdateRenameColumn = "rename column";
+    std::string DropDrop = "drop table";
+    std::string DropTruncate = "truncate table";
+  };
 
   bool DatabaseConnectionValidation();
   std::string QuerySerialization(const StringMap &ModelFields);
@@ -73,6 +76,8 @@ public:
                 const std::string &FieldType);
   void SwapAllFields(const std::string &ModelName,
                      const StringMap &ModelFields);
+  void RemoveField();
+  void RemoveTable();
   std::string PrintModel(const std::string &ModelName);
 
   /**
@@ -82,20 +87,21 @@ public:
    * @param TableFields - StringMap, new fields of the table.
    * @todo implement and probably add option to delete previous data.
    */
-  void MigrateTable(const std::string &TableName, const StringMap &TableFields);
+  // void MigrateTable(const std::string &TableName, const StringMap
+  // &TableFields);
 
 private:
   /**
-   * @brief private db CRUD related methods, they connect only with the model
-   * editor above and in DatabaseModel.
+   * @brief private database CRUD related methods, they connect only with the
+   * model editor above and in DatabaseModel.
    */
   pqxx::result Query(const std::string &TableName, const std::string &Query);
   pqxx::result CreateTable(const std::string &TableName,
                            const StringMap &TableFields);
-  pqxx::result UpdateTable();
-  pqxx::result GetTable();
+  std::string GetTable(const std::string &TableName);
+  pqxx::result UpdateTable(const std::string &TableName,
+                           const std::string &Method, const std::string &Query);
   pqxx::result DeleteTable();
-  pqxx::result CreateFields();
 
 private:
   std::string m_DatabaseConnectionString;
@@ -106,6 +112,26 @@ private:
   // std::shared_ptr<DatabasePoolManager> m_DatabaseManager;
   std::shared_ptr<DatabaseConnection> m_DatabaseManager;
   std::vector<std::shared_ptr<DatabaseModel>> m_DatabaseModels;
+};
+
+/**
+ * @class DatabaseConnectionPoolManager
+ * @brief this class is reponsible for the database connection pool, currently
+ * still in development.
+ * @todo implement this class, adjust connections accordingly, study about
+ * pool's more.
+ */
+class DatabaseConnectionPoolManager {
+public:
+  void CreateConnection();
+  void AddConnection(std::shared_ptr<DatabaseConnection> Connection);
+  void RemoveConnection(std::shared_ptr<DatabaseConnection> Connection);
+  std::shared_ptr<DatabaseConnection> LockConnection();
+
+private:
+  std::string m_DatabaseConnectionString;
+  std::vector<std::unique_ptr<DatabaseConnection>> m_DatabaseConnectionPool;
+  std::mutex m_DatabaseConnectionPoolMutex;
 };
 
 #endif
