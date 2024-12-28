@@ -13,7 +13,8 @@ bool DatabaseManager::DatabaseConnectionValidation() {
   return m_DatabaseManager->IsDatabaseConnected();
 }
 
-std::string DatabaseManager::QuerySerialization(const StringUnMap &ModelFields) {
+std::string
+DatabaseManager::QuerySerialization(const StringUnMap &ModelFields) {
   std::string Response;
   for (const auto &[key, value] : ModelFields) {
     Response.append(key).append(" ").append(value).append(", ");
@@ -41,10 +42,11 @@ DatabaseManager::operator[](const std::string &ModelName) {
 }
 
 pqxx::result DatabaseManager::AddModel(const std::string &ModelName,
-                                       const StringUnMap &ModelFields) {
+                                       const StringUnMap &ModelFields,
+                                       DatabaseQueryCommands QueryCommand) {
   m_DatabaseModels.emplace_back(
       std::make_shared<DatabaseModel>(ModelName, ModelFields));
-  auto Response = CreateTable(ModelName, ModelFields);
+  auto Response = CreateTable(ModelName, ModelFields, QueryCommand);
   return Response;
 }
 
@@ -81,15 +83,16 @@ pqxx::result DatabaseManager::Query(const std::string &TableName,
 }
 
 pqxx::result DatabaseManager::CreateTable(const std::string &TableName,
-                                          const StringUnMap &TableFields) {
+                                          const StringUnMap &TableFields,
+                                          DatabaseQueryCommands QueryCommand) {
   std::string query;
-  query
-      .append(DatabaseCommandToString(DatabaseQueryCommands::CreateTableIfNotExists))
-      .append(" ")
-      .append(TableName)
-      .append("(")
-      .append(QuerySerialization(TableFields))
-      .append(");");
+  // query
+  //     .append(DatabaseCommandToString(DatabaseQueryCommands::CreateTableIfNotExists))
+  //     .append(" ")
+  //     .append(TableName)
+  //     .append("(")
+  //     .append(QuerySerialization(TableFields))
+  //     .append(");");
   return Query(TableName, query);
 };
 
@@ -101,13 +104,13 @@ pqxx::result DatabaseManager::UpdateTable(const std::string &TableName,
                                           DatabaseQueryCommands DatabaseCommand,
                                           const std::string &Query) {
   std::string query;
-  query.append("alter role ")
-      .append(TableName)
-      .append(" ")
-      .append(DatabaseCommandToString(DatabaseCommand))
-      .append(" ")
-      .append(Query)
-      .append(";");
+  // query.append("alter role ")
+  //     .append(TableName)
+  //     .append(" ")
+  //     .append(DatabaseCommandToString(DatabaseCommand))
+  //     .append(" ")
+  //     .append(Query)
+  //     .append(";");
 }
 
 pqxx::result DatabaseManager::DeleteTable() {}

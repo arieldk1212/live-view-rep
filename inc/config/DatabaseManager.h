@@ -10,7 +10,6 @@
 #include <memory>
 #include <mutex>
 
-
 /**
  * @class DatabaseManager
  * @brief Manges the database models and operations, in front of the db itself.
@@ -44,7 +43,8 @@ public:
    * @return pqxx::result the result of the query.
    */
   pqxx::result AddModel(const std::string &ModelName,
-                        const StringUnMap &ModelFields);
+                        const StringUnMap &ModelFields,
+                        DatabaseQueryCommands QueryCommand);
   /**
    * @brief adds fields to an existing table.
    * @param ModelName string, name of the model/table.
@@ -77,10 +77,12 @@ private:
    */
   pqxx::result Query(const std::string &TableName, const std::string &Query);
   pqxx::result CreateTable(const std::string &TableName,
-                           const StringUnMap &TableFields);
+                           const StringUnMap &TableFields,
+                           DatabaseQueryCommands QueryCommand);
   std::string GetTable(const std::string &TableName);
   pqxx::result UpdateTable(const std::string &TableName,
-                           DatabaseQueryCommands DatabaseCommand, const std::string &Query);
+                           DatabaseQueryCommands DatabaseCommand,
+                           const std::string &Query);
   pqxx::result DeleteTable();
 
 private:
