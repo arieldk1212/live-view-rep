@@ -1,5 +1,5 @@
 #include "../../inc/Config/DatabaseManager.h"
-#include "Config/Database.h"
+#include "Config/DatabaseCommands.h"
 
 DatabaseManager::DatabaseManager(const std::string &DatabaseConnectionString)
     : m_DatabaseConnectionString(DatabaseConnectionString) {
@@ -13,7 +13,7 @@ bool DatabaseManager::DatabaseConnectionValidation() {
   return m_DatabaseManager->IsDatabaseConnected();
 }
 
-std::string DatabaseManager::QuerySerialization(const StringMap &ModelFields) {
+std::string DatabaseManager::QuerySerialization(const StringUnMap &ModelFields) {
   std::string Response;
   for (const auto &[key, value] : ModelFields) {
     Response.append(key).append(" ").append(value).append(", ");
@@ -41,7 +41,7 @@ DatabaseManager::operator[](const std::string &ModelName) {
 }
 
 pqxx::result DatabaseManager::AddModel(const std::string &ModelName,
-                                       const StringMap &ModelFields) {
+                                       const StringUnMap &ModelFields) {
   m_DatabaseModels.emplace_back(
       std::make_shared<DatabaseModel>(ModelName, ModelFields));
   auto Response = CreateTable(ModelName, ModelFields);
@@ -55,7 +55,7 @@ void DatabaseManager::AddField(const std::string &ModelName,
 }
 
 void DatabaseManager::SwapAllFields(const std::string &ModelName,
-                                    const StringMap &ModelFields) {
+                                    const StringUnMap &ModelFields) {
   GetModel(ModelName)->ClearAndInsertFields(ModelFields);
 }
 
@@ -81,13 +81,15 @@ pqxx::result DatabaseManager::Query(const std::string &TableName,
 }
 
 pqxx::result DatabaseManager::CreateTable(const std::string &TableName,
-                                          const StringMap &TableFields) {
+                                          const StringUnMap &TableFields) {
   std::string query;
-  query.append("create table if not exists ")
+  query
+      .append(DatabaseCommandToString(DatabaseQueryCommands::CreateTableIfNotExists))
+      .append(" ")
       .append(TableName)
       .append("(")
       .append(QuerySerialization(TableFields))
-      .append(")");
+      .append(");");
   return Query(TableName, query);
 };
 
@@ -96,13 +98,13 @@ std::string DatabaseManager::GetTable(const std::string &TableName) {
 }
 
 pqxx::result DatabaseManager::UpdateTable(const std::string &TableName,
-                                          const std::string &Method,
+                                          DatabaseQueryCommands DatabaseCommand,
                                           const std::string &Query) {
   std::string query;
   query.append("alter role ")
       .append(TableName)
       .append(" ")
-      .append(Method)
+      .append(DatabaseCommandToString(DatabaseCommand))
       .append(" ")
       .append(Query)
       .append(";");

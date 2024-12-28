@@ -1,13 +1,14 @@
 #include "../../../inc/Config/DatabaseManager.h"
 #include "../../Test.h"
+#include "Config/DatabaseCommands.h"
 
 #include <memory>
 
 class DatabaseTest : public ::testing::Test {
 protected:
   std::shared_ptr<DatabaseManager> Manager;
-  StringMap TestFieldsFirst;
-  StringMap TestFieldsSecond;
+  StringUnMap TestFieldsFirst;
+  StringUnMap TestFieldsSecond;
 
   void SetUp() override {
     GlobalConfig::InitGlobalConfig("../../config.json");
@@ -72,6 +73,7 @@ TEST_F(DatabaseTest, DatabaseModelCreateMethodTest) {
    *    TestFieldsFirst.emplace("addressnumber", "int");
    */
   TestFieldsFirst.insert({
+      {"sdfsdf", DatabaseCommandToString(DatabaseQueryCommands::CreateTable)},
       {"id", "serial primary key"},
       {"addressname", "varchar(100)"},
       {"addresslocation", "varchar(100)"},

@@ -1,7 +1,7 @@
 #include "../../inc/Models/DatabaseModel.h"
 
 DatabaseModel::DatabaseModel(const std::string &ModelName,
-                             const StringMap &ModelFields)
+                             const StringUnMap &ModelFields)
     : m_DatabaseModelName{ModelName}, m_DatabaseModelFields{ModelFields} {}
 
 const std::string &DatabaseModel::GetModelName() const {
@@ -44,7 +44,7 @@ void DatabaseModel::RemoveField(const std::string &FieldName,
   }
 }
 
-void DatabaseModel::ClearAndInsertFields(const StringMap &ModelFields) {
+void DatabaseModel::ClearAndInsertFields(const StringUnMap &ModelFields) {
   ClearFields();
   m_DatabaseModelFields.insert(ModelFields.begin(), ModelFields.end());
 }

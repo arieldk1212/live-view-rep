@@ -3,25 +3,13 @@
 
 #include "../Models/DatabaseModel.h"
 #include "Database.h"
+#include "DatabaseCommands.h"
 #include "Logger.h"
 
 #include <iostream>
 #include <memory>
 #include <mutex>
 
-class DatabaseManagerMethods {
-public:
-  virtual pqxx::result AddModel(const std::string &ModelName,
-                                const StringMap &ModelFields);
-  virtual void AddField(const std::string &ModelName,
-                        const std::string &FieldName,
-                        const std::string &FieldType);
-  virtual void SwapAllFields(const std::string &ModelName,
-                             const StringMap &ModelFields);
-  virtual void RemoveField();
-  virtual void RemoveTable();
-  virtual std::string PrintModel(const std::string &ModelName);
-};
 
 /**
  * @class DatabaseManager
@@ -42,16 +30,8 @@ public:
    */
   ~DatabaseManager();
 
-  struct DatabaseCommands {
-    std::string UpdateAdd = "add";
-    std::string UpdateDropColumn = "drop column";
-    std::string UpdateRenameColumn = "rename column";
-    std::string DropDrop = "drop table";
-    std::string DropTruncate = "truncate table";
-  };
-
   bool DatabaseConnectionValidation();
-  std::string QuerySerialization(const StringMap &ModelFields);
+  std::string QuerySerialization(const StringUnMap &ModelFields);
 
   std::shared_ptr<DatabaseModel> GetModel(const std::string &ModelName);
   std::shared_ptr<DatabaseModel> &operator[](const std::string &ModelName);
@@ -64,7 +44,7 @@ public:
    * @return pqxx::result the result of the query.
    */
   pqxx::result AddModel(const std::string &ModelName,
-                        const StringMap &ModelFields);
+                        const StringUnMap &ModelFields);
   /**
    * @brief adds fields to an existing table.
    * @param ModelName string, name of the model/table.
@@ -75,7 +55,7 @@ public:
   void AddField(const std::string &ModelName, const std::string &FieldName,
                 const std::string &FieldType);
   void SwapAllFields(const std::string &ModelName,
-                     const StringMap &ModelFields);
+                     const StringUnMap &ModelFields);
   void RemoveField();
   void RemoveTable();
   std::string PrintModel(const std::string &ModelName);
@@ -97,10 +77,10 @@ private:
    */
   pqxx::result Query(const std::string &TableName, const std::string &Query);
   pqxx::result CreateTable(const std::string &TableName,
-                           const StringMap &TableFields);
+                           const StringUnMap &TableFields);
   std::string GetTable(const std::string &TableName);
   pqxx::result UpdateTable(const std::string &TableName,
-                           const std::string &Method, const std::string &Query);
+                           DatabaseQueryCommands DatabaseCommand, const std::string &Query);
   pqxx::result DeleteTable();
 
 private:

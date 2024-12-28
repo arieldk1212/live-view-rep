@@ -1,13 +1,14 @@
 #ifndef DATABASE_MODEL_H
 #define DATABASE_MODEL_H
 
-#include "../Core/UUID.h"
 #include "../Config/Logger.h"
+#include "../Core/UUID.h"
 
 #include <algorithm>
 #include <map>
+#include <unordered_map>
 
-using StringMap = std::map<std::string, std::string>;
+using StringUnMap = std::unordered_map<std::string, std::string>;
 
 /**
  * @class DatabaseModel
@@ -18,7 +19,7 @@ using StringMap = std::map<std::string, std::string>;
  */
 class DatabaseModel {
 public:
-  DatabaseModel(const std::string &ModelName, const StringMap &ModelFields);
+  DatabaseModel(const std::string &ModelName, const StringUnMap &ModelFields);
   ~DatabaseModel() = default;
 
   const std::string &GetModelName() const;
@@ -44,11 +45,11 @@ public:
    * @brief clears and insert the new fields.
    * @param ModelFields - StringMap, the new fields.
    */
-  void ClearAndInsertFields(const StringMap &ModelFields);
+  void ClearAndInsertFields(const StringUnMap &ModelFields);
 
 private:
   std::string m_DatabaseModelName;
-  StringMap m_DatabaseModelFields;
+  StringUnMap m_DatabaseModelFields;
 };
 
 #endif
