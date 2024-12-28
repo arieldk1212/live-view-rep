@@ -1,7 +1,7 @@
 #ifndef DATABASE_COMMANDS_H
 #define DATABASE_COMMANDS_H
 
-#include <optional>
+#include "Config/Logger.h"
 #include <string>
 #include <unordered_map>
 
@@ -47,12 +47,21 @@ const std::unordered_map<DatabaseQueryCommands, std::string>
         {DatabaseQueryCommands::DropTruncate, "truncate table"}};
 
 template <typename DatabaseCommand>
-inline std::string DatabaseCommandToString(DatabaseCommand Command) {
-  try {
-    return DatabaseQueryCommandsStrings.at(Command);
-  } catch (const std::exception &e) {
-    return "Command Not Found" + std::string(e.what());
+constexpr std::string DatabaseCommandToString(DatabaseCommand Command) {
+  if constexpr (std::is_same_v<DatabaseFieldCommands, DatabaseQueryCommands>) {
+    auto it = DatabaseFieldStrings.find(Command);
+    if (it != DatabaseFieldStrings.end()) {
+      return it->second;
+    }
+  } else if constexpr (std::is_same_v<DatabaseQueryCommands,
+                                      DatabaseFieldCommands>) {
+    auto it = DatabaseQueryCommandsStrings.find(Command);
+    if (it != DatabaseQueryCommandsStrings.end()) {
+      return it->second;
+    }
   }
+  APP_ERROR("DATABASE COMMAND ERROR");
+  return "";
 }
 
 #endif
