@@ -33,11 +33,11 @@ TEST_F(DatabaseTest, DatabaseModelCreation) {
   TestFieldsFirst.emplace("AddressName", "text");
   TestFieldsFirst.emplace("AddressNumber", "int");
   Manager->AddModel("Address", TestFieldsFirst);
-  std::string Response = Manager->PrintModel("Address");
+  std::string Response = Manager->GetModelData("Address");
 
   TestFieldsSecond.emplace("TestName", "Text");
   Manager->AddModel("Test", TestFieldsSecond);
-  std::string ResponseTest = Manager->PrintModel("Test");
+  std::string ResponseTest = Manager->GetModelData("Test");
 
   EXPECT_STRNE(ResponseTest.c_str(), Response.c_str());
 }
@@ -45,10 +45,10 @@ TEST_F(DatabaseTest, DatabaseModelCreation) {
 TEST_F(DatabaseTest, DatabaseModelAddField) {
   TestFieldsFirst.emplace("AddressName", "text");
   Manager->AddModel("Address", TestFieldsFirst);
-  std::string Response = Manager->PrintModel("Address");
+  std::string Response = Manager->GetModelData("Address");
 
   Manager->AddField("Address", "AddedField", "Text");
-  std::string AddedFieldResponse = Manager->PrintModel("Address");
+  std::string AddedFieldResponse = Manager->GetModelData("Address");
 
   EXPECT_STRNE(Response.c_str(), AddedFieldResponse.c_str());
 }
@@ -57,11 +57,11 @@ TEST_F(DatabaseTest, DatabaseModelSwapFields) {
   TestFieldsFirst.emplace("AddressName", "text");
   TestFieldsFirst.emplace("AddressNumber", "int");
   Manager->AddModel("Address", TestFieldsFirst);
-  std::string PreResponse = Manager->PrintModel("Address");
+  std::string PreResponse = Manager->GetModelData("Address");
 
   TestFieldsSecond.emplace("PostAddressName", "text");
   Manager->SwapAllFields("Address", TestFieldsSecond);
-  std::string PostResponse = Manager->PrintModel("Address");
+  std::string PostResponse = Manager->GetModelData("Address");
 
   EXPECT_STRNE(PreResponse.c_str(), PostResponse.c_str());
 }
@@ -73,11 +73,14 @@ TEST_F(DatabaseTest, DatabaseModelCreateMethodTest) {
    *    TestFieldsFirst.emplace("addressnumber", "int");
    */
   TestFieldsFirst.insert({
-      {"sdfsdf", DatabaseCommandToString(DatabaseQueryCommands::CreateTable)},
-      {"id", "serial primary key"},
-      {"addressname", "varchar(100)"},
-      {"addresslocation", "varchar(100)"},
-      {"addressnumber", "int"},
+      {"id",
+       DatabaseCommandToString(DatabaseFieldCommands::SerialPrimaryKeyField)},
+      {"addressname",
+       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
+      {"addresslocation",
+       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
+      {"addressnumber",
+       DatabaseCommandToString(DatabaseFieldCommands::IntField)},
   });
 
   auto MethodResponse = Manager->AddModel("Address", TestFieldsFirst);

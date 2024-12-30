@@ -43,22 +43,24 @@ public:
    * @return pqxx::result the result of the query.
    */
   pqxx::result AddModel(const std::string &ModelName,
-                        const StringUnMap &ModelFields,
-                        DatabaseQueryCommands QueryCommand);
+                        const StringUnMap &ModelFields);
   /**
    * @brief adds fields to an existing table.
    * @param ModelName string, name of the model/table.
    * @param FieldName string, the field name.
    * @param FieldType string, the field type.
-   * @todo create the UpdateTable method and then add it to this function.
+   * @todo change AddField, SwapAllFields -> create a generic update function
+   * and pass that, return pqxx::result.
    */
   void AddField(const std::string &ModelName, const std::string &FieldName,
                 const std::string &FieldType);
   void SwapAllFields(const std::string &ModelName,
                      const StringUnMap &ModelFields);
-  void RemoveField();
-  void RemoveTable();
-  std::string PrintModel(const std::string &ModelName);
+
+  pqxx::result RemoveTable(const std::string &ModelName);
+  pqxx::result TruncateTable(const std::string &ModelName);
+
+  std::string GetModelData(const std::string &ModelName);
 
   /**
    * @brief this function in resposible for migrating certain changes for an
@@ -67,8 +69,8 @@ public:
    * @param TableFields - StringMap, new fields of the table.
    * @todo implement and probably add option to delete previous data.
    */
-  // void MigrateTable(const std::string &TableName, const StringMap
-  // &TableFields);
+  void MigrateTable(const std::string &TableName,
+                    const StringUnMap &TableFields);
 
 private:
   /**
@@ -77,13 +79,12 @@ private:
    */
   pqxx::result Query(const std::string &TableName, const std::string &Query);
   pqxx::result CreateTable(const std::string &TableName,
-                           const StringUnMap &TableFields,
-                           DatabaseQueryCommands QueryCommand);
+                           const StringUnMap &TableFields);
   std::string GetTable(const std::string &TableName);
   pqxx::result UpdateTable(const std::string &TableName,
-                           DatabaseQueryCommands DatabaseCommand,
-                           const std::string &Query);
-  pqxx::result DeleteTable();
+                           DatabaseQueryCommands QueryCommand);
+  pqxx::result DeleteTable(const std::string &TableName,
+                           DatabaseQueryCommands QueryCommand);
 
 private:
   std::string m_DatabaseConnectionString;

@@ -28,28 +28,36 @@ const std::unordered_map<DatabaseFieldCommands, std::string>
         {DatabaseFieldCommands::VarChar100Field, "varchar(100)"}};
 
 enum class DatabaseQueryCommands {
+  AlterRole,
+
   CreateTable,
   CreateTableIfNotExists,
+
   UpdateAdd,
   UpdateDropColumn,
   UpdateRenameColumn,
+
   DropDrop,
   DropTruncate,
 };
 
 const std::unordered_map<DatabaseQueryCommands, std::string>
     DatabaseQueryCommandsStrings = {
-        {DatabaseQueryCommands::CreateTable, "create table"},
+        {DatabaseQueryCommands::AlterRole, "alter role "},
+
+        {DatabaseQueryCommands::CreateTable, "create table "},
         {DatabaseQueryCommands::CreateTableIfNotExists,
-         "create table if not exists"},
-        {DatabaseQueryCommands::UpdateAdd, "add"},
-        {DatabaseQueryCommands::UpdateDropColumn, "drop column"},
-        {DatabaseQueryCommands::UpdateRenameColumn, "rename column"},
-        {DatabaseQueryCommands::DropDrop, "drop table"},
-        {DatabaseQueryCommands::DropTruncate, "truncate table"}};
+         "create table if not exists "},
+
+        {DatabaseQueryCommands::UpdateAdd, "add "},
+        {DatabaseQueryCommands::UpdateDropColumn, "drop column "},
+        {DatabaseQueryCommands::UpdateRenameColumn, "rename column "},
+
+        {DatabaseQueryCommands::DropDrop, "drop table "},
+        {DatabaseQueryCommands::DropTruncate, "truncate table "}};
 
 template <typename DatabaseCommand>
-constexpr std::optional<std::string> DatabaseCommandToString(DatabaseCommand Command) {
+constexpr std::string DatabaseCommandToString(DatabaseCommand Command) {
   if constexpr (std::is_same_v<DatabaseFieldCommands, DatabaseQueryCommands>) {
     auto it = DatabaseFieldStrings.find(Command);
     if (it != DatabaseFieldStrings.end()) {
@@ -63,7 +71,7 @@ constexpr std::optional<std::string> DatabaseCommandToString(DatabaseCommand Com
     }
   }
   APP_ERROR("DATABASE COMMAND ERROR");
-  return std::nullopt;
+  return "";
 }
 
 #endif

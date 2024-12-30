@@ -42,11 +42,10 @@ DatabaseManager::operator[](const std::string &ModelName) {
 }
 
 pqxx::result DatabaseManager::AddModel(const std::string &ModelName,
-                                       const StringUnMap &ModelFields,
-                                       DatabaseQueryCommands QueryCommand) {
+                                       const StringUnMap &ModelFields) {
   m_DatabaseModels.emplace_back(
       std::make_shared<DatabaseModel>(ModelName, ModelFields));
-  auto Response = CreateTable(ModelName, ModelFields, QueryCommand);
+  auto Response = CreateTable(ModelName, ModelFields);
   return Response;
 }
 
@@ -61,7 +60,15 @@ void DatabaseManager::SwapAllFields(const std::string &ModelName,
   GetModel(ModelName)->ClearAndInsertFields(ModelFields);
 }
 
-std::string DatabaseManager::PrintModel(const std::string &ModelName) {
+pqxx::result DatabaseManager::RemoveTable(const std::string &ModelName) {
+  return DeleteTable(ModelName, DatabaseQueryCommands::DropDrop);
+}
+
+pqxx::result DatabaseManager::TruncateTable(const std::string &ModelName) {
+  return DeleteTable(ModelName, DatabaseQueryCommands::DropTruncate);
+}
+
+std::string DatabaseManager::GetModelData(const std::string &ModelName) {
   return GetTable(ModelName);
 }
 
@@ -83,16 +90,15 @@ pqxx::result DatabaseManager::Query(const std::string &TableName,
 }
 
 pqxx::result DatabaseManager::CreateTable(const std::string &TableName,
-                                          const StringUnMap &TableFields,
-                                          DatabaseQueryCommands QueryCommand) {
+                                          const StringUnMap &TableFields) {
   std::string query;
-  // query
-  //     .append(DatabaseCommandToString(DatabaseQueryCommands::CreateTableIfNotExists))
-  //     .append(" ")
-  //     .append(TableName)
-  //     .append("(")
-  //     .append(QuerySerialization(TableFields))
-  //     .append(");");
+  query
+      .append(DatabaseCommandToString(
+          DatabaseQueryCommands::CreateTableIfNotExists))
+      .append(TableName)
+      .append("(")
+      .append(QuerySerialization(TableFields))
+      .append(");");
   return Query(TableName, query);
 };
 
@@ -100,17 +106,18 @@ std::string DatabaseManager::GetTable(const std::string &TableName) {
   return GetModel(TableName)->ModelSerialization();
 }
 
-pqxx::result DatabaseManager::UpdateTable(const std::string &TableName,
-                                          DatabaseQueryCommands DatabaseCommand,
-                                          const std::string &Query) {
+/**
+ * @todo finish implementing this, seperate every update command..
+ */
+pqxx::result UpdateTable(const std::string &TableName,
+                         DatabaseQueryCommands QueryCommand) {
   std::string query;
-  // query.append("alter role ")
-  //     .append(TableName)
-  //     .append(" ")
-  //     .append(DatabaseCommandToString(DatabaseCommand))
-  //     .append(" ")
-  //     .append(Query)
-  //     .append(";");
+  query.append("alter role ").append(TableName);
 }
 
-pqxx::result DatabaseManager::DeleteTable() {}
+pqxx::result DatabaseManager::DeleteTable(const std::string &TableName,
+                                          DatabaseQueryCommands QueryCommand) {
+  std::string query;
+  query.append(DatabaseCommandToString(QueryCommand)).append(TableName);
+  return Query(TableName, query);
+}
