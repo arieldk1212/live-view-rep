@@ -49,13 +49,13 @@ pqxx::result DatabaseManager::AddModel(const std::string &ModelName,
 }
 
 void DatabaseManager::AddField(const std::string &ModelName,
-                                       const std::string &FieldName,
-                                       const std::string &FieldType) {
+                               const std::string &FieldName,
+                               const std::string &FieldType) {
   GetModel(ModelName)->InsertField(FieldName, FieldType);
 }
 
 void DatabaseManager::SwapAllFields(const std::string &ModelName,
-                                            const StringUnMap &ModelFields) {
+                                    const StringUnMap &ModelFields) {
   GetModel(ModelName)->ClearAndInsertFields(ModelFields);
 }
 
@@ -77,8 +77,13 @@ pqxx::result DatabaseManager::TruncateModel(const std::string &ModelName) {
   return DeleteTable(ModelName, DatabaseQueryCommands::DropTruncate);
 }
 
-std::string DatabaseManager::GetModelData(const std::string &ModelName) {
-  return GetTable(ModelName);
+pqxx::result DatabaseManager::GetModelData(const std::string &ModelName) {
+  return GetTableData(ModelName);
+}
+
+std::string
+DatabaseManager::GetSerializedModelData(const std::string &ModelName) {
+  return GetSerializedTableData(ModelName);
 }
 
 pqxx::result DatabaseManager::Query(const std::string &TableName,
@@ -111,7 +116,14 @@ pqxx::result DatabaseManager::CreateTable(const std::string &TableName,
   return Query(TableName, query);
 };
 
-std::string DatabaseManager::GetTable(const std::string &TableName) {
+pqxx::result DatabaseManager::GetTableData(const std::string &TabelName) {
+  std::string query;
+  query.append("select * from ").append(TabelName);
+  return Query(TabelName, query);
+}
+
+std::string
+DatabaseManager::GetSerializedTableData(const std::string &TableName) {
   return GetModel(TableName)->ModelSerialization();
 }
 

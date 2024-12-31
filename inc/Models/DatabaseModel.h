@@ -37,14 +37,12 @@ public:
    * @brief changes the field name.
    * @param FieldName - string, name of the field.
    * @param NewFieldName - string, name of the new field name.
-   * @todo implement this function.
    */
   void ChangeFieldName(const std::string &FieldName, const std::string &NewFieldName);
   /**
    * @brief changes the field type, deletes data.
    * @param FieldName - string, name of the field.
    * @param FieldType - string, new field type.
-   * @todo implement this function.
    */
   void ChangeFieldType(const std::string &FieldName, const std::string &FieldType);
   /**

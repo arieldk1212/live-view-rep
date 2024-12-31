@@ -25,7 +25,7 @@ public:
    * @brief Deconstructs the DatabaseManager object, clearing the database
    * models.
    * @todo Probably need to change the way it deconstructs, maybe when model
-   * deleted run delete in sql
+   * deleted run delete in sql.
    */
   ~DatabaseManager();
 
@@ -55,17 +55,11 @@ public:
   void SwapAllFields(const std::string &ModelName,
                      const StringUnMap &ModelFields);
 
-  void UpdateRecordModel();
-  void DeleteRecordModel();
-
-  pqxx::result AlterColumnModel();
-  pqxx::result DropColumnModel();
-
   pqxx::result RemoveModel(const std::string &ModelName);
   pqxx::result TruncateModel(const std::string &ModelName);
 
-  void InsertInto();
-  std::string GetModelData(const std::string &ModelName);
+  pqxx::result GetModelData(const std::string &ModelName);
+  std::string GetSerializedModelData(const std::string &ModelName);
 
   /**
    * @brief this function in resposible for migrating certain changes for an
@@ -87,7 +81,8 @@ private:
   pqxx::result Query(const std::string &TableName, const std::string &Query);
   pqxx::result CreateTable(const std::string &TableName,
                            const StringUnMap &TableFields);
-  std::string GetTable(const std::string &TableName);
+  pqxx::result GetTableData(const std::string &TabelName);
+  std::string GetSerializedTableData(const std::string &TableName);
   pqxx::result DeleteTable(const std::string &TableName,
                            DatabaseQueryCommands QueryCommand);
 
