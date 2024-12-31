@@ -33,11 +33,11 @@ TEST_F(DatabaseTest, DatabaseModelCreation) {
   TestFieldsFirst.emplace("AddressName", "text");
   TestFieldsFirst.emplace("AddressNumber", "int");
   Manager->AddModel("Address", TestFieldsFirst);
-  std::string Response = Manager->GetModelData("Address");
+  std::string Response = Manager->GetSerializedModelData("Address");
 
   TestFieldsSecond.emplace("TestName", "Text");
   Manager->AddModel("Test", TestFieldsSecond);
-  std::string ResponseTest = Manager->GetModelData("Test");
+  std::string ResponseTest = Manager->GetSerializedModelData("Test");
 
   EXPECT_STRNE(ResponseTest.c_str(), Response.c_str());
 }
@@ -45,10 +45,10 @@ TEST_F(DatabaseTest, DatabaseModelCreation) {
 TEST_F(DatabaseTest, DatabaseModelAddField) {
   TestFieldsFirst.emplace("AddressName", "text");
   Manager->AddModel("Address", TestFieldsFirst);
-  std::string Response = Manager->GetModelData("Address");
+  std::string Response = Manager->GetSerializedModelData("Address");
 
   Manager->AddField("Address", "AddedField", "Text");
-  std::string AddedFieldResponse = Manager->GetModelData("Address");
+  std::string AddedFieldResponse = Manager->GetSerializedModelData("Address");
 
   EXPECT_STRNE(Response.c_str(), AddedFieldResponse.c_str());
 }
@@ -57,11 +57,11 @@ TEST_F(DatabaseTest, DatabaseModelSwapFields) {
   TestFieldsFirst.emplace("AddressName", "text");
   TestFieldsFirst.emplace("AddressNumber", "int");
   Manager->AddModel("Address", TestFieldsFirst);
-  std::string PreResponse = Manager->GetModelData("Address");
+  std::string PreResponse = Manager->GetSerializedModelData("Address");
 
   TestFieldsSecond.emplace("PostAddressName", "text");
   Manager->SwapAllFields("Address", TestFieldsSecond);
-  std::string PostResponse = Manager->GetModelData("Address");
+  std::string PostResponse = Manager->GetSerializedModelData("Address");
 
   EXPECT_STRNE(PreResponse.c_str(), PostResponse.c_str());
 }
