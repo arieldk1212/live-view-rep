@@ -32,8 +32,8 @@ public:
   bool DatabaseConnectionValidation();
   std::string QuerySerialization(const StringUnMap &ModelFields);
 
-  std::shared_ptr<DatabaseModel> GetModel(const std::string &ModelName);
   std::shared_ptr<DatabaseModel> &operator[](const std::string &ModelName);
+  std::shared_ptr<DatabaseModel> GetModel(const std::string &ModelName);
 
   /**
    * @brief creates a new DatabaseModel object, creates a new table in the
@@ -49,28 +49,33 @@ public:
    * @param ModelName string, name of the model/table.
    * @param FieldName string, the field name.
    * @param FieldType string, the field type.
-   * @todo change AddField, SwapAllFields -> create a generic update function
-   * and pass that, return pqxx::result.
    */
   void AddField(const std::string &ModelName, const std::string &FieldName,
                 const std::string &FieldType);
   void SwapAllFields(const std::string &ModelName,
                      const StringUnMap &ModelFields);
 
-  pqxx::result RemoveTable(const std::string &ModelName);
-  pqxx::result TruncateTable(const std::string &ModelName);
+  void UpdateRecordModel();
+  void DeleteRecordModel();
+
+  pqxx::result AlterColumnModel();
+  pqxx::result DropColumnModel();
+
+  pqxx::result RemoveModel(const std::string &ModelName);
+  pqxx::result TruncateModel(const std::string &ModelName);
 
   std::string GetModelData(const std::string &ModelName);
 
   /**
    * @brief this function in resposible for migrating certain changes for an
-   * exsiting table.
+   * exsiting table, compares the changes in a given DatabaseModel, migrates the
+   * changes to the database.
    * @param TableName - string, name of the table.
    * @param TableFields - StringMap, new fields of the table.
    * @todo implement and probably add option to delete previous data.
    */
-  void MigrateTable(const std::string &TableName,
-                    const StringUnMap &TableFields);
+  pqxx::result Migrate(const std::string &TableName,
+                       const StringUnMap &TableFields);
 
 private:
   /**
@@ -81,8 +86,6 @@ private:
   pqxx::result CreateTable(const std::string &TableName,
                            const StringUnMap &TableFields);
   std::string GetTable(const std::string &TableName);
-  pqxx::result UpdateTable(const std::string &TableName,
-                           DatabaseQueryCommands QueryCommand);
   pqxx::result DeleteTable(const std::string &TableName,
                            DatabaseQueryCommands QueryCommand);
 

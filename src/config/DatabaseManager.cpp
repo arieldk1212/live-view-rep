@@ -1,5 +1,4 @@
 #include "../../inc/Config/DatabaseManager.h"
-#include "Config/DatabaseCommands.h"
 
 DatabaseManager::DatabaseManager(const std::string &DatabaseConnectionString)
     : m_DatabaseConnectionString(DatabaseConnectionString) {
@@ -26,11 +25,6 @@ DatabaseManager::QuerySerialization(const StringUnMap &ModelFields) {
   return Response;
 }
 
-std::shared_ptr<DatabaseModel>
-DatabaseManager::GetModel(const std::string &ModelName) {
-  return (*this)[ModelName];
-}
-
 std::shared_ptr<DatabaseModel> &
 DatabaseManager::operator[](const std::string &ModelName) {
   for (auto &Model : m_DatabaseModels) {
@@ -39,6 +33,11 @@ DatabaseManager::operator[](const std::string &ModelName) {
     }
   }
   throw std::out_of_range("Model not found: " + ModelName);
+}
+
+std::shared_ptr<DatabaseModel>
+DatabaseManager::GetModel(const std::string &ModelName) {
+  return (*this)[ModelName];
 }
 
 pqxx::result DatabaseManager::AddModel(const std::string &ModelName,
@@ -50,21 +49,31 @@ pqxx::result DatabaseManager::AddModel(const std::string &ModelName,
 }
 
 void DatabaseManager::AddField(const std::string &ModelName,
-                               const std::string &FieldName,
-                               const std::string &FieldType) {
+                                       const std::string &FieldName,
+                                       const std::string &FieldType) {
   GetModel(ModelName)->InsertField(FieldName, FieldType);
 }
 
 void DatabaseManager::SwapAllFields(const std::string &ModelName,
-                                    const StringUnMap &ModelFields) {
+                                            const StringUnMap &ModelFields) {
   GetModel(ModelName)->ClearAndInsertFields(ModelFields);
 }
 
-pqxx::result DatabaseManager::RemoveTable(const std::string &ModelName) {
-  return DeleteTable(ModelName, DatabaseQueryCommands::DropDrop);
+pqxx::result DatabaseManager::RemoveModel(const std::string &ModelName) {
+  auto it =
+      std::find_if(m_DatabaseModels.begin(), m_DatabaseModels.end(),
+                   [&ModelName](const std::shared_ptr<DatabaseModel> &Model) {
+                     return Model->GetModelName() == ModelName;
+                   });
+  if (it != m_DatabaseModels.end()) {
+    m_DatabaseModels.erase(it);
+    return DeleteTable(ModelName, DatabaseQueryCommands::DropDrop);
+  }
+  throw std::out_of_range("Model not found: " + ModelName);
 }
 
-pqxx::result DatabaseManager::TruncateTable(const std::string &ModelName) {
+pqxx::result DatabaseManager::TruncateModel(const std::string &ModelName) {
+  GetModel(ModelName)->ClearFields();
   return DeleteTable(ModelName, DatabaseQueryCommands::DropTruncate);
 }
 
@@ -104,15 +113,6 @@ pqxx::result DatabaseManager::CreateTable(const std::string &TableName,
 
 std::string DatabaseManager::GetTable(const std::string &TableName) {
   return GetModel(TableName)->ModelSerialization();
-}
-
-/**
- * @todo finish implementing this, seperate every update command..
- */
-pqxx::result UpdateTable(const std::string &TableName,
-                         DatabaseQueryCommands QueryCommand) {
-  std::string query;
-  query.append("alter role ").append(TableName);
 }
 
 pqxx::result DatabaseManager::DeleteTable(const std::string &TableName,
