@@ -14,8 +14,6 @@ using StringUnMap = std::unordered_map<std::string, std::string>;
  * @class DatabaseModel
  * @brief this class is responsible for the database model itself (table &
  * fields) - api, no relation to postgres, only in project base.
- * @todo think about improvement when it comes to a small detail about the model
- * - only edit.
  */
 class DatabaseModel {
 public:
@@ -35,6 +33,20 @@ public:
    * @param FieldType - string, type of the field.
    */
   void InsertField(const std::string &FieldName, const std::string &FieldType);
+  /**
+   * @brief changes the field name.
+   * @param FieldName - string, name of the field.
+   * @param NewFieldName - string, name of the new field name.
+   * @todo implement this function.
+   */
+  void ChangeFieldName(const std::string &FieldName, const std::string &NewFieldName);
+  /**
+   * @brief changes the field type, deletes data.
+   * @param FieldName - string, name of the field.
+   * @param FieldType - string, new field type.
+   * @todo implement this function.
+   */
+  void ChangeFieldType(const std::string &FieldName, const std::string &FieldType);
   /**
    * @brief removes an existing field in an existing model.
    * @param FieldName string, name of the field to remove.

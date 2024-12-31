@@ -64,6 +64,7 @@ public:
   pqxx::result RemoveModel(const std::string &ModelName);
   pqxx::result TruncateModel(const std::string &ModelName);
 
+  void InsertInto();
   std::string GetModelData(const std::string &ModelName);
 
   /**
@@ -72,7 +73,8 @@ public:
    * changes to the database.
    * @param TableName - string, name of the table.
    * @param TableFields - StringMap, new fields of the table.
-   * @todo implement and probably add option to delete previous data.
+   * @todo implement this, after client editing changes in DatabaseModel, should
+   * call this function.
    */
   pqxx::result Migrate(const std::string &TableName,
                        const StringUnMap &TableFields);

@@ -3,7 +3,6 @@
 
 #include "Config/Logger.h"
 
-#include <optional>
 #include <string>
 #include <unordered_map>
 

@@ -35,12 +35,32 @@ void DatabaseModel::InsertField(const std::string &FieldName,
   }
 }
 
+void DatabaseModel::ChangeFieldName(const std::string &FieldName,
+                                    const std::string &NewFieldName) {
+  try {
+    auto FieldKey = m_DatabaseModelFields.extract(FieldName);
+    FieldKey.key() = NewFieldName;
+    m_DatabaseModelFields.insert(std::move(FieldKey));
+  } catch (const std::exception &e) {
+    APP_ERROR("KEY NOT FOUND - " + FieldName + " - " + std::string(e.what()));
+  }
+}
+
+void DatabaseModel::ChangeFieldType(const std::string &FieldName,
+                                    const std::string &NewFieldType) {
+  try {
+    m_DatabaseModelFields[FieldName] = NewFieldType;
+  } catch (const std::exception &e) {
+    APP_ERROR("KEY NOT FOUND - " + FieldName + " - " + std::string(e.what()));
+  }
+}
+
 void DatabaseModel::RemoveField(const std::string &FieldName,
                                 const std::string &FieldType) {
   try {
     m_DatabaseModelFields.erase(FieldName);
   } catch (const std::exception &e) {
-    APP_ERROR("KEY NOT FOUND - " + FieldName " - " + std::string(e.what()));
+    APP_ERROR("KEY NOT FOUND - " + FieldName + " - " + std::string(e.what()));
   }
 }
 
