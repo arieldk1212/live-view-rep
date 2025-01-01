@@ -1,7 +1,7 @@
 #include "../../../inc/Config/DatabaseManager.h"
 #include "../../Test.h"
-#include "Config/DatabaseCommands.h"
 
+#include <gtest/gtest.h>
 #include <memory>
 
 class DatabaseTest : public ::testing::Test {
@@ -86,4 +86,60 @@ TEST_F(DatabaseTest, DatabaseModelCreateMethodTest) {
   auto MethodResponse = Manager->AddModel("Address", TestFieldsFirst);
 
   EXPECT_NE(MethodResponse.query().size(), 0);
+}
+
+TEST_F(DatabaseTest, DatabaseModelGetSerializedDataTest) {
+  TestFieldsFirst.insert({
+      {"id",
+       DatabaseCommandToString(DatabaseFieldCommands::SerialPrimaryKeyField)},
+      {"addressname",
+       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
+      {"addresslocation",
+       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
+      {"addressnumber",
+       DatabaseCommandToString(DatabaseFieldCommands::IntField)},
+  });
+
+  auto MethodResponse = Manager->AddModel("Address", TestFieldsFirst);
+  auto Data = Manager->GetSerializedModelData("Address");
+
+  EXPECT_NE(Data.find("id"), 0);
+}
+
+TEST_F(DatabaseTest, DatabaseModelGetDataTest) {
+  TestFieldsFirst.insert({
+      {"id",
+       DatabaseCommandToString(DatabaseFieldCommands::SerialPrimaryKeyField)},
+      {"addressname",
+       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
+      {"addresslocation",
+       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
+      {"addressnumber",
+       DatabaseCommandToString(DatabaseFieldCommands::IntField)},
+  });
+/** @todo fix this test, then move to other tests, add dtor in the gtest, finish migrate. */
+  auto MethodResponse = Manager->AddModel("Address", TestFieldsFirst);
+  auto Data = Manager->GetModelData("Address");
+
+  EXPECT_FALSE(Data.empty());
+}
+
+TEST_F(DatabaseTest, DatabaseRemoveModelTest) {
+  TestFieldsFirst.insert({
+      {"id",
+       DatabaseCommandToString(DatabaseFieldCommands::SerialPrimaryKeyField)},
+      {"addressname",
+       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
+      {"addresslocation",
+       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
+      {"addressnumber",
+       DatabaseCommandToString(DatabaseFieldCommands::IntField)},
+  });
+
+  auto MethodResponse = Manager->AddModel("Address", TestFieldsFirst);
+  auto Data = Manager->RemoveModel("Address");
+  auto ModelData = Manager->GetSerializedModelData("Address");
+
+  // EXPECT_TRUE(Data.column_table("Address")) << ModelData;
+  EXPECT_EQ(ModelData.length(), 0) << ModelData;
 }

@@ -86,12 +86,15 @@ DatabaseManager::GetSerializedModelData(const std::string &ModelName) {
   return GetSerializedTableData(ModelName);
 }
 
+pqxx::result Migrate(const std::string &TableName,
+                     const StringUnMap &TableFields) {}
+
 pqxx::result DatabaseManager::Query(const std::string &TableName,
                                     const std::string &query) {
   try {
     auto Response = m_DatabaseManager->Query(query);
     m_DatabaseManager->Commit();
-    APP_INFO("SQL TABLE CREATED - " + TableName);
+    APP_INFO("QUERRY COMMITTED AT - " + TableName);
     return Response;
   } catch (pqxx::sql_error const &e) {
     APP_ERROR("QUERY ERROR AT TABLE - " + TableName + " " +
@@ -118,7 +121,7 @@ pqxx::result DatabaseManager::CreateTable(const std::string &TableName,
 
 pqxx::result DatabaseManager::GetTableData(const std::string &TabelName) {
   std::string query;
-  query.append("select * from ").append(TabelName);
+  query.append("select * from ").append(TabelName).append(";");
   return Query(TabelName, query);
 }
 

@@ -57,20 +57,19 @@ const std::unordered_map<DatabaseQueryCommands, std::string>
 
 template <typename DatabaseCommand>
 constexpr std::string DatabaseCommandToString(DatabaseCommand Command) {
-  if constexpr (std::is_same_v<DatabaseFieldCommands, DatabaseQueryCommands>) {
+  if constexpr (std::is_same_v<decltype(Command), DatabaseFieldCommands>) {
     auto it = DatabaseFieldStrings.find(Command);
     if (it != DatabaseFieldStrings.end()) {
       return it->second;
     }
-  } else if constexpr (std::is_same_v<DatabaseQueryCommands,
-                                      DatabaseFieldCommands>) {
+  } else if constexpr (std::is_same_v<decltype(Command), DatabaseQueryCommands>) {
     auto it = DatabaseQueryCommandsStrings.find(Command);
     if (it != DatabaseQueryCommandsStrings.end()) {
       return it->second;
     }
   }
   APP_ERROR("DATABASE COMMAND ERROR");
-  return "";
+  return "error";
 }
 
 #endif
