@@ -27,6 +27,7 @@ const std::unordered_map<DatabaseFieldCommands, std::string>
         {DatabaseFieldCommands::VarChar100Field, "varchar(100)"}};
 
 enum class DatabaseQueryCommands {
+  SelectAll,
   AlterRole,
 
   CreateTable,
@@ -42,6 +43,7 @@ enum class DatabaseQueryCommands {
 
 const std::unordered_map<DatabaseQueryCommands, std::string>
     DatabaseQueryCommandsStrings = {
+        {DatabaseQueryCommands::SelectAll, "select * from "},
         {DatabaseQueryCommands::AlterRole, "alter role "},
 
         {DatabaseQueryCommands::CreateTable, "create table "},

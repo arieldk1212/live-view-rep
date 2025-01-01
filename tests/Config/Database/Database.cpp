@@ -121,7 +121,7 @@ TEST_F(DatabaseTest, DatabaseModelGetDataTest) {
   auto MethodResponse = Manager->AddModel("Address", TestFieldsFirst);
   auto Data = Manager->GetModelData("Address");
 
-  EXPECT_FALSE(Data.empty());
+  EXPECT_NE(Data.size(), 0);
 }
 
 TEST_F(DatabaseTest, DatabaseRemoveModelTest) {

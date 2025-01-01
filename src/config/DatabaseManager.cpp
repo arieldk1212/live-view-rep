@@ -1,4 +1,5 @@
 #include "../../inc/Config/DatabaseManager.h"
+#include "Config/DatabaseCommands.h"
 
 DatabaseManager::DatabaseManager(const std::string &DatabaseConnectionString)
     : m_DatabaseConnectionString(DatabaseConnectionString) {
@@ -119,10 +120,11 @@ pqxx::result DatabaseManager::CreateTable(const std::string &TableName,
   return Query(TableName, query);
 };
 
-pqxx::result DatabaseManager::GetTableData(const std::string &TabelName) {
+pqxx::result DatabaseManager::GetTableData(const std::string &TableName) {
   std::string query;
-  query.append("select * from ").append(TabelName).append(";");
-  return Query(TabelName, query);
+  query.append(DatabaseCommandToString(DatabaseQueryCommands::SelectAll))
+      .append(TableName);
+  return Query(TableName, query);
 }
 
 std::string

@@ -81,7 +81,7 @@ private:
   pqxx::result Query(const std::string &TableName, const std::string &Query);
   pqxx::result CreateTable(const std::string &TableName,
                            const StringUnMap &TableFields);
-  pqxx::result GetTableData(const std::string &TabelName);
+  pqxx::result GetTableData(const std::string &TableName);
   std::string GetSerializedTableData(const std::string &TableName);
   pqxx::result DeleteTable(const std::string &TableName,
                            DatabaseQueryCommands QueryCommand);
