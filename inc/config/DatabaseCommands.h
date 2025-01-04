@@ -64,7 +64,8 @@ constexpr std::string DatabaseCommandToString(DatabaseCommand Command) {
     if (it != DatabaseFieldStrings.end()) {
       return it->second;
     }
-  } else if constexpr (std::is_same_v<decltype(Command), DatabaseQueryCommands>) {
+  } else if constexpr (std::is_same_v<decltype(Command),
+                                      DatabaseQueryCommands>) {
     auto it = DatabaseQueryCommandsStrings.find(Command);
     if (it != DatabaseQueryCommandsStrings.end()) {
       return it->second;

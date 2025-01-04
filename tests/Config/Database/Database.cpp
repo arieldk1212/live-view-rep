@@ -117,11 +117,31 @@ TEST_F(DatabaseTest, DatabaseModelGetDataTest) {
       {"addressnumber",
        DatabaseCommandToString(DatabaseFieldCommands::IntField)},
   });
-/** @todo fix this test, then move to other tests, add dtor in the gtest, finish migrate. */
   auto MethodResponse = Manager->AddModel("Address", TestFieldsFirst);
+  /** @todo after insert into function is applied, add it here to make the test complete. */
   auto Data = Manager->GetModelData("Address");
 
-  EXPECT_NE(Data.size(), 0);
+  EXPECT_NE(Data.affected_rows(), 0);
+}
+
+TEST_F(DatabaseTest, DatabaseTruncateModelTest) {
+  TestFieldsFirst.insert({
+      {"id",
+       DatabaseCommandToString(DatabaseFieldCommands::SerialPrimaryKeyField)},
+      {"addressname",
+       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
+      {"addresslocation",
+       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
+      {"addressnumber",
+       DatabaseCommandToString(DatabaseFieldCommands::IntField)},
+  });
+  auto MethodResponse = Manager->AddModel("Address", TestFieldsFirst);
+  /** @todo after insert into function is applied, add it here to make the test complete. */
+  auto Before = Manager->GetModelData("Address");
+  auto Data = Manager->TruncateModel("Address");
+  auto After = Manager->GetModelData("Address");
+
+  EXPECT_NE(Before, After);
 }
 
 TEST_F(DatabaseTest, DatabaseRemoveModelTest) {
@@ -138,8 +158,6 @@ TEST_F(DatabaseTest, DatabaseRemoveModelTest) {
 
   auto MethodResponse = Manager->AddModel("Address", TestFieldsFirst);
   auto Data = Manager->RemoveModel("Address");
-  auto ModelData = Manager->GetSerializedModelData("Address");
 
-  // EXPECT_TRUE(Data.column_table("Address")) << ModelData;
-  EXPECT_EQ(ModelData.length(), 0) << ModelData;
+  EXPECT_TRUE(Data.empty());
 }

@@ -44,23 +44,23 @@ public:
    */
   pqxx::result AddModel(const std::string &ModelName,
                         const StringUnMap &ModelFields);
-  /**
-   * @brief adds fields to an existing table.
-   * @param ModelName string, name of the model/table.
-   * @param FieldName string, the field name.
-   * @param FieldType string, the field type.
-   */
-  void AddField(const std::string &ModelName, const std::string &FieldName,
-                const std::string &FieldType);
-  void SwapAllFields(const std::string &ModelName,
-                     const StringUnMap &ModelFields);
 
   pqxx::result RemoveModel(const std::string &ModelName);
   pqxx::result TruncateModel(const std::string &ModelName);
 
   pqxx::result GetModelData(const std::string &ModelName);
   std::string GetSerializedModelData(const std::string &ModelName);
-
+  /**
+   * @brief adds fields to an existing table.
+   * @param ModelName string, name of the model/table.
+   * @param FieldName string, the field name.
+   * @param FieldType string, the field type.
+   * @todo UpdateField, UpdateFields, Addfield, InsertInto
+   */
+  void AddField(const std::string &ModelName, const std::string &FieldName,
+                const std::string &FieldType);
+  void SwapAllFields(const std::string &ModelName,
+                     const StringUnMap &ModelFields);
   /**
    * @brief this function in resposible for migrating certain changes for an
    * exsiting table, compares the changes in a given DatabaseModel, migrates the
@@ -78,7 +78,9 @@ private:
    * @brief private database CRUD related methods, they connect only with the
    * model editor above and in DatabaseModel.
    */
-  pqxx::result Query(const std::string &TableName, const std::string &Query);
+  // pqxx::result MUQuery(const std::string &TableName, const std::string
+  // &Query);
+  pqxx::result MCrQuery(const std::string &TableName, const std::string &Query);
   pqxx::result CreateTable(const std::string &TableName,
                            const StringUnMap &TableFields);
   pqxx::result GetTableData(const std::string &TableName);

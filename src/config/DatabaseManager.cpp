@@ -1,5 +1,4 @@
 #include "../../inc/Config/DatabaseManager.h"
-#include "Config/DatabaseCommands.h"
 
 DatabaseManager::DatabaseManager(const std::string &DatabaseConnectionString)
     : m_DatabaseConnectionString(DatabaseConnectionString) {
@@ -90,19 +89,34 @@ DatabaseManager::GetSerializedModelData(const std::string &ModelName) {
 pqxx::result Migrate(const std::string &TableName,
                      const StringUnMap &TableFields) {}
 
-pqxx::result DatabaseManager::Query(const std::string &TableName,
+// pqxx::result DatabaseManager::MUQuery(const std::string &TableName,
+//                                     const std::string &query) {
+//   try {
+//     auto Response = m_DatabaseManager->UQuery(query);
+//     APP_INFO("UQUERRY COMMITTED AT - " + TableName);
+//     return Response;
+//   } catch (pqxx::sql_error const &e) {
+//     APP_ERROR("UQUERY ERROR AT TABLE - " + TableName + " " +
+//               std::string(e.what()));
+//     return {};
+//   } catch (std::exception const &e) {
+//     APP_ERROR("UQUERY GENERAL ERROR - " + std::string(e.what()));
+//     return {};
+//   }
+// }
+
+pqxx::result DatabaseManager::MCrQuery(const std::string &TableName,
                                     const std::string &query) {
   try {
-    auto Response = m_DatabaseManager->Query(query);
-    m_DatabaseManager->Commit();
-    APP_INFO("QUERRY COMMITTED AT - " + TableName);
+    auto Response = m_DatabaseManager->CrQuery(query);
+    APP_INFO("CRQUERRY COMMITTED AT - " + TableName);
     return Response;
   } catch (pqxx::sql_error const &e) {
-    APP_ERROR("QUERY ERROR AT TABLE - " + TableName + " " +
+    APP_ERROR("CRQUERY ERROR AT TABLE - " + TableName + " " +
               std::string(e.what()));
     return {};
   } catch (std::exception const &e) {
-    APP_ERROR("GENERAL ERROR - " + std::string(e.what()));
+    APP_ERROR("CRQUERY GENERAL ERROR - " + std::string(e.what()));
     return {};
   }
 }
@@ -117,14 +131,14 @@ pqxx::result DatabaseManager::CreateTable(const std::string &TableName,
       .append("(")
       .append(QuerySerialization(TableFields))
       .append(");");
-  return Query(TableName, query);
+  return MCrQuery(TableName, query);
 };
 
 pqxx::result DatabaseManager::GetTableData(const std::string &TableName) {
   std::string query;
   query.append(DatabaseCommandToString(DatabaseQueryCommands::SelectAll))
       .append(TableName);
-  return Query(TableName, query);
+  return MCrQuery(TableName, query);
 }
 
 std::string
@@ -136,5 +150,5 @@ pqxx::result DatabaseManager::DeleteTable(const std::string &TableName,
                                           DatabaseQueryCommands QueryCommand) {
   std::string query;
   query.append(DatabaseCommandToString(QueryCommand)).append(TableName);
-  return Query(TableName, query);
+  return MCrQuery(TableName, query);
 }
