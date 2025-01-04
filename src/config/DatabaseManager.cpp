@@ -1,4 +1,6 @@
 #include "../../inc/Config/DatabaseManager.h"
+#include "Config/DatabaseCommands.h"
+#include "Models/DatabaseModel.h"
 
 DatabaseManager::DatabaseManager(const std::string &DatabaseConnectionString)
     : m_DatabaseConnectionString(DatabaseConnectionString) {
@@ -48,15 +50,111 @@ pqxx::result DatabaseManager::AddModel(const std::string &ModelName,
   return Response;
 }
 
-void DatabaseManager::AddField(const std::string &ModelName,
-                               const std::string &FieldName,
-                               const std::string &FieldType) {
+pqxx::result DatabaseManager::AddColumn(const std::string &ModelName,
+                                        const std::string &FieldName,
+                                        const std::string &FieldType) {
   GetModel(ModelName)->InsertField(FieldName, FieldType);
+  std::string query;
+  query.append(DatabaseCommandToString(DatabaseQueryCommands::AlterTable))
+      .append(ModelName)
+      .append(" add ")
+      .append(FieldName)
+      .append(" ")
+      .append(FieldType)
+      .append(";");
+  return MCrQuery(ModelName, query);
 }
 
-void DatabaseManager::SwapAllFields(const std::string &ModelName,
-                                    const StringUnMap &ModelFields) {
-  GetModel(ModelName)->ClearAndInsertFields(ModelFields);
+pqxx::result DatabaseManager::DropColumn(const std::string &ModelName,
+                                         const std::string &FieldName) {
+  GetModel(ModelName)->RemoveField(FieldName);
+  std::string query;
+  query.append(DatabaseCommandToString(DatabaseQueryCommands::AlterTable))
+      .append(ModelName)
+      .append(" ")
+      .append(DatabaseCommandToString(DatabaseQueryCommands::UpdateDropColumn))
+      .append(FieldName);
+  return MCrQuery(ModelName, query);
+}
+
+pqxx::result DatabaseManager::AlterColumn(const std::string &ModelName,
+                                          const std::string &FieldName,
+                                          const std::string &NewFieldType) {
+  GetModel(ModelName)->ChangeFieldType(FieldName, NewFieldType);
+  std::string query;
+  query.append(DatabaseCommandToString(DatabaseQueryCommands::AlterColumn))
+      .append(ModelName)
+      .append(" ")
+      .append(DatabaseCommandToString(DatabaseQueryCommands::AlterColumn))
+      .append(FieldName)
+      .append(" type ")
+      .append(NewFieldType);
+  return MCrQuery(ModelName, query);
+}
+
+// pqxx::result DatabaseManager::SwapAllColumns(const std::string &ModelName,
+//                                              const StringUnMap &ModelFields)
+//                                              {
+//   GetModel(ModelName)->ClearAndInsertFields(ModelFields);
+// }
+
+pqxx::result DatabaseManager::UpdateColumn(const std::string &ModelName,
+                                           const std::string &FieldName,
+                                           const std::string &NewFieldValue,
+                                           const std::string &Condition) {
+  std::string query;
+  query.append(DatabaseCommandToString(DatabaseQueryCommands::Update))
+      .append(ModelName)
+      .append(" set ")
+      .append(FieldName)
+      .append(" = '")
+      .append(NewFieldValue)
+      .append("' where ")
+      .append(Condition)
+      .append(";");
+  return MCrQuery(ModelName, query);
+}
+
+pqxx::result DatabaseManager::UpdateColumns(const std::string &ModelName,
+                                            const StringUnMap &Fields,
+                                            const std::string &Condition) {
+  std::string query;
+  query.append(DatabaseCommandToString(DatabaseQueryCommands::Update))
+      .append(ModelName)
+      .append(" set ");
+  for (const auto &[key, value] : Fields) {
+    query.append(key).append(" = '").append(value).append("', ");
+  }
+  query.pop_back();
+  query.pop_back();
+  query += " where " + Condition + ";";
+  return MCrQuery(ModelName, query);
+}
+
+pqxx::result DatabaseManager::InsertInto(const std::string &ModelName,
+                                         const StringUnMap &Fields) {
+  std::string query;
+  std::string keys;
+  std::string values;
+  for (const auto &[key, value] : Fields) {
+    keys.append(key).append(", ");
+    values.append("'").append(value).append("', ");
+  }
+  if (!Fields.empty()) {
+    keys.pop_back();
+    keys.pop_back();
+    values.pop_back();
+    values.pop_back();
+  }
+  query.append(DatabaseCommandToString(DatabaseQueryCommands::InsertInto))
+      .append(ModelName)
+      .append(" (")
+      .append(keys)
+      .append(") values (")
+      .append(values)
+      .append(");");
+
+  return MCrQuery(ModelName, query);
 }
 
 pqxx::result DatabaseManager::RemoveModel(const std::string &ModelName) {
@@ -81,13 +179,16 @@ pqxx::result DatabaseManager::GetModelData(const std::string &ModelName) {
   return GetTableData(ModelName);
 }
 
+pqxx::result DatabaseManager::GetModelData(const std::string &ModelName,
+                                           const std::string &FieldName,
+                                           const std::string &FieldValue) {
+  return GetTableData(ModelName, FieldName, FieldValue);
+}
+
 std::string
 DatabaseManager::GetSerializedModelData(const std::string &ModelName) {
   return GetSerializedTableData(ModelName);
 }
-
-pqxx::result Migrate(const std::string &TableName,
-                     const StringUnMap &TableFields) {}
 
 // pqxx::result DatabaseManager::MUQuery(const std::string &TableName,
 //                                     const std::string &query) {
@@ -106,7 +207,7 @@ pqxx::result Migrate(const std::string &TableName,
 // }
 
 pqxx::result DatabaseManager::MCrQuery(const std::string &TableName,
-                                    const std::string &query) {
+                                       const std::string &query) {
   try {
     auto Response = m_DatabaseManager->CrQuery(query);
     APP_INFO("CRQUERRY COMMITTED AT - " + TableName);
@@ -138,6 +239,21 @@ pqxx::result DatabaseManager::GetTableData(const std::string &TableName) {
   std::string query;
   query.append(DatabaseCommandToString(DatabaseQueryCommands::SelectAll))
       .append(TableName);
+  return MCrQuery(TableName, query);
+}
+
+pqxx::result DatabaseManager::GetTableData(const std::string &TableName,
+                                           const std::string &TableFieldName,
+                                           const std::string &TableFieldValue) {
+  std::string query;
+  query.append(DatabaseCommandToString(DatabaseQueryCommands::SelectAll))
+      .append(TableName)
+      .append(" where ")
+      .append(TableFieldName)
+      .append("=")
+      .append("'")
+      .append(TableFieldValue)
+      .append("'");
   return MCrQuery(TableName, query);
 }
 

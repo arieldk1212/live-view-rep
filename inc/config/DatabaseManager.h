@@ -49,29 +49,38 @@ public:
   pqxx::result TruncateModel(const std::string &ModelName);
 
   pqxx::result GetModelData(const std::string &ModelName);
+  pqxx::result GetModelData(const std::string &ModelName,
+                            const std::string &FieldName,
+                            const std::string &FieldValue);
   std::string GetSerializedModelData(const std::string &ModelName);
   /**
-   * @brief adds fields to an existing table.
+   * @brief add fields to an existing table.
    * @param ModelName string, name of the model/table.
    * @param FieldName string, the field name.
    * @param FieldType string, the field type.
    * @todo UpdateField, UpdateFields, Addfield, InsertInto
    */
-  void AddField(const std::string &ModelName, const std::string &FieldName,
-                const std::string &FieldType);
-  void SwapAllFields(const std::string &ModelName,
-                     const StringUnMap &ModelFields);
-  /**
-   * @brief this function in resposible for migrating certain changes for an
-   * exsiting table, compares the changes in a given DatabaseModel, migrates the
-   * changes to the database.
-   * @param TableName - string, name of the table.
-   * @param TableFields - StringMap, new fields of the table.
-   * @todo implement this, after client editing changes in DatabaseModel, should
-   * call this function.
-   */
-  pqxx::result Migrate(const std::string &TableName,
-                       const StringUnMap &TableFields);
+  pqxx::result AddColumn(const std::string &ModelName,
+                         const std::string &FieldName,
+                         const std::string &FieldType);
+  pqxx::result DropColumn(const std::string &ModelName,
+                          const std::string &FieldName);
+  pqxx::result AlterColumn(const std::string &ModelName,
+                           const std::string &FieldName,
+                           const std::string &NewFieldType);
+  /** @brief not in usage, better to delete the model than change all.
+  pqxx::result SwapAllColumns(const std::string &ModelName,
+                              const StringUnMap &ModelFields);
+  */
+  pqxx::result UpdateColumn(const std::string &ModelName,
+                            const std::string &FieldName,
+                            const std::string &NewFieldValue,
+                            const std::string &Condition);
+  pqxx::result UpdateColumns(const std::string &ModelName,
+                             const StringUnMap &Fields,
+                             const std::string &Condition);
+  pqxx::result InsertInto(const std::string &ModelName,
+                          const StringUnMap &Fields);
 
 private:
   /**
@@ -84,6 +93,9 @@ private:
   pqxx::result CreateTable(const std::string &TableName,
                            const StringUnMap &TableFields);
   pqxx::result GetTableData(const std::string &TableName);
+  pqxx::result GetTableData(const std::string &TableName,
+                            const std::string &TableFieldName,
+                            const std::string &TableFieldValue);
   std::string GetSerializedTableData(const std::string &TableName);
   pqxx::result DeleteTable(const std::string &TableName,
                            DatabaseQueryCommands QueryCommand);

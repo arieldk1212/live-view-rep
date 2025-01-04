@@ -55,8 +55,7 @@ void DatabaseModel::ChangeFieldType(const std::string &FieldName,
   }
 }
 
-void DatabaseModel::RemoveField(const std::string &FieldName,
-                                const std::string &FieldType) {
+void DatabaseModel::RemoveField(const std::string &FieldName) {
   try {
     m_DatabaseModelFields.erase(FieldName);
   } catch (const std::exception &e) {
@@ -64,7 +63,7 @@ void DatabaseModel::RemoveField(const std::string &FieldName,
   }
 }
 
-void DatabaseModel::ClearAndInsertFields(const StringUnMap &ModelFields) {
-  ClearFields();
-  m_DatabaseModelFields.insert(ModelFields.begin(), ModelFields.end());
-}
+// void DatabaseModel::ClearAndInsertFields(const StringUnMap &ModelFields) {
+//   ClearFields();
+//   m_DatabaseModelFields.insert(ModelFields.begin(), ModelFields.end());
+// }

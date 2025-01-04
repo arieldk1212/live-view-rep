@@ -29,6 +29,10 @@ const std::unordered_map<DatabaseFieldCommands, std::string>
 enum class DatabaseQueryCommands {
   SelectAll,
   AlterRole,
+  AlterColumn,
+  AlterTable,
+  Update,
+  InsertInto,
 
   CreateTable,
   CreateTableIfNotExists,
@@ -45,6 +49,10 @@ const std::unordered_map<DatabaseQueryCommands, std::string>
     DatabaseQueryCommandsStrings = {
         {DatabaseQueryCommands::SelectAll, "select * from "},
         {DatabaseQueryCommands::AlterRole, "alter role "},
+        {DatabaseQueryCommands::AlterColumn, "alter column "},
+        {DatabaseQueryCommands::AlterTable, "alter table "},
+        {DatabaseQueryCommands::Update, "update "},
+        {DatabaseQueryCommands::InsertInto, "insert into "},
 
         {DatabaseQueryCommands::CreateTable, "create table "},
         {DatabaseQueryCommands::CreateTableIfNotExists,
