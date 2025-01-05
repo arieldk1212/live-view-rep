@@ -11,17 +11,31 @@ env:
   CMAKE_PREFIX_PATH: ${{ github.workspace }}/vcpkg/installed/arm64-osx/share
 
 jobs:
-  call-postgres-setup:
-    uses: ./.github/workflows/postgres-setup.yml 
+  # call-postgres-setup:
+    # uses: ./.github/workflows/postgres-setup.yml 
 
   run-tests:
     runs-on: macos-latest
-    needs: call-postgres-setup
+    # needs: call-postgres-setup
 
     steps:
     - uses: actions/checkout@v4
 
-    - name: Install vcpkg
+    - name: Install Postgres
+        run: |
+          brew install postgresql@15
+    
+    - name: Create Role and Database
+        run: |
+          export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
+          initdb --locale=C -D /opt/homebrew/var/postgres@15
+          pg_ctl -D /opt/homebrew/var/postgres@15 start
+          createuser -s postgres
+          psql -U postgres -c "CREATE ROLE arielkriheli WITH LOGIN PASSWORD 'password';"
+          psql -U postgres -c "ALTER ROLE arielkriheli CREATEDB;"
+          psql -U postgres -c "CREATE DATABASE live_view_test OWNER arielkriheli;"
+
+    - name: Install vcpkg and autoconf
       run: |
         brew install autoconf    
         git clone https://github.com/microsoft/vcpkg.git
