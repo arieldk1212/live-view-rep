@@ -58,7 +58,8 @@ const std::string Config::TestDatabaseToString() const {
         .append(m_Data["TEST_DATABASE"]["dbname"]);
     return Data;
   } catch (const Json::exception &e) {
-    SYSTEM_ERROR("CONFIG FILE ERROR - TEST_DATABASE - " + std::string(e.what()));
+    SYSTEM_ERROR("CONFIG FILE ERROR - TEST_DATABASE - " +
+                 std::string(e.what()));
     return "";
   }
 }

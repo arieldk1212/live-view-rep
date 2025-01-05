@@ -14,7 +14,7 @@ protected:
   void SetUp() override {
     GlobalConfig::InitGlobalConfig("../../config.json");
     std::string TestDatabaseConnectionString =
-        GlobalConfig::g_Config->DatabaseToString();
+        GlobalConfig::g_Config->TestDatabaseToString();
     Manager = std::make_shared<DatabaseManager>(TestDatabaseConnectionString);
     TestTableName = "Test";
   }
