@@ -1,6 +1,6 @@
 #include "../inc/Core/Type.h"
 
-Type::Type(StringVector Type) : m_Type(std::move(Type)) {}
+Type::Type(StringVector Type) : m_Type{std::move(Type)} {}
 
 const StringVector &Type::GetTypeVector() const { return m_Type; }
 

@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-typedef std::vector<std::string> StringVector;
+using StringVector = std::vector<std::string>;
 
 class Type {
 public:

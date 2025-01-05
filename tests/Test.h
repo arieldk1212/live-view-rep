@@ -2,5 +2,6 @@
 #define TEST_H
 
 #include <gtest/gtest.h>
+#include "../inc/Config/GConfig.h"
 
 #endif

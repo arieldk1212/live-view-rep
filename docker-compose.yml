@@ -9,7 +9,7 @@ services:
       - 8080:8080
     networks:
       - live-view-network
-    command: bash -c "./src/app"
+    command: bash -c "./src/App"
     depends_on:
       - postgres-db
 

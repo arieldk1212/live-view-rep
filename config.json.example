@@ -1,0 +1,21 @@
+{
+  "DATABASE": {
+    "username": "",
+    "password": "",
+    "host": "",
+    "port": "",
+    "dbname": ""
+  },
+
+  "TEST_DATABASE": {
+    "username": "",
+    "password": "",
+    "host": "",
+    "port": "",
+    "dbname": ""
+  },
+
+  "LOGGING": {
+    "PATH": ""
+  }
+}

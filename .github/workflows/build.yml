@@ -2,12 +2,13 @@ name: build
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
     branches: [ "main" ]
 
 env:
   DOCKER_COMPOSE_FILE_NAME: docker-compose.yml
+  DOCKERFILE: Dockerfile
 
 jobs:
   build:
@@ -15,5 +16,11 @@ jobs:
     steps:
 
     - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+
+    - name: Install docker
+      run: |
+        brew install docker docker-compose docker-buildx
+
+    - name: Build Dockerfile
+      run: docker-buildx build . --platform linux/arm64
+      # run: COMPOSE_DOCKER_CLI_BUILD=1 docker-compose build

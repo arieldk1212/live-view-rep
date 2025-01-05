@@ -1,11 +1,16 @@
-FROM ubuntu:22.04
+FROM gcc:12.4.0-bookworm
 
 RUN apt update -y; \
     apt upgrade -y; \
     apt install -y \
     build-essential \
+    autoconf \
+    pkg-config \
+    bison \
+    flex \
     gcc \
     python3 \
+    libc6 \
     zip \
     curl \
     unzip \
@@ -23,8 +28,8 @@ RUN  apt install -y wget; \
     rm -rf cmake.sh;
 
 WORKDIR /usr/local
-RUN git clone https://github.com/microsoft/vcpkg.git && \
-    vcpkg/bootstrap-vcpkg.sh
+RUN git clone https://github.com/microsoft/vcpkg.git
+RUN ./vcpkg/bootstrap-vcpkg.sh
 
 EXPOSE 8080 5432 
 
@@ -32,6 +37,7 @@ WORKDIR /live-view
 
 COPY ./src/ ./src/
 COPY ./inc/ ./inc/
+COPY ./tests/ ./tests/
 COPY ./CMakeLists.txt .
 COPY ./vcpkg.json .
 
@@ -41,5 +47,5 @@ RUN vcpkg install
 
 WORKDIR /live-view/build
 
-RUN cmake .. -DCMAKE_TOOLCHAIN_FILE=/usr/local/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_PREFIX_PATH=/usr/local/vcpkg/installed/arm64-osx/share -DCMAKE_BUILD_TYPE=Release
+RUN cmake .. -DCMAKE_TOOLCHAIN_FILE=/usr/local/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_PREFIX_PATH=/usr/local/vcpkg/installed/arm64-osx/share -DCMAKE_BUILD_TYPE=Debug
 RUN make
