@@ -82,7 +82,7 @@ pqxx::result DatabaseManager::AlterColumn(const std::string &ModelName,
                                           const std::string &NewFieldType) {
   GetModel(ModelName)->ChangeFieldType(FieldName, NewFieldType);
   std::string query;
-  query.append(DatabaseCommandToString(DatabaseQueryCommands::AlterColumn))
+  query.append(DatabaseCommandToString(DatabaseQueryCommands::AlterTable))
       .append(ModelName)
       .append(" ")
       .append(DatabaseCommandToString(DatabaseQueryCommands::AlterColumn))
@@ -97,6 +97,32 @@ pqxx::result DatabaseManager::AlterColumn(const std::string &ModelName,
 //                                              {
 //   GetModel(ModelName)->ClearAndInsertFields(ModelFields);
 // }
+
+pqxx::result DatabaseManager::InsertInto(const std::string &ModelName,
+                                         const StringUnMap &Fields) {
+  std::string query;
+  std::string keys;
+  std::string values;
+  for (const auto &[key, value] : Fields) {
+    keys.append(key).append(", ");
+    values.append("'").append(value).append("', ");
+  }
+  if (!Fields.empty()) {
+    keys.pop_back();
+    keys.pop_back();
+    values.pop_back();
+    values.pop_back();
+  }
+  query.append(DatabaseCommandToString(DatabaseQueryCommands::InsertInto))
+      .append(ModelName)
+      .append(" (")
+      .append(keys)
+      .append(") values (")
+      .append(values)
+      .append(");");
+
+  return MCrQuery(ModelName, query);
+}
 
 pqxx::result DatabaseManager::UpdateColumn(const std::string &ModelName,
                                            const std::string &FieldName,
@@ -128,32 +154,6 @@ pqxx::result DatabaseManager::UpdateColumns(const std::string &ModelName,
   query.pop_back();
   query.pop_back();
   query += " where " + Condition + ";";
-  return MCrQuery(ModelName, query);
-}
-
-pqxx::result DatabaseManager::InsertInto(const std::string &ModelName,
-                                         const StringUnMap &Fields) {
-  std::string query;
-  std::string keys;
-  std::string values;
-  for (const auto &[key, value] : Fields) {
-    keys.append(key).append(", ");
-    values.append("'").append(value).append("', ");
-  }
-  if (!Fields.empty()) {
-    keys.pop_back();
-    keys.pop_back();
-    values.pop_back();
-    values.pop_back();
-  }
-  query.append(DatabaseCommandToString(DatabaseQueryCommands::InsertInto))
-      .append(ModelName)
-      .append(" (")
-      .append(keys)
-      .append(") values (")
-      .append(values)
-      .append(");");
-
   return MCrQuery(ModelName, query);
 }
 

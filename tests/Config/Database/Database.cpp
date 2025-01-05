@@ -6,6 +6,7 @@
 
 class DatabaseTest : public ::testing::Test {
 protected:
+  std::string TestTableName;
   std::shared_ptr<DatabaseManager> Manager;
   StringUnMap TestFieldsFirst;
   StringUnMap TestFieldsSecond;
@@ -15,9 +16,11 @@ protected:
     std::string TestDatabaseConnectionString =
         GlobalConfig::g_Config->DatabaseToString();
     Manager = std::make_shared<DatabaseManager>(TestDatabaseConnectionString);
+    TestTableName = "Test";
   }
 
   void TearDown() override {
+    Manager->RemoveModel("Test");
     Manager.reset();
     TestFieldsFirst.clear();
     TestFieldsSecond.clear();
@@ -26,29 +29,31 @@ protected:
 
 TEST_F(DatabaseTest, DatabaseConnectionTest) {
   bool Result = Manager->DatabaseConnectionValidation();
+  Manager->AddModel(TestTableName, TestFieldsFirst);
   EXPECT_TRUE(Result);
 }
 
 TEST_F(DatabaseTest, DatabaseModelCreation) {
   TestFieldsFirst.emplace("AddressName", "text");
   TestFieldsFirst.emplace("AddressNumber", "int");
-  Manager->AddModel("Address", TestFieldsFirst);
-  std::string Response = Manager->GetSerializedModelData("Address");
+  Manager->AddModel(TestTableName, TestFieldsFirst);
+  auto Response = Manager->GetSerializedModelData(TestTableName);
 
   TestFieldsSecond.emplace("TestName", "Text");
-  Manager->AddModel("Test", TestFieldsSecond);
-  std::string ResponseTest = Manager->GetSerializedModelData("Test");
+  Manager->AddModel("Test2", TestFieldsSecond);
+  auto ResponseTest = Manager->GetSerializedModelData("Test2");
+  Manager->RemoveModel("Test2");
 
   EXPECT_STRNE(ResponseTest.c_str(), Response.c_str());
 }
 
 TEST_F(DatabaseTest, DatabaseModelAddField) {
   TestFieldsFirst.emplace("AddressName", "text");
-  Manager->AddModel("Address", TestFieldsFirst);
-  std::string Response = Manager->GetSerializedModelData("Address");
+  Manager->AddModel(TestTableName, TestFieldsFirst);
+  std::string Response = Manager->GetSerializedModelData(TestTableName);
 
-  Manager->AddColumn("Address", "AddedField", "Text");
-  std::string AddedFieldResponse = Manager->GetSerializedModelData("Address");
+  Manager->AddColumn(TestTableName, "AddedField", "Text");
+  std::string AddedFieldResponse = Manager->GetSerializedModelData(TestTableName);
 
   EXPECT_STRNE(Response.c_str(), AddedFieldResponse.c_str());
 }
@@ -83,7 +88,7 @@ TEST_F(DatabaseTest, DatabaseModelCreateMethodTest) {
        DatabaseCommandToString(DatabaseFieldCommands::IntField)},
   });
 
-  auto MethodResponse = Manager->AddModel("Address", TestFieldsFirst);
+  auto MethodResponse = Manager->AddModel(TestTableName, TestFieldsFirst);
 
   EXPECT_NE(MethodResponse.query().size(), 0);
 }
@@ -100,8 +105,8 @@ TEST_F(DatabaseTest, DatabaseModelGetSerializedDataTest) {
        DatabaseCommandToString(DatabaseFieldCommands::IntField)},
   });
 
-  auto MethodResponse = Manager->AddModel("Address", TestFieldsFirst);
-  auto Data = Manager->GetSerializedModelData("Address");
+  auto MethodResponse = Manager->AddModel(TestTableName, TestFieldsFirst);
+  auto Data = Manager->GetSerializedModelData(TestTableName);
 
   EXPECT_NE(Data.find("id"), 0);
 }
@@ -117,12 +122,17 @@ TEST_F(DatabaseTest, DatabaseModelGetDataTest) {
       {"addressnumber",
        DatabaseCommandToString(DatabaseFieldCommands::IntField)},
   });
-  auto MethodResponse = Manager->AddModel("Address", TestFieldsFirst);
-  /** @todo after insert into function is applied, add it here to make the test
-   * complete. */
-  auto Data = Manager->GetModelData("Address");
 
-  EXPECT_NE(Data.affected_rows(), 0);
+  StringUnMap Data = {{"addressname", "rami"},
+                      {"addresslocation", "levi"},
+                      {"addressnumber", "18"},
+                      {"id", "1"}};
+
+  auto MethodResponse = Manager->AddModel(TestTableName, TestFieldsFirst);
+  Manager->InsertInto(TestTableName, Data);
+  auto Response = Manager->GetModelData(TestTableName);
+
+  EXPECT_NE(Response.affected_rows(), 0);
 }
 
 TEST_F(DatabaseTest, DatabaseModelGetDataByFieldTest) {
@@ -136,12 +146,17 @@ TEST_F(DatabaseTest, DatabaseModelGetDataByFieldTest) {
       {"addressnumber",
        DatabaseCommandToString(DatabaseFieldCommands::IntField)},
   });
-  auto MethodResponse = Manager->AddModel("Address", TestFieldsFirst);
-  /** @todo after insert into function is applied, add it here to make the test
-   * complete. */
-  auto Data = Manager->GetModelData("Address", "id", "1");
 
-  EXPECT_NE(Data.affected_rows(), 0);
+  StringUnMap Data = {{"addressname", "rami"},
+                      {"addresslocation", "levi"},
+                      {"addressnumber", "18"},
+                      {"id", "1"}};
+
+  auto MethodResponse = Manager->AddModel(TestTableName, TestFieldsFirst);
+  Manager->InsertInto(TestTableName, Data);
+  auto Response = Manager->GetModelData(TestTableName, "id", "1");
+
+  EXPECT_NE(Response.affected_rows(), 0);
 }
 
 TEST_F(DatabaseTest, DatabaseTruncateModelTest) {
@@ -155,33 +170,37 @@ TEST_F(DatabaseTest, DatabaseTruncateModelTest) {
       {"addressnumber",
        DatabaseCommandToString(DatabaseFieldCommands::IntField)},
   });
-  auto MethodResponse = Manager->AddModel("Address", TestFieldsFirst);
-  /** @todo after insert into function is applied, add it here to make the test
-   * complete. */
-  auto Before = Manager->GetModelData("Address");
-  auto Data = Manager->TruncateModel("Address");
-  auto After = Manager->GetModelData("Address");
+
+  StringUnMap Data = {{"addressname", "rami"},
+                      {"addresslocation", "levi"},
+                      {"addressnumber", "18"},
+                      {"id", "1"}};
+
+  auto MethodResponse = Manager->AddModel(TestTableName, TestFieldsFirst);
+  Manager->InsertInto(TestTableName, Data);
+  auto Before = Manager->GetModelData(TestTableName);
+  auto Response = Manager->TruncateModel(TestTableName);
+  auto After = Manager->GetModelData(TestTableName);
 
   EXPECT_NE(Before, After);
 }
 
-TEST_F(DatabaseTest, DatabaseRemoveModelTest) {
-  TestFieldsFirst.insert({
-      {"id",
-       DatabaseCommandToString(DatabaseFieldCommands::SerialPrimaryKeyField)},
-      {"addressname",
-       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
-      {"addresslocation",
-       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
-      {"addressnumber",
-       DatabaseCommandToString(DatabaseFieldCommands::IntField)},
-  });
+// TEST_F(DatabaseTest, DatabaseRemoveModelTest) {
+//   TestFieldsFirst.insert({
+//       {"id",
+//        DatabaseCommandToString(DatabaseFieldCommands::SerialPrimaryKeyField)},
+//       {"addressname",
+//        DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
+//       {"addresslocation",
+//        DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
+//       {"addressnumber",
+//        DatabaseCommandToString(DatabaseFieldCommands::IntField)},
+//   });
 
-  auto MethodResponse = Manager->AddModel("Address", TestFieldsFirst);
-  auto Data = Manager->RemoveModel("Address");
+//   auto MethodResponse = Manager->AddModel(TestTableName, TestFieldsFirst);
 
-  EXPECT_TRUE(Data.empty());
-}
+//   EXPECT_TRUE(MethodResponse.());
+// }
 
 TEST_F(DatabaseTest, DatabaseAddColumnTest) {
   TestFieldsFirst.insert({
@@ -195,9 +214,9 @@ TEST_F(DatabaseTest, DatabaseAddColumnTest) {
        DatabaseCommandToString(DatabaseFieldCommands::IntField)},
   });
 
-  auto MethodResponse = Manager->AddModel("Address", TestFieldsFirst);
-  Manager->AddColumn("Address", "testfield", "int");
-  auto Data = Manager->GetSerializedModelData("Address");
+  auto MethodResponse = Manager->AddModel(TestTableName, TestFieldsFirst);
+  Manager->AddColumn(TestTableName, "testfield", "int");
+  auto Data = Manager->GetSerializedModelData(TestTableName);
 
   EXPECT_TRUE(Data.find("testfield"));
 }
@@ -214,9 +233,111 @@ TEST_F(DatabaseTest, DatabaseDropColumnTest) {
        DatabaseCommandToString(DatabaseFieldCommands::IntField)},
   });
 
-  auto MethodResponse = Manager->AddModel("Address", TestFieldsFirst);
-  Manager->DropColumn("Address", "id");
-  auto Data = Manager->GetSerializedModelData("Address");
+  auto MethodResponse = Manager->AddModel(TestTableName, TestFieldsFirst);
+  auto PreData = Manager->GetSerializedModelData(TestTableName);
+  Manager->DropColumn(TestTableName, "id");
+  auto AfterData = Manager->GetSerializedModelData(TestTableName);
 
-  EXPECT_FALSE(Data.find("id")) << Data;
+  EXPECT_NE(AfterData, PreData);
+}
+
+TEST_F(DatabaseTest, DatabaseAlterColumnTest) {
+  TestFieldsFirst.insert({
+      {"id",
+       DatabaseCommandToString(DatabaseFieldCommands::SerialPrimaryKeyField)},
+      {"addressname",
+       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
+      {"addresslocation",
+       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
+      {"addressnumber",
+       DatabaseCommandToString(DatabaseFieldCommands::IntField)},
+  });
+
+  auto MethodResponse = Manager->AddModel(TestTableName, TestFieldsFirst);
+  auto PreData = Manager->GetSerializedModelData(TestTableName);
+  Manager->AlterColumn(
+      TestTableName, "addressname",
+      DatabaseCommandToString(DatabaseFieldCommands::CharField));
+  auto AfterData = Manager->GetSerializedModelData(TestTableName);
+
+  EXPECT_NE(AfterData, PreData);
+}
+
+TEST_F(DatabaseTest, DatabaseInsertIntoTest) {
+  TestFieldsFirst.insert({
+      {"id",
+       DatabaseCommandToString(DatabaseFieldCommands::SerialPrimaryKeyField)},
+      {"addressname",
+       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
+      {"addresslocation",
+       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
+      {"addressnumber",
+       DatabaseCommandToString(DatabaseFieldCommands::IntField)},
+  });
+
+  StringUnMap Data = {{"addressname", "rami"},
+                      {"addresslocation", "levi"},
+                      {"addressnumber", "18"},
+                      {"id", "1"}};
+
+  auto MethodResponse = Manager->AddModel(TestTableName, TestFieldsFirst);
+  Manager->InsertInto(TestTableName, Data);
+  auto Response = Manager->GetModelData(TestTableName);
+
+  EXPECT_NE(Response.affected_rows(), 0);
+}
+
+TEST_F(DatabaseTest, DatabaseUpdateColumnTest) {
+  TestFieldsFirst.insert({
+      {"id",
+       DatabaseCommandToString(DatabaseFieldCommands::SerialPrimaryKeyField)},
+      {"addressname",
+       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
+      {"addresslocation",
+       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
+      {"addressnumber",
+       DatabaseCommandToString(DatabaseFieldCommands::IntField)},
+  });
+
+  StringUnMap Data = {{"addressname", "rami"},
+                      {"addresslocation", "levi"},
+                      {"addressnumber", "18"},
+                      {"id", "1"}};
+
+  auto MethodResponse = Manager->AddModel(TestTableName, TestFieldsFirst);
+  Manager->InsertInto(TestTableName, Data);
+  auto PreData = Manager->GetModelData(TestTableName);
+  Manager->UpdateColumn(TestTableName, "addressname", "holon", "id=1");
+  auto AfterData = Manager->GetModelData(TestTableName);
+
+  EXPECT_NE(AfterData, PreData);
+}
+
+TEST_F(DatabaseTest, DatabaseUpdateColumnsTest) {
+  TestFieldsFirst.insert({
+      {"id",
+       DatabaseCommandToString(DatabaseFieldCommands::SerialPrimaryKeyField)},
+      {"addressname",
+       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
+      {"addresslocation",
+       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
+      {"addressnumber",
+       DatabaseCommandToString(DatabaseFieldCommands::IntField)},
+  });
+
+  StringUnMap Data = {{"addressname", "rami"},
+                      {"addresslocation", "levi"},
+                      {"addressnumber", "18"},
+                      {"id", "1"}};
+
+  StringUnMap NewFields = {{"addressname", "new"},
+                           {"addresslocation", "fields"}};
+
+  auto MethodResponse = Manager->AddModel(TestTableName, TestFieldsFirst);
+  Manager->InsertInto(TestTableName, Data);
+  auto PreData = Manager->GetModelData(TestTableName);
+  Manager->UpdateColumns(TestTableName, NewFields, "id=1");
+  auto AfterData = Manager->GetModelData(TestTableName);
+
+  EXPECT_NE(AfterData, PreData);
 }

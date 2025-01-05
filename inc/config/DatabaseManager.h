@@ -24,8 +24,6 @@ public:
   /**
    * @brief Deconstructs the DatabaseManager object, clearing the database
    * models.
-   * @todo Probably need to change the way it deconstructs, maybe when model
-   * deleted run delete in sql.
    */
   ~DatabaseManager();
 
@@ -58,7 +56,6 @@ public:
    * @param ModelName string, name of the model/table.
    * @param FieldName string, the field name.
    * @param FieldType string, the field type.
-   * @todo UpdateField, UpdateFields, Addfield, InsertInto
    */
   pqxx::result AddColumn(const std::string &ModelName,
                          const std::string &FieldName,
@@ -72,6 +69,8 @@ public:
   pqxx::result SwapAllColumns(const std::string &ModelName,
                               const StringUnMap &ModelFields);
   */
+  pqxx::result InsertInto(const std::string &ModelName,
+                          const StringUnMap &Fields);
   pqxx::result UpdateColumn(const std::string &ModelName,
                             const std::string &FieldName,
                             const std::string &NewFieldValue,
@@ -79,8 +78,6 @@ public:
   pqxx::result UpdateColumns(const std::string &ModelName,
                              const StringUnMap &Fields,
                              const std::string &Condition);
-  pqxx::result InsertInto(const std::string &ModelName,
-                          const StringUnMap &Fields);
 
 private:
   /**
