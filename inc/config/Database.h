@@ -17,11 +17,25 @@ public:
 
 private:
   pqxx::connection m_DatabaseConnection;
-  pqxx::work m_DatabaseWorker{m_DatabaseConnection};
+  // pqxx::work m_DatabaseWorker{m_DatabaseConnection};
+  pqxx::nontransaction m_DatabaseNonTransaction{m_DatabaseConnection};
 
 private:
-  pqxx::result Query(const std::string &Query);
-  void Commit();
+  /**
+   * @brief query function that's based on a transaction, via the
+   * m_DatabaseWorker, created for update and delete operetions, currently
+   * disabled due to no usage.
+   * @param Query
+   * @return pqxx::result
+   */
+  // pqxx::result UQuery(const std::string &Query);
+  /**
+   * @brief query function that's based on a nontransaction, via the
+   * m_DatabaseNonTransaction, created for read-only and create operations.
+   * @param Query
+   * @return pqxx::result
+   */
+  pqxx::result CrQuery(const std::string &Query);
 
 private:
   friend class DatabaseManager;

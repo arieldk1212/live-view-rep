@@ -1,13 +1,18 @@
 list(APPEND sources
 App.cpp
 Address.cpp
+
 Config/Logger.cpp
 Config/Database.cpp
 Config/DatabaseManager.cpp
+Config/Config.cpp
+Config/GConfig.cpp
+
 Core/Entity.cpp
 Core/Type.cpp
 Core/UUID.cpp
 Core/Geo.cpp
+
 Models/DatabaseModel.cpp
 )
 
