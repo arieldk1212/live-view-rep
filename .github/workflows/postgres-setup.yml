@@ -16,6 +16,8 @@ jobs:
       - name: Create Role and Database
         run: |
           export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
+          pg_ctl -D /opt/homebrew/var/postgres start
+          createuser -s postgres
           psql -U postgres -c "CREATE ROLE arielkriheli WITH LOGIN PASSWORD 'password';"
           psql -U postgres -c "ALTER ROLE arielkriheli CREATEDB;"
           psql -U postgres -c "CREATE DATABASE live_view_test OWNER arielkriheli;"
