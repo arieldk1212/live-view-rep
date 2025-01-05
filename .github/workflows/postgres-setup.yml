@@ -9,8 +9,7 @@ jobs:
     steps:
       - name: Install Postgres
         run: |
-          brew install autoconf postgresql@15
-          # brew services start postgresql@15
+          brew install postgresql@15
           
       - name: Create Role and Database
         run: |
