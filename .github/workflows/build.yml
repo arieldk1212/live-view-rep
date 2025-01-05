@@ -1,9 +1,9 @@
 name: build
 
-# on:
-  # push:
-  # pull_request:
-    # branches: [ "main" ]
+on:
+  push:
+  pull_request:
+    branches: [ "main" ]
 
 env:
   DOCKER_COMPOSE_FILE_NAME: docker-compose.yml
