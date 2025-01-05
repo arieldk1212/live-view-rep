@@ -1,0 +1,18 @@
+name: postgres-setup
+
+on: workflow_call
+
+jobs:
+  setup-postgres:
+    runs-on: macos-latest
+
+    steps:
+      - name: Install Postgres
+        run: |
+          brew install autoconf postgresql@15
+          brew services start postgresql@15
+      - name: Create Role
+        run: |
+          psql -U postgres -c "CREATE ROLE arielkriheli WITH LOGIN PASSWORD 'password';"
+          psql -U postgres -c "ALTER ROLE arielkriheli CREATEDB;"
+          psql -U postgres -c "CREATE DATABASE live_view_test OWNER arielkriheli;"

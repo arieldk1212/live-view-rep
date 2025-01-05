@@ -13,15 +13,10 @@ env:
 jobs:
   build:
     runs-on: macos-latest
+    needs: call-postgres-setup
     steps:
 
     - uses: actions/checkout@v4
-
-    - name: Install Homebrew Dependencies & Start Postgresql Server
-      run: |
-          brew install autoconf postgresql@15
-          brew services start postgresql@15
-          # need to init the user settings
 
     - name: Install vcpkg
       run: |
