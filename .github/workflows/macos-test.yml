@@ -11,21 +11,17 @@ env:
   CMAKE_PREFIX_PATH: ${{ github.workspace }}/vcpkg/installed/arm64-osx/share
 
 jobs:
-  # call-postgres-setup:
-    # uses: ./.github/workflows/postgres-setup.yml 
-
   run-tests:
     runs-on: macos-latest
-    # needs: call-postgres-setup
 
     steps:
     - uses: actions/checkout@v4
 
-    - name: Install Postgres
+    - name: Install Postgres and autoconf
       run: |
-        brew install postgresql@15
+        brew install autoconf postgresql@15
     
-    - name: Create Role and Database
+    - name: Start Postgres Server, Create Role and Database
       run: |
         export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
         initdb --locale=C -D /opt/homebrew/var/postgres@15
@@ -35,9 +31,8 @@ jobs:
         psql -U postgres -c "ALTER ROLE arielkriheli CREATEDB;"
         psql -U postgres -c "CREATE DATABASE live_view_test OWNER arielkriheli;"
 
-    - name: Install vcpkg and autoconf
+    - name: Install vcpkg
       run: |
-        brew install autoconf    
         git clone https://github.com/microsoft/vcpkg.git
         ./vcpkg/bootstrap-vcpkg.sh
         ./vcpkg/vcpkg install --feature-flags=manifests
@@ -54,10 +49,10 @@ jobs:
       run: make -j 4
       working-directory: ${{ github.workspace }}/build
 
-    - name: Test Specific
-      run: ctest --output-on-failure --extra-verbose -R UUID
-      working-directory: ${{ github.workspace }}/build
+    # - name: Test Specific
+    #   run: ctest --output-on-failure --extra-verbose -R UUID
+    #   working-directory: ${{ github.workspace }}/build
 
-    - name: Test All
+    - name: Run Tests
       run: ctest --output-on-failure --extra-verbose
       working-directory: ${{ github.workspace }}/build
