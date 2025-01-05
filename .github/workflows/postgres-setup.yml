@@ -11,9 +11,9 @@ jobs:
         run: |
           brew install autoconf postgresql@15
           brew services start postgresql@15
-
-      - name: Create Role and Database
-        run: |
           psql -U postgres -c "CREATE ROLE arielkriheli WITH LOGIN PASSWORD 'password';"
           psql -U postgres -c "ALTER ROLE arielkriheli CREATEDB;"
           psql -U postgres -c "CREATE DATABASE live_view_test OWNER arielkriheli;"
+
+      - name: Create Role and Database
+        run: |
