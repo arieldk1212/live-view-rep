@@ -13,9 +13,16 @@ protected:
   StringUnMap TestFieldsSecond;
 
   void SetUp() override {
-    GlobalConfig::InitGlobalConfig("../../config.json");
-    std::string TestDatabaseConnectionString =
-        GlobalConfig::g_Config->TestDatabaseToString();
+    std::string TestDatabaseConnectionString;
+    if (std::getenv("GITHUB_ACTIONS") != nullptr) {
+      GlobalConfig::InitGlobalConfig("../../ci-config.json");
+      TestDatabaseConnectionString =
+          GlobalConfig::g_Config->TestDatabaseToString();
+    } else {
+      GlobalConfig::InitGlobalConfig("../../config.json");
+      TestDatabaseConnectionString =
+          GlobalConfig::g_Config->TestDatabaseToString();
+    }
     Manager = std::make_shared<DatabaseManager>(TestDatabaseConnectionString);
     TestTableName = "Test";
   }
@@ -48,7 +55,8 @@ TEST_F(DatabaseTest, DatabaseModelAddField) {
   std::string Response = Manager->GetSerializedModelData(TestTableName);
 
   Manager->AddColumn(TestTableName, "AddedField", "Text");
-  std::string AddedFieldResponse = Manager->GetSerializedModelData(TestTableName);
+  std::string AddedFieldResponse =
+      Manager->GetSerializedModelData(TestTableName);
 
   EXPECT_STRNE(Response.c_str(), AddedFieldResponse.c_str());
 }
