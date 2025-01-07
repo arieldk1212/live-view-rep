@@ -18,13 +18,27 @@ using StringUnMap = std::unordered_map<std::string, std::string>;
 class DatabaseModel {
 public:
   DatabaseModel(const std::string &ModelName, const StringUnMap &ModelFields);
-  ~DatabaseModel() = default;
+  ~DatabaseModel();
 
+  DatabaseModel(const DatabaseModel &) = delete;
+  DatabaseModel &operator=(const DatabaseModel &) = delete;
+
+  DatabaseModel(DatabaseModel &&) = delete;
+  DatabaseModel &operator=(DatabaseModel &&) = delete;
+
+  /**
+   * @brief returns the name of the model.
+   * @return const std::string&
+   */
   const std::string &GetModelName() const;
+  /**
+   * @brief return the model and its fields serialized (string format).
+   * @return std::string
+   */
   std::string ModelSerialization() const;
 
   /**
-   * @brief clears the StringMap inside the class private member.
+   * @brief clears the StringUnMap inside the class private member.
    */
   void ClearFields();
   /**

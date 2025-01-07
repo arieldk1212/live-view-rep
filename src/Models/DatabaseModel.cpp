@@ -2,7 +2,16 @@
 
 DatabaseModel::DatabaseModel(const std::string &ModelName,
                              const StringUnMap &ModelFields)
-    : m_DatabaseModelName{ModelName}, m_DatabaseModelFields{ModelFields} {}
+    : m_DatabaseModelName{ModelName}, m_DatabaseModelFields{ModelFields} {
+  APP_INFO("DATABASE MODEL CREATED" + ModelName);
+}
+
+void DatabaseModel::ClearFields() { m_DatabaseModelFields.clear(); }
+
+DatabaseModel::~DatabaseModel() {
+  APP_INFO("DATABASE MODEL DESTROYED - " + ModelName);
+  ClearFields();
+}
 
 const std::string &DatabaseModel::GetModelName() const {
   return m_DatabaseModelName;
@@ -22,8 +31,6 @@ std::string DatabaseModel::ModelSerialization() const {
   }
   return Response;
 }
-
-void DatabaseModel::ClearFields() { m_DatabaseModelFields.clear(); }
 
 void DatabaseModel::InsertField(const std::string &FieldName,
                                 const std::string &FieldType) {

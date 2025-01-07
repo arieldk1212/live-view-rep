@@ -14,8 +14,4 @@ int main() {
 
   std::shared_ptr<DatabaseManager> Database =
       std::make_shared<DatabaseManager>(GlobalConfig::g_Config->DatabaseToString());
-  bool DatabaseStatus = Database->DatabaseConnectionValidation();
-  if (DatabaseStatus) {
-    SYSTEM_INFO("DATABASE CONNECTION ESTABLISHED"); // TODO: test dtor in prod
-  }
 }

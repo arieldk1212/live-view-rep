@@ -6,7 +6,6 @@
 #include <exception>
 #include <filesystem>
 #include <fstream>
-#include <iterator>
 #include <nlohmann/json.hpp>
 #include <string>
 

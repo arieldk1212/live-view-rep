@@ -1,26 +1,39 @@
 #ifndef DATABASE_H
 #define DATABASE_H
 
+#include "Config/Logger.h"
+
 #include <pqxx/pqxx>
 
 class DatabaseManager;
 
 class DatabaseConnection {
-  /*
-   * This header file shouldn't be used directly!
+  /**
+   * @warning This header file shouldn't be used directly!
    */
 public:
   explicit DatabaseConnection(const std::string &ConnectionString);
   ~DatabaseConnection();
 
+  DatabaseConnection(const DatabaseConnection &) = delete;
+  DatabaseConnection &operator=(const DatabaseConnection &) = delete;
+
+  DatabaseConnection(DatabaseConnection &&) = delete;
+  DatabaseConnection &operator=(DatabaseConnection &&) = delete;
+
   bool IsDatabaseConnected();
 
 private:
-  pqxx::connection m_DatabaseConnection;
-  // pqxx::work m_DatabaseWorker{m_DatabaseConnection};
-  pqxx::nontransaction m_DatabaseNonTransaction{m_DatabaseConnection};
+  friend class DatabaseManager;
 
 private:
+  /**
+   * @brief query function that's based on a nontransaction, via the
+   * m_DatabaseNonTransaction, created for read-only and create operations.
+   * @param Query
+   * @return pqxx::result
+   */
+  pqxx::result CrQuery(const std::string &Query);
   /**
    * @brief query function that's based on a transaction, via the
    * m_DatabaseWorker, created for update and delete operetions, currently
@@ -29,16 +42,11 @@ private:
    * @return pqxx::result
    */
   // pqxx::result UQuery(const std::string &Query);
-  /**
-   * @brief query function that's based on a nontransaction, via the
-   * m_DatabaseNonTransaction, created for read-only and create operations.
-   * @param Query
-   * @return pqxx::result
-   */
-  pqxx::result CrQuery(const std::string &Query);
 
 private:
-  friend class DatabaseManager;
+  pqxx::connection m_DatabaseConnection;
+  // pqxx::work m_DatabaseWorker{m_DatabaseConnection};
+  pqxx::nontransaction m_DatabaseNonTransaction{m_DatabaseConnection};
 };
 
 #endif

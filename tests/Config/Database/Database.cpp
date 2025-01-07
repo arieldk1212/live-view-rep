@@ -1,8 +1,9 @@
 #include "../../../inc/Config/DatabaseManager.h"
 #include "../../Test.h"
 
-#include <gtest/gtest.h>
 #include <memory>
+#include <stdio.h>
+#include <stdlib.h>
 
 class DatabaseTest : public ::testing::Test {
 protected:
@@ -26,12 +27,6 @@ protected:
     TestFieldsSecond.clear();
   }
 };
-
-TEST_F(DatabaseTest, DatabaseConnectionTest) {
-  bool Result = Manager->DatabaseConnectionValidation();
-  Manager->AddModel(TestTableName, TestFieldsFirst);
-  EXPECT_TRUE(Result);
-}
 
 TEST_F(DatabaseTest, DatabaseModelCreation) {
   TestFieldsFirst.emplace("AddressName", "text");
