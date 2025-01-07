@@ -199,7 +199,6 @@ private:
  * still in development.
  * @todo implement this class, adjust connections accordingly, study about
  * pool's more.
- */
 class DatabaseConnectionPoolManager {
 public:
   void CreateConnection();
@@ -212,5 +211,6 @@ private:
   std::vector<std::unique_ptr<DatabaseConnection>> m_DatabaseConnectionPool;
   std::mutex m_DatabaseConnectionPoolMutex;
 };
+*/
 
 #endif
