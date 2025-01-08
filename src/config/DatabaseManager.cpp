@@ -241,7 +241,8 @@ pqxx::result DatabaseManager::CreateTable(const std::string &TableName,
   try {
     return MCrQuery(TableName, query);
   } catch (const std::exception &e) {
-    APP_ERROR("ERROR AT CREATETABLE FUNCTION - " + TableName " - " + std::string(e.what()));
+    APP_ERROR("ERROR AT CREATETABLE FUNCTION - " + TableName " - " +
+              std::string(e.what()));
     return {};
   }
 };

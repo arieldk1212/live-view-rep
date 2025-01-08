@@ -15,15 +15,16 @@ bool DatabaseConnection::IsDatabaseConnected() {
 }
 
 pqxx::result DatabaseConnection::CrQuery(const std::string &Query) {
-  if (IsDatabaseConnected()) {
-    try {
-      return m_DatabaseNonTransaction.exec(Query);
-    } catch (const std::exception &e) {
-      APP_ERROR("CRQUERY - QUERY EXECUTION ERROR - " + std::string(e.what()));
-    }
+  if (!IsDatabaseConnected()) {
+    APP_ERROR("CRQUERY - QUERY ERROR - DATABASE CONNECTION ERROR");
+    return {};
   }
-  APP_ERROR("CRQUERY - QUERY ERROR - DATABASE CONNECTION ERROR");
-  return {};
+  try {
+    return m_DatabaseNonTransaction.exec(Query);
+  } catch (const std::exception &e) {
+    APP_ERROR("CRQUERY - QUERY EXECUTION ERROR - " + std::string(e.what()));
+    return {};
+  }
 }
 
 // pqxx::result DatabaseConnection::UQuery(const std::string &Query) {
