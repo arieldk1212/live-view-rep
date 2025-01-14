@@ -22,5 +22,5 @@ jobs:
         brew install docker docker-compose docker-buildx
 
     - name: Build Dockerfile
-      run: docker-buildx build . --platform linux/arm64
-      # run: COMPOSE_DOCKER_CLI_BUILD=1 docker-compose build
+      # run: docker-buildx build . --platform linux/arm64
+      run: COMPOSE_DOCKER_CLI_BUILD=1 docker-compose build
