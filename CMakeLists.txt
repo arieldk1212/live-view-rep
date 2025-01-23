@@ -24,14 +24,16 @@ find_package(OpenSSL REQUIRED)
 find_package(PostgreSQL REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
 find_package(libpqxx CONFIG REQUIRED)
+find_package(benchmark CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
 
 list(APPEND project_libraries
-libpqxx::pqxx
-PostgreSQL::PostgreSQL
 OpenSSL::SSL
 OpenSSL::Crypto
+libpqxx::pqxx
+PostgreSQL::PostgreSQL
 spdlog::spdlog
+benchmark::benchmark
 nlohmann_json::nlohmann_json
 )
 
