@@ -1,6 +1,8 @@
 #include "../../../inc/Config/DatabaseManager.h"
 #include "../../Test.h"
 
+#include <benchmark/benchmark.h>
+#include <future>
 #include <memory>
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,10 +35,6 @@ protected:
     TestFieldsFirst.clear();
     TestFieldsSecond.clear();
   }
-
-  void ConFunction1(std::shared_ptr<DatabaseManager>& Manager);
-  void ConFunction2();
-  void RunConFunction(benchmark::State& State);
 };
 
 TEST_F(DatabaseTest, DatabaseModelCreation) {
@@ -347,8 +345,4 @@ TEST_F(DatabaseTest, DatabaseUpdateColumnsTest) {
   auto AfterData = Manager->GetModelData(TestTableName);
 
   EXPECT_NE(AfterData, PreData);
-}
-
-TEST_F(DatabaseTest, DatabaseConcurrencyTest) {
-
 }
