@@ -1,10 +1,14 @@
 #ifndef LOGGER_MODEL_H
 #define LOGGER_MODEL_H
 
+#include "../../Config/DatabaseManager.h"
 #include "../DatabaseModel.h"
 
 class LoggerModel {
 public:
+  struct LoggerFields {};
+
+  explicit LoggerModel(const std::shared_ptr<DatabaseManager> &Manager);
   ~LoggerModel();
 
 private:
@@ -15,4 +19,3 @@ private:
 };
 
 #endif
-

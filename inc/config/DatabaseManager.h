@@ -127,6 +127,7 @@ public:
   pqxx::result AlterColumn(const std::string &ModelName,
                            const std::string &FieldName,
                            const std::string &NewFieldType);
+
   /** @brief not in usage, better to delete the model than change all.
   pqxx::result SwapAllColumns(const std::string &ModelName,
                               const StringUnMap &ModelFields);

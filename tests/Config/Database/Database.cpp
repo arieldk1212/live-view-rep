@@ -1,7 +1,6 @@
 #include "../../../inc/Config/DatabaseManager.h"
 #include "../../Test.h"
 
-#include <benchmark/benchmark.h>
 #include <future>
 #include <memory>
 #include <stdio.h>
