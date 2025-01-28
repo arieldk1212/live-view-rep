@@ -68,7 +68,7 @@ const std::string Config::LoggingPathToString() const {
   try {
     return std::string(m_Data["LOGGING"]["PATH"]);
   } catch (const Json::exception &e) {
-    SYSTEM_ERROR("CONFIG FILE ERROR - LOGGING - " + std::string(e.what()));
+    std::cerr << e.what();
     return "";
   }
 }

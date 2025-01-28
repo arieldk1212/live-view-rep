@@ -2,7 +2,6 @@
 #define STREET_MODEL_H
 
 #include "../../Config/DatabaseManager.h"
-#include "../DatabaseModel.h"
 #include "Config/DatabaseCommands.h"
 
 class StreetModel {

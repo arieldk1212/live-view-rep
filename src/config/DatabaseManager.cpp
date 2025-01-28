@@ -8,7 +8,6 @@ DatabaseManager::DatabaseManager(const std::string &DatabaseConnectionString)
 }
 
 DatabaseManager::~DatabaseManager() {
-  m_DatabaseModels.clear();
   m_DatabaseManager.reset();
   APP_INFO("DATABASE MANAGER DESTROYED");
 }
@@ -26,44 +25,21 @@ DatabaseManager::QuerySerialization(const StringUnMap &ModelFields) {
   return Response;
 }
 
-std::shared_ptr<DatabaseModel> &
-DatabaseManager::operator[](const std::string &ModelName) {
-  for (auto &Model : m_DatabaseModels) {
-    if (Model && Model->GetModelName() == ModelName) {
-      return Model;
-    }
-  }
-  APP_ERROR("OPERATOR [] ERROR / GET MODEL FUNCTION ERROR, MODEL NOT FOUND - " +
-            ModelName);
-  throw std::out_of_range("Model not found: " + ModelName);
-}
-
-std::shared_ptr<DatabaseModel> &
-DatabaseManager::GetModel(const std::string &ModelName) {
-  return (*this)[ModelName];
-}
-
 pqxx::result DatabaseManager::AddModel(const std::string &ModelName,
                                        const StringUnMap &ModelFields) {
-  m_DatabaseModels.emplace_back(
-      std::make_shared<DatabaseModel>(ModelName, ModelFields));
   auto Response = CreateTable(ModelName, ModelFields);
   APP_INFO("MODEL ADDED, TABLE CREATED - " + ModelName);
   return Response;
 }
 
 pqxx::result DatabaseManager::RemoveModel(const std::string &ModelName) {
-  auto it =
-      std::find_if(m_DatabaseModels.begin(), m_DatabaseModels.end(),
-                   [&ModelName](const std::shared_ptr<DatabaseModel> &Model) {
-                     return Model->GetModelName() == ModelName;
-                   });
-  if (it != m_DatabaseModels.end()) {
-    m_DatabaseModels.erase(it);
+
+  try {
     return DeleteTable(ModelName, DatabaseQueryCommands::DropDrop);
+  } catch (const std::exception &e) {
+    APP_ERROR("MODEL NOT FOUND - " + std::string(e.what()));
+    return {};
   }
-  APP_ERROR("MODEL NOT FOUND - " + ModelName);
-  throw std::out_of_range("Model not found: " + ModelName);
 }
 
 pqxx::result DatabaseManager::TruncateModel(const std::string &ModelName) {
@@ -80,15 +56,9 @@ pqxx::result DatabaseManager::GetModelData(const std::string &ModelName,
   return GetTableData(ModelName, FieldName, FieldValue);
 }
 
-std::string
-DatabaseManager::GetSerializedModelData(const std::string &ModelName) {
-  return GetSerializedTableData(ModelName);
-}
-
 pqxx::result DatabaseManager::AddColumn(const std::string &ModelName,
                                         const std::string &FieldName,
                                         const std::string &FieldType) {
-  GetModel(ModelName)->InsertField(FieldName, FieldType);
   std::string query;
   query.append(DatabaseCommandToString(DatabaseQueryCommands::AlterTable))
       .append(ModelName)
@@ -103,7 +73,6 @@ pqxx::result DatabaseManager::AddColumn(const std::string &ModelName,
 
 pqxx::result DatabaseManager::DropColumn(const std::string &ModelName,
                                          const std::string &FieldName) {
-  GetModel(ModelName)->RemoveField(FieldName);
   std::string query;
   query.append(DatabaseCommandToString(DatabaseQueryCommands::AlterTable))
       .append(ModelName)
@@ -117,7 +86,6 @@ pqxx::result DatabaseManager::DropColumn(const std::string &ModelName,
 pqxx::result DatabaseManager::AlterColumn(const std::string &ModelName,
                                           const std::string &FieldName,
                                           const std::string &NewFieldType) {
-  GetModel(ModelName)->ChangeFieldType(FieldName, NewFieldType);
   std::string query;
   query.append(DatabaseCommandToString(DatabaseQueryCommands::AlterTable))
       .append(ModelName)
@@ -129,12 +97,6 @@ pqxx::result DatabaseManager::AlterColumn(const std::string &ModelName,
   APP_INFO("COLUMN ALTERED, TABLE ALTERED - " + ModelName + " - " + FieldName);
   return MCrQuery(ModelName, query);
 }
-
-// pqxx::result DatabaseManager::SwapAllColumns(const std::string &ModelName,
-//                                              const StringUnMap &ModelFields)
-//                                              {
-//   GetModel(ModelName)->ClearAndInsertFields(ModelFields);
-// }
 
 pqxx::result DatabaseManager::InsertInto(const std::string &ModelName,
                                          const StringUnMap &Fields) {
@@ -241,7 +203,7 @@ pqxx::result DatabaseManager::CreateTable(const std::string &TableName,
   try {
     return MCrQuery(TableName, query);
   } catch (const std::exception &e) {
-    APP_ERROR("ERROR AT CREATETABLE FUNCTION - " + TableName " - " +
+    APP_ERROR("ERROR AT CREATETABLE FUNCTION - " + TableName + " - " +
               std::string(e.what()));
     return {};
   }
@@ -279,11 +241,6 @@ pqxx::result DatabaseManager::GetTableData(const std::string &TableName,
               std::string(e.what()));
     return {};
   }
-}
-
-std::string
-DatabaseManager::GetSerializedTableData(const std::string &TableName) {
-  return GetModel(TableName)->ModelSerialization();
 }
 
 pqxx::result DatabaseManager::DeleteTable(const std::string &TableName,
