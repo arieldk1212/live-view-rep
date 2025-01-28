@@ -1,4 +1,5 @@
 #define ENABLE_LOGGING
+
 #include "../inc/App.h"
 
 int main() {
@@ -12,6 +13,6 @@ int main() {
   APP_INFO("APP INITIALIZED");
   SYSTEM_INFO("SYSTEM INITIALIZED");
 
-  std::shared_ptr<DatabaseManager> Database =
+  std::shared_ptr<DatabaseManager> AppManager =
       std::make_shared<DatabaseManager>(GlobalConfig::g_Config->DatabaseToString());
 }
