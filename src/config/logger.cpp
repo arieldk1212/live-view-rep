@@ -11,20 +11,24 @@ void Logger::Init(const std::string &path) {
     p_Path = path;
   }
 
-  spdlog::sink_ptr app_sink =
-      std::make_shared<spdlog::sinks::basic_file_sink_mt>(p_Path + "app.log",
-                                                          true);
-  app_sink->set_pattern("[%T] [%l] %n: %v");
-  s_AppLogger = std::make_shared<spdlog::logger>("APP", app_sink);
+  std::vector<spdlog::sink_ptr> Sinks;
+
+  Sinks.emplace_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>(
+      p_Path + "app.log", true));
+  Sinks.emplace_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>(
+      p_Path + "sys.log", true));
+
+  Sinks[0]->set_pattern("[%T] [%l] %n: %v");
+  Sinks[1]->set_pattern("[%T] [%l] %n: %v");
+
+  s_AppLogger =
+      std::make_shared<spdlog::logger>("APP", begin(Sinks), end(Sinks));
   spdlog::register_logger(s_AppLogger);
   s_AppLogger->set_level(spdlog::level::trace);
   s_AppLogger->flush_on(spdlog::level::trace);
 
-  spdlog::sink_ptr system_sink =
-      std::make_shared<spdlog::sinks::basic_file_sink_mt>(p_Path + "sys.log",
-                                                          true);
-  system_sink->set_pattern("[%T] [%l] %n: %v");
-  s_SystemLogger = std::make_shared<spdlog::logger>("SYSTEM", system_sink);
+  s_SystemLogger =
+      std::make_shared<spdlog::logger>("SYSTEM", begin(Sinks), end(Sinks));
   spdlog::register_logger(s_SystemLogger);
   s_SystemLogger->set_level(spdlog::level::trace);
   s_SystemLogger->flush_on(spdlog::level::trace);

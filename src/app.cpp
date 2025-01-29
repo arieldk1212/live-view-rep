@@ -12,6 +12,6 @@ int main() {
   APP_INFO("APP INITIALIZED");
   SYSTEM_INFO("SYSTEM INITIALIZED");
 
-  std::shared_ptr<DatabaseManager> Manager =
-      std::make_shared<DatabaseManager>(DatabaseConnectionString);
+  auto Manager = std::make_shared<DatabaseManager>(DatabaseConnectionString);
+
 }
