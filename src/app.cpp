@@ -13,5 +13,4 @@ int main() {
   SYSTEM_INFO("SYSTEM INITIALIZED");
 
   auto Manager = std::make_shared<DatabaseManager>(DatabaseConnectionString);
-
 }

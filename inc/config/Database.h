@@ -3,6 +3,7 @@
 
 #include "Config/Logger.h"
 
+#include <mutex>
 #include <pqxx/pqxx>
 
 class DatabaseManager;
@@ -17,9 +18,6 @@ public:
 
   DatabaseConnection(const DatabaseConnection &) = delete;
   DatabaseConnection &operator=(const DatabaseConnection &) = delete;
-
-  DatabaseConnection(DatabaseConnection &&) = delete;
-  DatabaseConnection &operator=(DatabaseConnection &&) = delete;
 
   bool IsDatabaseConnected();
 
@@ -44,6 +42,7 @@ private:
   // pqxx::result UQuery(const std::string &Query);
 
 private:
+  std::mutex m_DatabaseMutex;
   pqxx::connection m_DatabaseConnection;
   // pqxx::work m_DatabaseWorker{m_DatabaseConnection};
   pqxx::nontransaction m_DatabaseNonTransaction{m_DatabaseConnection};

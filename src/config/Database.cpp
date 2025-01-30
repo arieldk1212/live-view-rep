@@ -15,6 +15,7 @@ bool DatabaseConnection::IsDatabaseConnected() {
 }
 
 pqxx::result DatabaseConnection::CrQuery(const std::string &Query) {
+  std::lock_guard<std::mutex> lock(m_DatabaseMutex);
   if (!IsDatabaseConnected()) {
     APP_ERROR("CRQUERY - QUERY ERROR - DATABASE CONNECTION ERROR");
     return {};

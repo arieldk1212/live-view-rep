@@ -13,10 +13,6 @@ public:
   pqxx::result Update(const StringUnMap &Fields) override;
   pqxx::result Delete(const StringUnMap &Fields) override;
 
-  struct DatabaseStreetFields{
-    StringUnMap Fields;
-  };
-
 private:
   std::shared_ptr<DatabaseManager> m_DatabaseManager;
 private:

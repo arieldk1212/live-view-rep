@@ -1,15 +1,15 @@
 #ifndef DATABASE_MANAGER_H
 #define DATABASE_MANAGER_H
 
+#include "../Core/UUID.h"
 #include "Database.h"
 #include "DatabaseCommands.h"
-#include "../Core/UUID.h"
 #include "Logger.h"
 
 #include <iostream>
 #include <memory>
-#include <mutex>
 #include <type_traits>
+#include <utility>
 
 using StringUnMap = std::unordered_map<std::string, std::string>;
 
@@ -30,11 +30,17 @@ public:
    */
   ~DatabaseManager();
 
-  DatabaseManager(const DatabaseManager &) = delete;
-  DatabaseManager &operator=(const DatabaseManager &) = delete;
+  DatabaseManager(const DatabaseManager &) = default;
+  DatabaseManager &operator=(const DatabaseManager &) = default;
 
-  DatabaseManager(DatabaseManager &&) = delete;
-  DatabaseManager &operator=(DatabaseManager &&) = delete;
+  DatabaseManager(DatabaseManager &&) noexcept;
+  DatabaseManager &operator=(DatabaseManager &&) noexcept;
+
+  /**
+   * @brief check the status of the database connection.
+   * @return bool
+   */
+  bool IsDatabaseConnected();
 
   /**
    * @brief  serializes the fields of the model, query preparation.
@@ -165,6 +171,7 @@ private:
   // &Query);
 
 private:
+  bool m_IsConnected;
   std::string m_DatabaseConnectionString;
   std::shared_ptr<DatabaseConnection> m_DatabaseManager;
 

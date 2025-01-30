@@ -1,17 +1,22 @@
 #ifndef BASE_MODEL_H
 #define BASE_MODEL_H
 
-#include "Config/Config.h"
 #include "Config/DatabaseManager.h"
+#include <nlohmann/json.hpp>
 #include <pqxx/pqxx>
 
+using Json = nlohmann::json;
+
 class BaseModel {
-  virtual ~BaseModel() = default;
+public:
+  virtual ~BaseModel() = 0;
+  virtual pqxx::result Init(const StringUnMap &Fields) = 0;
   virtual pqxx::result Add(const StringUnMap &Fields) = 0;
   virtual pqxx::result Update(const StringUnMap &Fields) = 0;
   virtual pqxx::result Delete(const StringUnMap &Fields) = 0;
 
-  virtual Json SerializeModel() = 0;
+  virtual Json SerializeModel(const std::string &Data) = 0;
+  virtual std::string DeserializeModel(const Json &JsonData) = 0;
 };
 
 #endif

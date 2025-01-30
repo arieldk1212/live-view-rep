@@ -1,15 +1,35 @@
 #include "../../inc/Config/DatabaseManager.h"
 
 DatabaseManager::DatabaseManager(const std::string &DatabaseConnectionString)
-    : m_DatabaseConnectionString(DatabaseConnectionString) {
+    : m_DatabaseConnectionString(DatabaseConnectionString),
+      m_IsConnected(true) {
   m_DatabaseManager =
       std::make_shared<DatabaseConnection>(m_DatabaseConnectionString);
-  APP_INFO("DATABASE CONNECTION INITIALIZED VIA THE DATABASE MANAGER");
+  APP_INFO("DATABASE MANAGER CREATED");
 }
 
 DatabaseManager::~DatabaseManager() {
   m_DatabaseManager.reset();
+  m_IsConnected = false;
   APP_INFO("DATABASE MANAGER DESTROYED");
+}
+
+DatabaseManager::DatabaseManager(DatabaseManager &&other) noexcept
+    : m_IsConnected(std::exchange(other.m_IsConnected, false)),
+      m_DatabaseConnectionString(std::move(other.m_DatabaseConnectionString)),
+      m_DatabaseManager(std::move(other.m_DatabaseManager)) {}
+
+DatabaseManager &DatabaseManager::operator=(DatabaseManager &&other) noexcept {
+  if (this != &other) {
+    m_IsConnected = std::exchange(other.m_IsConnected, false);
+    m_DatabaseConnectionString = std::move(other.m_DatabaseConnectionString);
+    m_DatabaseManager = std::move(other.m_DatabaseManager);
+  }
+  return *this;
+}
+
+bool DatabaseManager::IsDatabaseConnected() {
+  return m_DatabaseManager->IsDatabaseConnected();
 }
 
 std::string
