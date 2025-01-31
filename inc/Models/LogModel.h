@@ -11,17 +11,17 @@ public:
   explicit LogModel(std::shared_ptr<DatabaseManager> &Manager);
   ~LogModel() override;
 
-  pqxx::result Init(const StringUnMap &Fields) override;
+  const std::string GetTableName() const override { return m_TableName; }
+
+  pqxx::result Init() override;
   // pqxx::result Add(const StringUnMap &Fields) override;
 
 private:
   std::shared_ptr<DatabaseManager> m_DatabaseManager;
 
 private:
-  UUID m_LogID;
-  std::string m_LogFile;
-  std::string m_Timestamp;
-  std::string m_Message;
+  std::string m_TableName;
+  StringUnMap m_LogFields;
 };
 
 #endif

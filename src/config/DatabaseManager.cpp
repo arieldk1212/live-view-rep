@@ -15,7 +15,7 @@ DatabaseManager::~DatabaseManager() {
 }
 
 DatabaseManager::DatabaseManager(DatabaseManager &&other) noexcept
-    : m_IsConnected(std::exchange(other.m_IsConnected, false)),
+    : m_IsConnected(std::exchange(other.m_IsConnected, true)),
       m_DatabaseConnectionString(std::move(other.m_DatabaseConnectionString)),
       m_DatabaseManager(std::move(other.m_DatabaseManager)) {}
 

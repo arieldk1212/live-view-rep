@@ -16,11 +16,11 @@ protected:
   void SetUp() override {
     std::string TestDatabaseConnectionString;
     if (std::getenv("GITHUB_ACTIONS") != nullptr) {
-      GlobalConfig::InitGlobalConfig("../../ci-config.json");
+      GlobalConfig::InitGlobalConfig("../../../../ci-config.json");
       TestDatabaseConnectionString =
           GlobalConfig::g_Config->TestDatabaseToString();
     } else {
-      GlobalConfig::InitGlobalConfig("../../config.json");
+      GlobalConfig::InitGlobalConfig("../../../../config.json");
       TestDatabaseConnectionString =
           GlobalConfig::g_Config->TestDatabaseToString();
     }

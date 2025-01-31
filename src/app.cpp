@@ -14,4 +14,13 @@ int main() {
   SYSTEM_INFO("SYSTEM INITIALIZED");
 
   auto Manager = std::make_shared<DatabaseManager>(DatabaseConnectionString);
+
+  AddressModel Addresses(Manager);
+  Addresses.Init();
+  /**
+   * @bug DatabaseManager gets deleted before Address, therefore error
+   * Fix It!
+   * Manager gets nuklptr, remove move and make copy available.
+   */
+  // Manager->RemoveModel(Addresses.GetTableName());
 }
