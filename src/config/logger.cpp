@@ -5,11 +5,7 @@ std::shared_ptr<spdlog::logger> Logger::s_SystemLogger;
 
 void Logger::Init(const std::string &path) {
   std::string p_Path;
-  if (path == "") {
-    p_Path = "../backend-logs/";
-  } else {
-    p_Path = path;
-  }
+  p_Path = (path == "") ? p_Path = "../../backend-logs/" : p_Path = path;
 
   std::vector<spdlog::sink_ptr> Sinks;
 
@@ -33,3 +29,6 @@ void Logger::Init(const std::string &path) {
   s_SystemLogger->set_level(spdlog::level::trace);
   s_SystemLogger->flush_on(spdlog::level::trace);
 }
+
+
+

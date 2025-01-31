@@ -12,6 +12,9 @@ Core/Entity.cpp
 Core/Type.cpp
 Core/UUID.cpp
 Core/Geo.cpp
+
+Models/LogModel.cpp
+Models/AddressModel.cpp
 )
 
 add_library(src STATIC ${sources})

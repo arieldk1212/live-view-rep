@@ -2,7 +2,7 @@
 
 DatabaseConnection::DatabaseConnection(const std::string &ConnectionString)
     : m_DatabaseConnection{ConnectionString} {
-  APP_INFO("DATABASE CONNECTION CONSTRUCTOR INITIALIZED");
+  APP_INFO("DATABASE CONNECTION CREATED");
 }
 
 DatabaseConnection::~DatabaseConnection() {

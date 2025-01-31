@@ -9,7 +9,7 @@ using Json = nlohmann::json;
 
 class BaseModel {
 public:
-  virtual ~BaseModel() = 0;
+  virtual ~BaseModel() = default;
   virtual pqxx::result Init(const StringUnMap &Fields) = 0;
   virtual pqxx::result Add(const StringUnMap &Fields) = 0;
   virtual pqxx::result Update(const StringUnMap &Fields) = 0;

@@ -6,10 +6,10 @@ Config::Config(const std::filesystem::path &FilePath) : m_FilePath{FilePath} {
     try {
       m_Data = Json::parse(f);
     } catch (const Json::exception &e) {
-      SYSTEM_ERROR("FILE ERROR - PARSE - " + std::string(e.what()));
+      std::cerr << "FILE ERROR - PARSE - " << e.what();
     }
   } catch (const std::exception &e) {
-    SYSTEM_ERROR("FILE PATH ERROR - STREAM - " + std::string(e.what()));
+    std::cerr << "FILE PATH ERROR - STREAM - " << e.what();
   }
 }
 

@@ -8,7 +8,7 @@ size_t Type::GetTypeVectorLength() const { return m_Type.size(); }
 
 void Type::SetTypeVector(StringVector &&Type) { m_Type = std::move(Type); }
 
-void Type::AddType(const std::string &Type) { m_Type.push_back(Type); }
+void Type::AddType(const std::string &Type) { m_Type.emplace_back(Type); }
 
 void Type::DeleteType(const std::string &Type) {
   const auto position = std::remove(m_Type.begin(), m_Type.end(), Type);
