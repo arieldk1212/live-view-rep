@@ -19,8 +19,8 @@ public:
   DatabaseConnection(const DatabaseConnection &) = delete;
   DatabaseConnection &operator=(const DatabaseConnection &) = delete;
 
-  DatabaseConnection(DatabaseConnection &&) = delete;
-  DatabaseConnection &operator=(DatabaseConnection &&) = delete;
+  DatabaseConnection(DatabaseConnection &&) noexcept = delete;
+  DatabaseConnection &operator=(DatabaseConnection &&) noexcept = delete;
 
   bool IsDatabaseConnected();
 
@@ -48,7 +48,7 @@ private:
 private:
   std::mutex m_DatabaseMutex;
   pqxx::connection m_DatabaseConnection;
-  pqxx::nontransaction m_DatabaseNonTransaction{m_DatabaseConnection};
+  pqxx::nontransaction m_DatabaseNonTransaction;
   // pqxx::work m_DatabaseWorker{m_DatabaseConnection};
 };
 

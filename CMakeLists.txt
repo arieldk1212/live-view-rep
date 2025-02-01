@@ -8,9 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_INCLUDE_CURRENT_DIR)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g") # g for lldb help
-if (true)
-  add_definitions(-DENABLE_LOGGING)
-endif()
+add_definitions(-DENABLE_LOGGING)
 
 if (APPLE)
   set(CMAKE_TOOLCHAIN_FILE "/Users/$ENV{USER}/Library/vcpkg/scripts/buildsystems/vcpkg.cmake")

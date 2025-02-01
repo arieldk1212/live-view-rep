@@ -12,7 +12,7 @@ public:
   const std::string GetTableName() const override { return m_TableName; }
 
   pqxx::result Init() override;
-  // pqxx::result Add(const StringUnMap &Fields) override;
+  pqxx::result Add(const StringUnMap &Fields) override;
   // pqxx::result Update(const StringUnMap &Fields) override;
   // pqxx::result Delete(const StringUnMap &Fields) override;
 
@@ -23,7 +23,7 @@ private:
   std::string m_TableName;
   StringUnMap m_AddressFields = {
       {"addressname",
-       DatabaseCommandToString(DatabaseFieldCommands::CharField)},
+       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
       {"addressnumber",
        DatabaseCommandToString(DatabaseFieldCommands::IntField)}};
 };

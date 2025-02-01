@@ -6,7 +6,6 @@
     "port": "5432",
     "dbname": "arielkriheli"
   },
-
   "TEST_DATABASE": {
     "username": "arielkriheli",
     "password": "password",
@@ -14,7 +13,6 @@
     "port": "5432",
     "dbname": "live_view_test"
   },
-
   "LOGGING": {
     "PATH": ""
   }

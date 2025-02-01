@@ -1,13 +1,13 @@
 #include "../../inc/Models/LogModel.h"
 
 LogModel::LogModel(std::shared_ptr<DatabaseManager> &Manager)
-    : m_DatabaseManager(std::move(Manager)), m_TableName("Log") {
+    : m_DatabaseManager(Manager), m_TableName("Log") {
   APP_INFO("LOGGER MODEL RESOURCE CREATED");
 }
 
 LogModel::~LogModel() {
   m_DatabaseManager.reset();
-  APP_INFO("LOGGER MODEL RESOURCE DESTYOYED");
+  APP_CRITICAL("LOGGER MODEL RESOURCE DESTYOYED");
 }
 
 pqxx::result LogModel::Init() {

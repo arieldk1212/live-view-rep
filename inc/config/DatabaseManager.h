@@ -30,11 +30,11 @@ public:
    */
   ~DatabaseManager();
 
-  DatabaseManager(const DatabaseManager &) = default;
-  DatabaseManager &operator=(const DatabaseManager &) = default;
+  DatabaseManager(const DatabaseManager &other) = delete;
+  DatabaseManager &operator=(const DatabaseManager &other) = delete;
 
-  DatabaseManager(DatabaseManager &&) noexcept;
-  DatabaseManager &operator=(DatabaseManager &&) noexcept;
+  DatabaseManager(DatabaseManager &&other) noexcept = delete;
+  DatabaseManager &operator=(DatabaseManager &&other) noexcept = delete;
 
   /**
    * @brief check the status of the database connection.
@@ -195,10 +195,12 @@ public:
   std::shared_ptr<DatabaseConnection> LockConnection();
 
 private:
+  size_t m_PoolSize;
   std::string m_DatabaseConnectionString;
   std::vector<std::unique_ptr<DatabaseConnection>> m_DatabaseConnectionPool;
   std::mutex m_DatabaseConnectionPoolMutex;
 };
 */
+
 
 #endif

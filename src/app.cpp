@@ -5,8 +5,7 @@ int main() {
   Logger::Init(GlobalConfig::g_Config->LoggingPathToString());
 
   SYSTEM_INFO("CONFIG INITIALIZED");
-  std::string DatabaseConnectionString =
-      GlobalConfig::g_Config->DatabaseToString();
+  auto DatabaseConnectionString = GlobalConfig::g_Config->DatabaseToString();
 
   APP_INFO("APP LOGGER INITIALIZED");
   SYSTEM_INFO("SYSTEM LOGGER INITIALIZED");
@@ -17,10 +16,8 @@ int main() {
 
   AddressModel Addresses(Manager);
   Addresses.Init();
-  /**
-   * @bug DatabaseManager gets deleted before Address, therefore error
-   * Fix It!
-   * Manager gets nuklptr, remove move and make copy available.
-   */
-  // Manager->RemoveModel(Addresses.GetTableName());
+  auto Result =
+      Addresses.Add({{"addressname", "hamaasdasdasdasd"}, {"addressnumber", "18"}});
+
+  Manager->RemoveModel(Addresses.GetTableName());
 }
