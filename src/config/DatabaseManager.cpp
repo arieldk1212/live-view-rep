@@ -1,8 +1,12 @@
 #include "../../inc/Config/DatabaseManager.h"
 
 DatabaseManager::DatabaseManager(const std::string &DatabaseConnectionString)
-    : m_DatabaseConnectionString(DatabaseConnectionString),
-      m_IsConnected(true) {
+    : m_IsConnected(true) {
+  if (DatabaseConnectionString.empty()) {
+    APP_CRITICAL("DATABASE MANAGER ERROR - EMPTY CONNECTION STRING");
+    throw std::invalid_argument("Database Connection String Empty.");
+  }
+  m_DatabaseConnectionString = DatabaseConnectionString;
   m_DatabaseManager =
       std::make_shared<DatabaseConnection>(m_DatabaseConnectionString);
   APP_INFO("DATABASE MANAGER CREATED");

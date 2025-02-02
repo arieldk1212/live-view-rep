@@ -1,37 +1,41 @@
 #include "../../inc/Config/Config.h"
 
-Config::Config(const std::filesystem::path &FilePath) : m_FilePath{FilePath} {
+Json Config::ReadFile(const std::filesystem::path &Path) {
   try {
-    std::ifstream f(m_FilePath);
-    try {
-      m_Data = Json::parse(f);
-    } catch (const Json::exception &e) {
-      std::cerr << "FILE ERROR - PARSE - " << e.what();
+    std::ifstream f(Path);
+    if (!f) {
+      throw std::ios_base::failure("Unable To Open Config File.");
     }
+    auto Data = Json::parse(f);
+    // f.close();
+    return Data;
+  } catch(const Json::exception &e) {
+    std::cerr << "JSON PARSING ERROR - " << e.what();
+    return {};
   } catch (const std::exception &e) {
-    std::cerr << "FILE PATH ERROR - STREAM - " << e.what();
+    std::cerr << "FILE OPENING ERROR - " << e.what();
+    return {};
   }
 }
 
-const Json Config::GetData() const { return m_Data; }
-
-const std::string Config::DatabaseToString() const {
+std::string Config::DatabaseToString(const std::filesystem::path &Path) {
+  auto JsonData = ReadFile(Path);
   std::string Data;
   try {
     Data.append("user=")
-        .append(m_Data["DATABASE"]["username"])
+        .append(JsonData["DATABASE"]["username"])
         .append(" ")
         .append("password=")
-        .append(m_Data["DATABASE"]["password"])
+        .append(JsonData["DATABASE"]["password"])
         .append(" ")
         .append("host=")
-        .append(m_Data["DATABASE"]["host"])
+        .append(JsonData["DATABASE"]["host"])
         .append(" ")
         .append("port=")
-        .append(m_Data["DATABASE"]["port"])
+        .append(JsonData["DATABASE"]["port"])
         .append(" ")
         .append("dbname=")
-        .append(m_Data["DATABASE"]["dbname"]);
+        .append(JsonData["DATABASE"]["dbname"]);
     return Data;
   } catch (const Json::exception &e) {
     SYSTEM_ERROR("CONFIG FILE ERROR - DATABASE - " + std::string(e.what()));
@@ -39,23 +43,24 @@ const std::string Config::DatabaseToString() const {
   }
 }
 
-const std::string Config::TestDatabaseToString() const {
+std::string Config::TestDatabaseToString(const std::filesystem::path &Path) {
+  auto JsonData = ReadFile(Path);
   std::string Data;
   try {
     Data.append("user=")
-        .append(m_Data["TEST_DATABASE"]["username"])
+        .append(JsonData["TEST_DATABASE"]["username"])
         .append(" ")
         .append("password=")
-        .append(m_Data["TEST_DATABASE"]["password"])
+        .append(JsonData["TEST_DATABASE"]["password"])
         .append(" ")
         .append("host=")
-        .append(m_Data["TEST_DATABASE"]["host"])
+        .append(JsonData["TEST_DATABASE"]["host"])
         .append(" ")
         .append("port=")
-        .append(m_Data["TEST_DATABASE"]["port"])
+        .append(JsonData["TEST_DATABASE"]["port"])
         .append(" ")
         .append("dbname=")
-        .append(m_Data["TEST_DATABASE"]["dbname"]);
+        .append(JsonData["TEST_DATABASE"]["dbname"]);
     return Data;
   } catch (const Json::exception &e) {
     SYSTEM_ERROR("CONFIG FILE ERROR - TEST_DATABASE - " +
@@ -64,11 +69,13 @@ const std::string Config::TestDatabaseToString() const {
   }
 }
 
-const std::string Config::LoggingPathToString() const {
+std::string Config::LoggingPathToString(const std::filesystem::path &Path) {
+  auto JsonData = ReadFile(Path);
+  std::string Data;
   try {
-    return std::string(m_Data["LOGGING"]["PATH"]);
+    return std::string(JsonData["LOGGING"]["path"]);
   } catch (const Json::exception &e) {
-    std::cerr << e.what();
+    std::cerr << "FILE ERROR AT LOG PATH FUNCTION - " << e.what();
     return "";
   }
 }

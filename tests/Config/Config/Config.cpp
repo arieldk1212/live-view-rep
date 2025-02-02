@@ -1,16 +1,11 @@
-#include "../../../inc/Config/Config.h"
 #include "../../Test.h"
 
 class ConfigTest : public ::testing::Test {
 protected:
-  std::filesystem::path TestFilePath;
-  std::string TestDataString;
-  Json JsonData;
+    std::string TestDataString;
 
   void SetUp() override {
-    Config Test {"../../config.json"};
-    TestDataString = Test.DatabaseToString();
-    JsonData = Test.GetData();
+    TestDataString = Config::TestDatabaseToString("../../configs/config.json");
   }
 
   void TearDown() override {}
@@ -18,6 +13,6 @@ protected:
 
 TEST_F(ConfigTest, ConfigOverallTest){
   std::string GoodDataString = "user=arielkriheli password=password "
-                                "host=localhost port=5432 dbname=arielkriheli";
+                                "host=localhost port=5432 dbname=live_view_test";
   EXPECT_EQ(TestDataString, GoodDataString);
 }

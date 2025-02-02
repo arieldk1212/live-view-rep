@@ -2,7 +2,7 @@
 #define APP_H
 
 #include "Config/DatabaseManager.h"
-#include "Config/GConfig.h"
+#include "Config/Config.h"
 #include "Models/AddressModel.h"
 
 #endif

@@ -6,7 +6,6 @@ Config/Logger.cpp
 Config/Database.cpp
 Config/DatabaseManager.cpp
 Config/Config.cpp
-Config/GConfig.cpp
 
 Core/Entity.cpp
 Core/Type.cpp

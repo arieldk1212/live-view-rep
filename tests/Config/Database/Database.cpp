@@ -1,4 +1,3 @@
-
 #include "../../../inc/Config/DatabaseManager.h"
 #include "../../Test.h"
 
@@ -17,13 +16,11 @@ protected:
   void SetUp() override {
     std::string TestDatabaseConnectionString;
     if (std::getenv("GITHUB_ACTIONS") != nullptr) {
-      GlobalConfig::InitGlobalConfig("../../../../ci-config.json");
       TestDatabaseConnectionString =
-          GlobalConfig::g_Config->TestDatabaseToString();
+          Config::TestDatabaseToString("../../configs/config.json");
     } else {
-      GlobalConfig::InitGlobalConfig("../../../../config.json");
       TestDatabaseConnectionString =
-          GlobalConfig::g_Config->TestDatabaseToString();
+          Config::TestDatabaseToString("../../configs/config.json");
     }
     Manager = std::make_shared<DatabaseManager>(TestDatabaseConnectionString);
     TestTableName = "Test";
