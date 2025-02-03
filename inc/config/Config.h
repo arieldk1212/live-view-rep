@@ -20,5 +20,4 @@ public:
   static std::string LoggingPathToString(const std::filesystem::path &Path);
 };
 
-
 #endif

@@ -5,7 +5,7 @@ std::shared_ptr<spdlog::logger> Logger::s_SystemLogger;
 
 void Logger::Init(const std::string &path) {
   std::string p_Path;
-  p_Path = (path == "null") ? p_Path = "../../backend-logs/" : p_Path = path;
+  p_Path = (path == "") ? p_Path = "../../backend-logs/" : p_Path = path;
 
   spdlog::sink_ptr app_sink =
       std::make_shared<spdlog::sinks::basic_file_sink_mt>(p_Path + "app.log",

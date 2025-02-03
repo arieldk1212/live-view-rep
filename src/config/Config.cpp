@@ -9,7 +9,7 @@ Json Config::ReadFile(const std::filesystem::path &Path) {
     auto Data = Json::parse(f);
     // f.close();
     return Data;
-  } catch(const Json::exception &e) {
+  } catch (const Json::exception &e) {
     std::cerr << "JSON PARSING ERROR - " << e.what();
     return {};
   } catch (const std::exception &e) {

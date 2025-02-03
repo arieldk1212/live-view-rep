@@ -5,6 +5,11 @@
 
 // TODO: write this into database, when accessible.
 
+/**
+ * @brief wont be done now, not until we figure out elastic search and kibana structure.
+ * 
+ */
+
 class InstanceLogger {
 public:
 	virtual ~InstanceLogger();

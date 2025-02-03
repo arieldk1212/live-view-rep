@@ -34,39 +34,15 @@ protected:
   }
 };
 
-TEST_F(DatabaseTest, DatabaseModelCreation) {
-  TestFieldsFirst.emplace("AddressName", "text");
-  TestFieldsFirst.emplace("AddressNumber", "int");
-  Manager->AddModel(TestTableName, TestFieldsFirst);
-
-  TestFieldsSecond.emplace("TestName", "Text");
-  Manager->AddModel("Test2", TestFieldsSecond);
-  Manager->RemoveModel("Test2");
-
-  // EXPECT_STRNE(ResponseTest.c_str(), Response.c_str());
-}
-
 TEST_F(DatabaseTest, DatabaseModelAddField) {
   TestFieldsFirst.emplace("AddressName", "text");
   Manager->AddModel(TestTableName, TestFieldsFirst);
-
+  auto Before = Manager->GetModelData(TestTableName);
   Manager->AddColumn(TestTableName, "AddedField", "Text");
+  auto After = Manager->GetModelData(TestTableName);
 
-  // EXPECT_STRNE(Response.c_str(), AddedFieldResponse.c_str());
+  EXPECT_NE(Before.columns(), After.columns());
 }
-
-// TEST_F(DatabaseTest, DatabaseModelSwapFields) {
-//   TestFieldsFirst.emplace("AddressName", "text");
-//   TestFieldsFirst.emplace("AddressNumber", "int");
-//   Manager->AddModel("Address", TestFieldsFirst);
-//   std::string PreResponse = Manager->GetSerializedModelData("Address");
-
-//   TestFieldsSecond.emplace("PostAddressName", "text");
-//   Manager->SwapAllColumns("Address", TestFieldsSecond);
-//   std::string PostResponse = Manager->GetSerializedModelData("Address");
-
-//   EXPECT_STRNE(PreResponse.c_str(), PostResponse.c_str());
-// }
 
 TEST_F(DatabaseTest, DatabaseModelCreateMethodTest) {
   /**
@@ -88,23 +64,6 @@ TEST_F(DatabaseTest, DatabaseModelCreateMethodTest) {
   auto MethodResponse = Manager->AddModel(TestTableName, TestFieldsFirst);
 
   EXPECT_NE(MethodResponse.query().size(), 0);
-}
-
-TEST_F(DatabaseTest, DatabaseModelGetSerializedDataTest) {
-  TestFieldsFirst.insert({
-      {"id",
-       DatabaseCommandToString(DatabaseFieldCommands::SerialPrimaryKeyField)},
-      {"addressname",
-       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
-      {"addresslocation",
-       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
-      {"addressnumber",
-       DatabaseCommandToString(DatabaseFieldCommands::IntField)},
-  });
-
-  auto MethodResponse = Manager->AddModel(TestTableName, TestFieldsFirst);
-
-  // EXPECT_NE(Data.find("id"), 0);
 }
 
 TEST_F(DatabaseTest, DatabaseModelGetDataTest) {
@@ -181,23 +140,6 @@ TEST_F(DatabaseTest, DatabaseTruncateModelTest) {
   EXPECT_NE(Before, After);
 }
 
-// TEST_F(DatabaseTest, DatabaseRemoveModelTest) {
-//   TestFieldsFirst.insert({
-//       {"id",
-//        DatabaseCommandToString(DatabaseFieldCommands::SerialPrimaryKeyField)},
-//       {"addressname",
-//        DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
-//       {"addresslocation",
-//        DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
-//       {"addressnumber",
-//        DatabaseCommandToString(DatabaseFieldCommands::IntField)},
-//   });
-
-//   auto MethodResponse = Manager->AddModel(TestTableName, TestFieldsFirst);
-
-//   EXPECT_TRUE(MethodResponse.());
-// }
-
 TEST_F(DatabaseTest, DatabaseAddColumnTest) {
   TestFieldsFirst.insert({
       {"id",
@@ -211,9 +153,11 @@ TEST_F(DatabaseTest, DatabaseAddColumnTest) {
   });
 
   auto MethodResponse = Manager->AddModel(TestTableName, TestFieldsFirst);
+  auto Before = Manager->GetModelData(TestTableName);
   Manager->AddColumn(TestTableName, "testfield", "int");
+  auto After = Manager->GetModelData(TestTableName);
 
-  // EXPECT_TRUE(Data.find("testfield"));
+  EXPECT_NE(Before.columns(), After.columns());
 }
 
 TEST_F(DatabaseTest, DatabaseDropColumnTest) {
@@ -229,9 +173,11 @@ TEST_F(DatabaseTest, DatabaseDropColumnTest) {
   });
 
   auto MethodResponse = Manager->AddModel(TestTableName, TestFieldsFirst);
+  auto Before = Manager->GetModelData(TestTableName);
   Manager->DropColumn(TestTableName, "id");
+  auto After = Manager->GetModelData(TestTableName);
 
-  // EXPECT_NE(AfterData, PreData);
+  EXPECT_NE(Before.columns(), After.columns());
 }
 
 TEST_F(DatabaseTest, DatabaseAlterColumnTest) {
@@ -246,12 +192,20 @@ TEST_F(DatabaseTest, DatabaseAlterColumnTest) {
        DatabaseCommandToString(DatabaseFieldCommands::IntField)},
   });
 
+  StringUnMap PostData = {{"addressname", "20"},
+                          {"addresslocation", "levi"},
+                          {"addressnumber", "18"},
+                          {"id", "1"}};
+
   auto MethodResponse = Manager->AddModel(TestTableName, TestFieldsFirst);
+  auto Before = Manager->GetModelData(TestTableName);
   Manager->AlterColumn(
       TestTableName, "addressname",
-      DatabaseCommandToString(DatabaseFieldCommands::CharField));
+      DatabaseCommandToString(DatabaseFieldCommands::IntField));
+  Manager->InsertInto(TestTableName, PostData);
+  auto After = Manager->GetModelData(TestTableName);
 
-  // EXPECT_NE(AfterData, PreData);
+  EXPECT_NE(Before.affected_rows(), After.affected_rows());
 }
 
 TEST_F(DatabaseTest, DatabaseInsertIntoTest) {
