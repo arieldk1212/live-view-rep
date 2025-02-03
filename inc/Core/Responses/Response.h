@@ -1,5 +1,5 @@
-#ifndef BASE_RESPONSE_H
-#define BASE_RESPONSE_H
+#ifndef RESPONSE_H
+#define RESPONSE_H
 
 // INFO: this class is all about the response classes from different classes
 // across the project. meaning -> from db model a model returns a certain
@@ -17,23 +17,28 @@
 // class will inherit from entity due to the need use of the private entity
 // members and their functionality.
 
-
 /**
  * @brief valid can try and figure out a generic form of responses from
  * different application sections.
  *
  */
 
-class BaseResponse {
+#include <chrono>
+
+template <typename ReturnType, typename DataType> class Response {
 public:
-  BaseResponse();
-  ~BaseResponse();
+  Response() = default;
+  Response(const ReturnType &Data);
+  virtual ~Response();
 
-  void ToString();
+  virtual const std::string ResponseType(); /* database response.. */
+  virtual void ToString();
+  virtual void TimeBenchmark();
 
-  void TimeBenchmark();
 private:
-
+  size_t m_ResponseSize;
+  std::unique_ptr<ReturnType> m_ResponseApiRef; /* ptr to pqxx for example */
+  DataType m_ResponseData;
 };
 
 #endif
