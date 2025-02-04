@@ -9,7 +9,7 @@ using Json = nlohmann::json;
 
 class BaseModel {
 public:
-  virtual ~BaseModel() = default;
+  virtual ~BaseModel() = 0;
   virtual const std::string GetTableName() const = 0;
   virtual pqxx::result Init() = 0;
   virtual pqxx::result Add(const StringUnMap &Fields) = 0;

@@ -18,26 +18,6 @@ DatabaseManager::~DatabaseManager() {
   APP_CRITICAL("DATABASE MANAGER DESTROYED");
 }
 
-// DatabaseManager::DatabaseManager(const DatabaseManager &other)
-//     : m_IsConnected(other.m_IsConnected),
-//       m_DatabaseConnectionString(other.m_DatabaseConnectionString),
-//       m_DatabaseManager(other.m_DatabaseManager) {}
-
-// DatabaseManager::DatabaseManager(DatabaseManager &&other) noexcept
-//     : m_IsConnected(std::exchange(other.m_IsConnected, true)),
-//       m_DatabaseConnectionString(std::move(other.m_DatabaseConnectionString)),
-//       m_DatabaseManager(std::move(other.m_DatabaseManager)) {}
-
-// DatabaseManager &DatabaseManager::operator=(DatabaseManager &&other) noexcept
-// {
-//   if (this != &other) {
-//     m_IsConnected = std::exchange(other.m_IsConnected, false);
-//     m_DatabaseConnectionString = std::move(other.m_DatabaseConnectionString);
-//     m_DatabaseManager = std::move(other.m_DatabaseManager);
-//   }
-//   return *this;
-// }
-
 bool DatabaseManager::IsDatabaseConnected() {
   return m_DatabaseManager->IsDatabaseConnected();
 }

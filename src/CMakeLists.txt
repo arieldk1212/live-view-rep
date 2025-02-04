@@ -8,6 +8,7 @@ Config/Config.cpp
 
 Core/UUID.cpp
 Core/Geo.cpp
+Core/Responses/Response.cpp
 
 Models/LogModel.cpp
 Models/AddressModel.cpp

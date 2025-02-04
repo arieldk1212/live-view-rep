@@ -1,5 +1,7 @@
 #include "../../inc/Models/AddressModel.h"
 
+BaseModel::~BaseModel() {}
+
 AddressModel::AddressModel(std::shared_ptr<DatabaseManager> &Manager)
     : m_DatabaseManager(Manager), m_TableName("Address") {
   APP_INFO("ADDRESS MODEL RESOURCE CREATED");
