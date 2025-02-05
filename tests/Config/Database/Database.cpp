@@ -17,7 +17,7 @@ protected:
     std::string TestDatabaseConnectionString;
     if (std::getenv("GITHUB_ACTIONS") != nullptr) {
       TestDatabaseConnectionString =
-          Config::TestDatabaseToString("../../configs/config.json");
+          Config::TestDatabaseToString("../../configs/ci-config.json");
     } else {
       TestDatabaseConnectionString =
           Config::TestDatabaseToString("../../configs/config.json");
