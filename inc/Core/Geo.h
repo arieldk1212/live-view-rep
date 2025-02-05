@@ -18,4 +18,4 @@ private:
 	std::string m_Latitude;
 };
 
-#endif // GEO_H
+#endif

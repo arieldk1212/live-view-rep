@@ -27,9 +27,9 @@ jobs:
         initdb --locale=C -D /opt/homebrew/var/postgres@15
         pg_ctl -D /opt/homebrew/var/postgres@15 start
         createuser -s postgres
-        psql -U postgres -c "CREATE ROLE arielkriheli WITH LOGIN PASSWORD 'password';"
-        psql -U postgres -c "ALTER ROLE arielkriheli CREATEDB;"
-        psql -U postgres -c "CREATE DATABASE live_view_test OWNER arielkriheli;"
+        psql -U postgres -c "CREATE ROLE ci WITH LOGIN PASSWORD 'password';"
+        psql -U postgres -c "ALTER ROLE ci CREATEDB;"
+        psql -U postgres -c "CREATE DATABASE live_view_ci_test OWNER ci;"
 
     - name: Install vcpkg
       run: |
@@ -49,10 +49,6 @@ jobs:
       run: make -j 4
       working-directory: ${{ github.workspace }}/build
 
-    # - name: Test Specific
-    #   run: ctest --output-on-failure --extra-verbose -R UUID
-    #   working-directory: ${{ github.workspace }}/build
-
-    - name: Run Tests
+    - name: Run Unit Tests
       run: ctest --output-on-failure --extra-verbose
       working-directory: ${{ github.workspace }}/build

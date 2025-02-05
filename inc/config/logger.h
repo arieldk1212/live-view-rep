@@ -20,8 +20,8 @@ public:
    * to "../backend-logs/".
    */
   static void Init(const std::string &path);
-  static std::shared_ptr<spdlog::logger> &GetAppLogger();
-  static std::shared_ptr<spdlog::logger> &GetSystemLogger();
+  static std::shared_ptr<spdlog::logger> &GetAppLogger() { return s_AppLogger; }
+  static std::shared_ptr<spdlog::logger> &GetSystemLogger() { return s_SystemLogger; }
 
 private:
   static std::shared_ptr<spdlog::logger> s_AppLogger;
@@ -29,7 +29,7 @@ private:
 };
 
 /**
- * @brief Via CMakeLists.txt at root directory, or #define at App.cpp at src directory.
+ * @brief Via CMakeLists.txt at root directory.
  */
 #ifdef ENABLE_LOGGING
 #define APP_INFO(...) Logger::GetAppLogger()->info(__VA_ARGS__)
