@@ -10,11 +10,6 @@
 // class will inherit from entity due to the need use of the private entity
 // members and their functionality.
 
-/**
- * @brief valid can try and figure out a generic form of responses from
- * different application sections.
- */
-
 #include "Config/Logger.h"
 
 #include <chrono>
@@ -28,23 +23,24 @@ public:
 public:
   virtual ~Response() = 0;
 
-  virtual void Query() = 0;
-  virtual void ToString() = 0;
+  virtual const std::string GetResponseQuery() const = 0;
+  virtual const size_t GetResponseSize() const = 0;
 
-  virtual DoubleDuration RunBenchmark() = 0;
-  virtual const std::string ResponseType() = 0; /* e.g database response.. */
+  virtual DoubleDuration RunBenchmark(std::function<void()> Func) = 0;
+  virtual const std::string ResponseType() = 0;
 };
 
 class DBResponse : Response<pqxx::result> {
 public:
-  DBResponse(pqxx::result &&ResponseData);
+  explicit DBResponse(const pqxx::result &ResponseData);
+  explicit DBResponse(pqxx::result &&ResponseData);
 
-  /**
-   * @brief depends on how the usage will be, operator= will be good.
-   */
-  DBResponse &operator=(std::function<pqxx::result> Func);
+  [[nodiscard]] const std::string GetResponseQuery() const override {
+    return m_ResponseData.query();
+  }
+  [[nodiscard]] const size_t GetResponseSize() const override { return m_ResponseSize; }
 
-  DoubleDuration RunBenchmark() override;
+  DoubleDuration RunBenchmark(std::function<void()> Func) override;
   const std::string ResponseType() override { return "Response: Database"; }
 
 private:
@@ -54,8 +50,8 @@ private:
 
 /**
  * @brief
- * DBResponse x = Manager->AddModel; -> operator=
- * return DBReponse(CreateTable(Args...)); -> copy ctor
+ * DBResponse x = Manager->AddModel; -> copy ctor
+ * return DBReponse(CreateTable(Args...)); -> ctor
  */
 
 #endif

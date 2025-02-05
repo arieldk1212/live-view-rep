@@ -2,17 +2,21 @@
 
 template <typename ResType> Response<ResType>::~Response() {}
 
-DBResponse::DBResponse(pqxx::result &&ResponseData)
-    : m_ResponseData(std::move(ResponseData)),
-      m_ResponseSize(sizeof(ResponseData)) {
+DBResponse::DBResponse(const pqxx::result &ResponseData)
+    : m_ResponseData{ResponseData}, m_ResponseSize{sizeof(ResponseData)} {
   APP_INFO("Response Size -> " + std::to_string(m_ResponseSize));
 }
 
-DBResponse::DoubleDuration DBResponse::RunBenchmark() {
+DBResponse::DBResponse(pqxx::result &&ResponseData)
+    : m_ResponseData{std::move(ResponseData)},
+      m_ResponseSize{sizeof(ResponseData)} {
+  APP_INFO("Response Size -> " + std::to_string(m_ResponseSize));
+}
+
+DBResponse::DoubleDuration
+DBResponse::RunBenchmark(std::function<void()> Func) {
   auto start = Clock::now();
-
-  /* Insert Usage Here */
-
+  Func();
   auto end = Clock::now();
   auto duration = end - start;
   return duration;
