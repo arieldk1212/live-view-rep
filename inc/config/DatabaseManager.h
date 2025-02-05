@@ -1,15 +1,17 @@
 #ifndef DATABASE_MANAGER_H
 #define DATABASE_MANAGER_H
 
-#include "../Models/DatabaseModel.h"
+#include "../Core/UUID.h"
 #include "Database.h"
 #include "DatabaseCommands.h"
 #include "Logger.h"
 
 #include <iostream>
 #include <memory>
-#include <mutex>
 #include <type_traits>
+#include <utility>
+
+using StringUnMap = std::unordered_map<std::string, std::string>;
 
 /**
  * @class DatabaseManager
@@ -28,11 +30,17 @@ public:
    */
   ~DatabaseManager();
 
-  DatabaseManager(const DatabaseManager &) = delete;
-  DatabaseManager &operator=(const DatabaseManager &) = delete;
+  DatabaseManager(const DatabaseManager &other) = delete;
+  DatabaseManager &operator=(const DatabaseManager &other) = delete;
 
-  DatabaseManager(DatabaseManager &&) = delete;
-  DatabaseManager &operator=(DatabaseManager &&) = delete;
+  DatabaseManager(DatabaseManager &&other) noexcept = delete;
+  DatabaseManager &operator=(DatabaseManager &&other) noexcept = delete;
+
+  /**
+   * @brief check the status of the database connection.
+   * @return bool
+   */
+  bool IsDatabaseConnected();
 
   /**
    * @brief  serializes the fields of the model, query preparation.
@@ -40,21 +48,6 @@ public:
    * @return std::string
    */
   std::string QuerySerialization(const StringUnMap &ModelFields);
-
-  /**
-   * @brief [] operator overload, returns the ref to of the model to the
-   * DatabaseModel class for further exploration.
-   * @param ModelName
-   * @return std::shared_ptr<DatabaseModel>&
-   */
-  std::shared_ptr<DatabaseModel> &operator[](const std::string &ModelName);
-  /**
-   * @brief function to get the instance of the model, implements the []
-   * operator overload.
-   * @param ModelName
-   * @return std::shared_ptr<DatabaseModel>&
-   */
-  std::shared_ptr<DatabaseModel> &GetModel(const std::string &ModelName);
 
   /**
    * @brief creates a new DatabaseModel object, creates a new table in the
@@ -94,12 +87,7 @@ public:
   pqxx::result GetModelData(const std::string &ModelName,
                             const std::string &FieldName,
                             const std::string &FieldValue);
-  /**
-   * @brief Get the Serialized Model Data object.
-   * @param ModelName
-   * @return std::string
-   */
-  std::string GetSerializedModelData(const std::string &ModelName);
+
   /**
    * @brief add fields to an existing table.
    * @param ModelName string, name of the model/table.
@@ -177,16 +165,15 @@ private:
   pqxx::result GetTableData(const std::string &TableName,
                             const std::string &TableFieldName,
                             const std::string &TableFieldValue);
-  std::string GetSerializedTableData(const std::string &TableName);
   pqxx::result DeleteTable(const std::string &TableName,
                            DatabaseQueryCommands QueryCommand);
   // pqxx::result MUQuery(const std::string &TableName, const std::string
   // &Query);
 
 private:
+  bool m_IsConnected;
   std::string m_DatabaseConnectionString;
   std::shared_ptr<DatabaseConnection> m_DatabaseManager;
-  std::vector<std::shared_ptr<DatabaseModel>> m_DatabaseModels;
 
 private:
   /** @brief to create the connection pool we need, create a new connection,
@@ -208,10 +195,12 @@ public:
   std::shared_ptr<DatabaseConnection> LockConnection();
 
 private:
+  size_t m_PoolSize;
   std::string m_DatabaseConnectionString;
   std::vector<std::unique_ptr<DatabaseConnection>> m_DatabaseConnectionPool;
   std::mutex m_DatabaseConnectionPoolMutex;
 };
 */
+
 
 #endif

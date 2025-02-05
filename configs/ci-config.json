@@ -8,6 +8,6 @@
   },
 
   "LOGGING": {
-    "PATH": ""
+    "path": ""
   }
 }

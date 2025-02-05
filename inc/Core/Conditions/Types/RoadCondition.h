@@ -5,7 +5,7 @@
 
 class RoadCondition : public Condition {
 public:
-	virtual ~RoadCondition() = 0;
+	virtual ~RoadCondition();
 
 	void ConditionType() override { m_RoadConditionType = "Road Condition"; }
 	virtual void RoadConditionType() = 0;
