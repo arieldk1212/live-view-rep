@@ -1,8 +1,6 @@
 enable_testing()
 find_package(GTest CONFIG REQUIRED)
 
-
-
 add_library(tests
 Config/Database/Database.cpp
 Config/Config/Config.cpp
