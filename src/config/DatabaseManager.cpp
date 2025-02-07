@@ -176,7 +176,7 @@ pqxx::result DatabaseManager::DeleteRecord(const std::string &ModelName,
       .append(" where ")
       .append(Condition)
       .append(";");
-  APP_INFO("RECORD DATA DELETED - " + ModelName);
+  APP_INFO("RECORD DATA DELETED IN - " + ModelName);
   return MCrQuery(ModelName, query);
 }
 

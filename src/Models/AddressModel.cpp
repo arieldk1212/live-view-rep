@@ -35,4 +35,7 @@ pqxx::result AddressModel::Update(const StringUnMap &Fields,
   return Result;
 }
 
-pqxx::result AddressModel::Delete(const StringUnMap &Fields) {}
+pqxx::result AddressModel::Delete(const std::string &Condition) {
+  auto Result = m_DatabaseManager->DeleteRecord(m_TableName, Condition);
+  return Result;
+}

@@ -287,3 +287,33 @@ TEST_F(DatabaseTest, DatabaseUpdateColumnsTest) {
 
   EXPECT_NE(AfterData, PreData);
 }
+
+TEST_F(DatabaseTest, DatabaseDeleteRecordTest) {
+  TestFieldsFirst.insert({
+      {"id",
+       DatabaseCommandToString(DatabaseFieldCommands::SerialPrimaryKeyField)},
+      {"addressname",
+       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
+      {"addresslocation",
+       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
+      {"addressnumber",
+       DatabaseCommandToString(DatabaseFieldCommands::IntField)},
+  });
+
+  StringUnMap Data1 = {{"addressname", "rami"},
+                       {"addresslocation", "levi"},
+                       {"addressnumber", "18"},
+                       {"id", "1"}};
+
+  StringUnMap Data2 = {
+      {"addressname", "new"}, {"addresslocation", "fields"}, {"id", "2"}};
+
+  auto MethodResponse = Manager->AddModel(TestTableName, TestFieldsFirst);
+  Manager->InsertInto(TestTableName, Data1);
+  Manager->InsertInto(TestTableName, Data2);
+  auto PreData = Manager->GetModelData(TestTableName);
+  Manager->DeleteRecord(TestTableName, "id=2");
+  auto AfterData = Manager->GetModelData(TestTableName);
+
+  EXPECT_NE(AfterData, PreData);
+}

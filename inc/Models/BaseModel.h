@@ -15,7 +15,7 @@ public:
   virtual pqxx::result Add(const StringUnMap &Fields) = 0;
   virtual pqxx::result Update(const StringUnMap &Fields,
                               const std::string &Condition) = 0;
-  virtual pqxx::result Delete(const StringUnMap &Fields) = 0;
+  virtual pqxx::result Delete(const std::string &Condition) = 0;
 
   // virtual Json SerializeModel(const std::string &Data) = 0;
   // virtual std::string DeserializeModel(const Json &JsonData) = 0;

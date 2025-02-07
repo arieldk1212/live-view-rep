@@ -5,6 +5,9 @@
 #include "Config/DatabaseCommands.h"
 
 class AddressModel : BaseModel {
+  /**
+   * @brief in here we need to init a logger for a certain address!
+   */
 public:
   explicit AddressModel(std::shared_ptr<DatabaseManager> &Manager);
   ~AddressModel() override;
@@ -15,7 +18,7 @@ public:
   pqxx::result Add(const StringUnMap &Fields) override;
   pqxx::result Update(const StringUnMap &Fields,
                       const std::string &Condition) override;
-  pqxx::result Delete(const StringUnMap &Fields) override;
+  pqxx::result Delete(const std::string &Condition) override;
 
 private:
   std::shared_ptr<DatabaseManager> m_DatabaseManager;
