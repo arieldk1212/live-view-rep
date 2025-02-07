@@ -168,6 +168,18 @@ pqxx::result DatabaseManager::UpdateColumns(const std::string &ModelName,
   return MCrQuery(ModelName, query);
 }
 
+pqxx::result DatabaseManager::DeleteRecord(const std::string &ModelName,
+                                           const std::string &Condition) {
+  std::string query;
+  query.append("delete from ")
+      .append(ModelName)
+      .append(" where ")
+      .append(Condition)
+      .append(";");
+  APP_INFO("RECORD DATA DELETED - " + ModelName);
+  return MCrQuery(ModelName, query);
+}
+
 // pqxx::result DatabaseManager::MUQuery(const std::string &TableName,
 //                                     const std::string &query) {
 //   try {

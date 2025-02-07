@@ -282,6 +282,7 @@ TEST_F(DatabaseTest, DatabaseUpdateColumnsTest) {
   Manager->InsertInto(TestTableName, Data);
   auto PreData = Manager->GetModelData(TestTableName);
   Manager->UpdateColumns(TestTableName, NewFields, "id=1");
+  auto size = NewFields.size();
   auto AfterData = Manager->GetModelData(TestTableName);
 
   EXPECT_NE(AfterData, PreData);

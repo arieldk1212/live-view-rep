@@ -19,13 +19,6 @@ enum class DatabaseFieldCommands {
   VarChar100Field
 };
 
-const std::unordered_map<DatabaseFieldCommands, std::string>
-    DatabaseFieldStrings = {
-        {DatabaseFieldCommands::SerialPrimaryKeyField, "serial primary key"},
-        {DatabaseFieldCommands::IntField, "int"},
-        {DatabaseFieldCommands::CharField, "char"},
-        {DatabaseFieldCommands::VarChar100Field, "varchar(100)"}};
-
 enum class DatabaseQueryCommands {
   SelectAll,
   AlterRole,
@@ -44,6 +37,13 @@ enum class DatabaseQueryCommands {
   DropDrop,
   DropTruncate,
 };
+
+const std::unordered_map<DatabaseFieldCommands, std::string>
+    DatabaseFieldStrings = {
+        {DatabaseFieldCommands::SerialPrimaryKeyField, "serial primary key"},
+        {DatabaseFieldCommands::IntField, "int"},
+        {DatabaseFieldCommands::CharField, "char"},
+        {DatabaseFieldCommands::VarChar100Field, "varchar(100)"}};
 
 const std::unordered_map<DatabaseQueryCommands, std::string>
     DatabaseQueryCommandsStrings = {

@@ -87,7 +87,6 @@ public:
   pqxx::result GetModelData(const std::string &ModelName,
                             const std::string &FieldName,
                             const std::string &FieldValue);
-
   /**
    * @brief add fields to an existing table.
    * @param ModelName string, name of the model/table.
@@ -115,12 +114,6 @@ public:
   pqxx::result AlterColumn(const std::string &ModelName,
                            const std::string &FieldName,
                            const std::string &NewFieldType);
-
-  /** @brief not in usage, better to delete the model than change all.
-  pqxx::result SwapAllColumns(const std::string &ModelName,
-                              const StringUnMap &ModelFields);
-  */
-
   /**
    * @brief inserts data to the table's database.
    * @param ModelName
@@ -152,6 +145,13 @@ public:
   pqxx::result UpdateColumns(const std::string &ModelName,
                              const StringUnMap &Fields,
                              const std::string &Condition);
+  /**
+   * @brief delete a record from the table.
+   * @param ModelName
+   * @param Condition
+   */
+  pqxx::result DeleteRecord(const std::string &ModelName,
+                            const std::string &Condition);
 
 private:
   /**
@@ -201,6 +201,5 @@ private:
   std::mutex m_DatabaseConnectionPoolMutex;
 };
 */
-
 
 #endif

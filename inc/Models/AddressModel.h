@@ -13,8 +13,9 @@ public:
 
   pqxx::result Init() override;
   pqxx::result Add(const StringUnMap &Fields) override;
-  // pqxx::result Update(const StringUnMap &Fields) override;
-  // pqxx::result Delete(const StringUnMap &Fields) override;
+  pqxx::result Update(const StringUnMap &Fields,
+                      const std::string &Condition) override;
+  pqxx::result Delete(const StringUnMap &Fields) override;
 
 private:
   std::shared_ptr<DatabaseManager> m_DatabaseManager;
