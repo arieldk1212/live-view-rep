@@ -1,5 +1,7 @@
 #include "../../../inc/Core/Responses/DatabaseResponse.h"
 
+template <typename ResType> Response<ResType>::~Response() {}
+
 DBResponse::DBResponse(const pqxx::result &ResponseData)
     : m_ResponseData{ResponseData}, m_ResponseSize{sizeof(ResponseData)} {
   APP_INFO("Response Size -> " + std::to_string(m_ResponseSize));
