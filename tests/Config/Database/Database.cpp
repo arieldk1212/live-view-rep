@@ -317,3 +317,21 @@ TEST_F(DatabaseTest, DatabaseDeleteRecordTest) {
 
   EXPECT_NE(AfterData, PreData);
 }
+
+TEST_F(DatabaseTest, DatabaseHeavyLoadTest) {
+  /**
+   * @todo test a heavy workload here with uniqueptr and sharedptrs.
+   * 
+   */
+  auto TestDatabaseConnectionString =
+      Config::TestDatabaseToString("../../configs/config.json");
+
+  std::unique_ptr<DatabaseManager> UnqManager1 =
+      std::make_unique<DatabaseManager>(TestDatabaseConnectionString);
+  std::unique_ptr<DatabaseManager> UnqManager2 =
+      std::make_unique<DatabaseManager>(TestDatabaseConnectionString);
+
+  auto MethodResponse = Manager->AddModel(TestTableName, TestFieldsFirst);
+
+  // EXPECT_NE(AfterData, PreData);
+}
