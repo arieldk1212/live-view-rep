@@ -32,12 +32,12 @@ pqxx::result DatabaseConnection::CrQuery(const std::string &Query) {
    connection once the previous one has completed. If you want to have multiple
    concurrent transactions, let them work on different connections.
    */
-  std::lock_guard<std::mutex> lock(m_DatabaseMutex);
   if (!IsDatabaseConnected()) {
     APP_ERROR("CRQUERY - QUERY ERROR - DATABASE CONNECTION ERROR");
     return {};
   }
   try {
+    std::lock_guard<std::mutex> lock(m_DatabaseMutex);
     return m_DatabaseNonTransaction.exec(Query);
   } catch (const std::exception &e) {
     APP_ERROR("CRQUERY - QUERY EXECUTION ERROR - " + std::string(e.what()));
