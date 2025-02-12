@@ -8,7 +8,7 @@ DatabaseManager::DatabaseManager(const std::string &DatabaseConnectionString)
   }
   m_DatabaseConnectionString = DatabaseConnectionString;
   m_DatabaseManager =
-      std::make_shared<DatabaseConnection>(m_DatabaseConnectionString);
+      std::make_unique<DatabaseConnection>(m_DatabaseConnectionString);
   APP_INFO("DATABASE MANAGER CREATED");
 }
 
@@ -282,3 +282,12 @@ pqxx::result DatabaseManager::DeleteTable(const std::string &TableName,
     return {};
   }
 }
+
+/*************************/
+
+// DBManager::DBManager(std::string &&ConnectionString) noexcept
+//     : m_DatabaseConntectionPoolSize{1},
+//       m_DatabaseConnectionString{std::move(ConnectionString)} {
+//   m_DatabaseConnectionPool.emplace_back(
+//       std::make_unique<DatabaseManager>(m_DatabaseConnectionString));
+// }

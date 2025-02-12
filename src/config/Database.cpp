@@ -16,6 +16,22 @@ bool DatabaseConnection::IsDatabaseConnected() {
 }
 
 pqxx::result DatabaseConnection::CrQuery(const std::string &Query) {
+  /**
+   * @todo need to change this to a concurrent environment. meaning no mutex,
+   * init another connection or execute multiple times, test it, check pqxx
+   docs.
+   * allow multi threaded runs, connection pool??
+   * FROM THE PQXX DOCS:
+   * Treat a connection, together with any and all objects related to it, as a
+   "world" of its own. You should generally make sure that the same "world" is
+   never accessed by another thread while you're doing anything non-const in
+   there.
+   * Not within the same connection. Even if you use nested transactions (see
+   the subtransaction class), a connection is always dealing with just one
+   transaction at a time. Of course you can create a new transaction on the same
+   connection once the previous one has completed. If you want to have multiple
+   concurrent transactions, let them work on different connections.
+   */
   std::lock_guard<std::mutex> lock(m_DatabaseMutex);
   if (!IsDatabaseConnected()) {
     APP_ERROR("CRQUERY - QUERY ERROR - DATABASE CONNECTION ERROR");

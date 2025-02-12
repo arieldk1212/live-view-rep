@@ -1,4 +1,5 @@
 #include "../inc/App.h"
+#include "Config/Database.h"
 
 /**
  * @brief acts as the frontend of the application in "swift".
