@@ -1,15 +1,19 @@
 #include "../../../inc/Config/DatabaseManager.h"
 #include "../../Test.h"
+#include "Core/Benchmark.h"
 
 #include <future>
+#include <gtest/gtest.h>
 #include <memory>
 #include <stdio.h>
 #include <stdlib.h>
 
 class DatabaseTest : public ::testing::Test {
 protected:
-  std::string TestTableName;
   std::shared_ptr<DatabaseManager> Manager;
+  std::shared_ptr<DatabaseManager> Manager1;
+  std::shared_ptr<DatabaseManager> Manager2;
+  std::string TestTableName;
   StringUnMap TestFieldsFirst;
   StringUnMap TestFieldsSecond;
 
@@ -22,6 +26,8 @@ protected:
       TestDatabaseConnectionString =
           Config::TestDatabaseToString("../../configs/config.json");
     }
+    Manager1 = std::make_shared<DatabaseManager>(TestDatabaseConnectionString);
+    Manager2 = std::make_shared<DatabaseManager>(TestDatabaseConnectionString);
     Manager = std::make_shared<DatabaseManager>(TestDatabaseConnectionString);
     TestTableName = "Test";
   }
@@ -29,6 +35,8 @@ protected:
   void TearDown() override {
     Manager->RemoveModel("Test");
     Manager.reset();
+    Manager1.reset();
+    Manager2.reset();
     TestFieldsFirst.clear();
     TestFieldsSecond.clear();
   }
@@ -318,20 +326,45 @@ TEST_F(DatabaseTest, DatabaseDeleteRecordTest) {
   EXPECT_NE(AfterData, PreData);
 }
 
-TEST_F(DatabaseTest, DatabaseHeavyLoadTest) {
-  /**
-   * @todo test a heavy workload here with uniqueptr and sharedptrs.
-   * 
-   */
-  // auto TestDatabaseConnectionString =
-  //     Config::TestDatabaseToString("../../configs/config.json");
+TEST_F(DatabaseTest, DatabasePerformanceTest) {
+  TestFieldsFirst.insert({
+      {"id",
+       DatabaseCommandToString(DatabaseFieldCommands::SerialPrimaryKeyField)},
+      {"addressname",
+       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
+      {"addressnumber",
+       DatabaseCommandToString(DatabaseFieldCommands::IntField)},
+  });
 
-  // std::unique_ptr<DatabaseManager> UnqManager1 =
-  //     std::make_unique<DatabaseManager>(TestDatabaseConnectionString);
-  // std::unique_ptr<DatabaseManager> UnqManager2 =
-  //     std::make_unique<DatabaseManager>(TestDatabaseConnectionString);
+  StringUnMap Data = {{"addressname", "rami"},
+                      {"addresslocation", "levi"},
+                      {"addressnumber", "18"},
+                      {"id", "1"}};
 
-  auto MethodResponse = Manager->AddModel(TestTableName, TestFieldsFirst);
+  Manager->AddModel(TestTableName, TestFieldsFirst);
+  Manager1->AddModel("Test2", TestFieldsFirst);
+  constexpr int LOOPS = 10000;
+  std::cout << "Insert Into Time:\n";
+  {
+    Benchmark here;
+    for (int i = 0; i < LOOPS; i++) {
+      Manager->InsertInto(TestTableName, Data);
+    }
+  }
+  std::cout << "Get Data Time:\n";
+  {
+    Benchmark here;
+    for (int i = 0; i < LOOPS; i++) {
+      Manager->GetModelData(TestTableName);
+    }
+  }
+  std::cout << "Get Empty Model Data Time:\n";
+  {
+    Benchmark here;
+    for (int i = 0; i < LOOPS; i++) {
+      Manager1->GetModelData(TestTableName);
+    }
+  }
 
-  // EXPECT_NE(AfterData, PreData);
+  EXPECT_EQ(1, 0);
 }

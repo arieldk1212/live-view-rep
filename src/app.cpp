@@ -25,6 +25,11 @@ int main() {
   APP_INFO("APP INITIALIZED");
   SYSTEM_INFO("SYSTEM INITIALIZED");
 
+  /**
+   * @brief can be set to unique_ptr, but can't create models with it, can be
+   * used for fast managing actions.
+   * for modeling, use shared_ptr.
+   */
   auto Manager = std::make_shared<DatabaseManager>(DatabaseConnectionString);
 
   AddressModel Addresses(Manager);
