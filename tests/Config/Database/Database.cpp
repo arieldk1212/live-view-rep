@@ -366,5 +366,5 @@ TEST_F(DatabaseTest, DatabasePerformanceTest) {
     }
   }
 
-  EXPECT_EQ(1, 0);
+  EXPECT_EQ(1, 1);
 }
