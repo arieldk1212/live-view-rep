@@ -1,6 +1,5 @@
 #include "../../../inc/Config/DatabaseManager.h"
 #include "../../Test.h"
-#include "Core/Benchmark.h"
 
 #include <future>
 #include <gtest/gtest.h>
@@ -34,6 +33,7 @@ protected:
 
   void TearDown() override {
     Manager->RemoveModel("Test");
+    Manager1->RemoveModel("Test2");
     Manager.reset();
     Manager1.reset();
     Manager2.reset();
