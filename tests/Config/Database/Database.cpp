@@ -327,6 +327,9 @@ TEST_F(DatabaseTest, DatabaseDeleteRecordTest) {
 }
 
 TEST_F(DatabaseTest, DatabasePerformanceTest) {
+  /**
+   * @brief add more features and testing when needed.
+   */
   TestFieldsFirst.insert({
       {"id",
        DatabaseCommandToString(DatabaseFieldCommands::SerialPrimaryKeyField)},
@@ -360,7 +363,7 @@ TEST_F(DatabaseTest, DatabasePerformanceTest) {
   }
   std::cout << "Get Empty Model Data Time:\n";
   {
-    Benchmark here;
+    Benchmark andhere;
     for (int i = 0; i < LOOPS; i++) {
       Manager1->GetModelData(TestTableName);
     }

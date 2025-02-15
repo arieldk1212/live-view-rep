@@ -6,8 +6,9 @@
 
 class Benchmark {
 public:
-  using TimePoint = std::chrono::time_point<std::chrono::high_resolution_clock>;
+  static constexpr float ms = 0.001;
   using Clock = std::chrono::high_resolution_clock;
+  using TimePoint = std::chrono::time_point<std::chrono::high_resolution_clock>;
 
 public:
   Benchmark() { m_StartPoint = Clock::now(); }
@@ -24,8 +25,8 @@ public:
                    .time_since_epoch()
                    .count();
 
-    auto Result = (End - Start) * 0.001;
-    std::cout << "BENCHMARK RESULT -> " << Result << "ms)\n";
+    auto Result = static_cast<float>(End - Start) * ms;
+    std::cout << "BENCHMARK RESULT -> " << Result << "ms\n";
   }
 
 private:

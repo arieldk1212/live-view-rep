@@ -31,7 +31,12 @@ pqxx::result DatabaseConnection::CrQuery(const std::string &Query) {
    transaction at a time. Of course you can create a new transaction on the same
    connection once the previous one has completed. If you want to have multiple
    concurrent transactions, let them work on different connections.
+   * for now consider other types of transadction, maybe when pool and
+   concurrency is implemented add another features, for one 1 will do with a
+   mutex thats not needed but it there.
+   https://libpqxx.readthedocs.io/stable/group__transactions.html
    */
+
   if (!IsDatabaseConnected()) {
     APP_ERROR("CRQUERY - QUERY ERROR - DATABASE CONNECTION ERROR");
     return {};
@@ -44,12 +49,3 @@ pqxx::result DatabaseConnection::CrQuery(const std::string &Query) {
     return {};
   }
 }
-
-// pqxx::result DatabaseConnection::UQuery(const std::string &Query) {
-//   if (IsDatabaseConnected()) {
-//     auto Result = m_DatabaseWorker.exec(Query);
-//     m_DatabaseWorker.commit();
-//     return Result;
-//   }
-//   return {};
-// }
