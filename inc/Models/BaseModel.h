@@ -2,6 +2,7 @@
 #define BASE_MODEL_H
 
 #include "Config/DatabaseManager.h"
+
 #include <nlohmann/json.hpp>
 #include <pqxx/pqxx>
 

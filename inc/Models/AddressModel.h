@@ -29,6 +29,7 @@ private:
 
 private:
   std::string m_TableName;
+  // Entity m_AddressEntities;
   StringUnMap m_AddressFields = {
       {"addressname",
        DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},

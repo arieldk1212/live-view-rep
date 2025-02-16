@@ -18,24 +18,19 @@ pqxx::result AddressModel::Init() {
 }
 
 pqxx::result AddressModel::Add(const StringUnMap &Fields) {
-  auto Result = m_DatabaseManager->InsertInto(m_TableName, Fields);
-  return Result;
+  return m_DatabaseManager->InsertInto(m_TableName, Fields);
 }
 
 pqxx::result AddressModel::Update(const StringUnMap &Fields,
                                   const std::string &Condition) {
   if (Fields.size() == 1) {
     auto field = Fields.begin();
-    auto Result = m_DatabaseManager->UpdateColumn(m_TableName, field->first,
-                                                  field->second, Condition);
-    return Result;
+    return m_DatabaseManager->UpdateColumn(m_TableName, field->first,
+                                           field->second, Condition);
   }
-  auto Result =
-      m_DatabaseManager->UpdateColumns(m_TableName, Fields, Condition);
-  return Result;
+  return m_DatabaseManager->UpdateColumns(m_TableName, Fields, Condition);
 }
 
 pqxx::result AddressModel::Delete(const std::string &Condition) {
-  auto Result = m_DatabaseManager->DeleteRecord(m_TableName, Condition);
-  return Result;
+  return m_DatabaseManager->DeleteRecord(m_TableName, Condition);
 }

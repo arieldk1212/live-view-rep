@@ -11,22 +11,19 @@
 // members and their functionality.
 
 #include "Config/Logger.h"
+#include "Core/Benchmark.h"
 
 #include <chrono>
 #include <pqxx/pqxx>
 
 template <typename ResType> class Response {
 public:
-  using Clock = std::chrono::high_resolution_clock;
-  using DoubleDuration = std::chrono::duration<double>;
-
-public:
   virtual ~Response() = 0;
 
   virtual const std::string GetResponseQuery() const = 0;
   virtual const size_t GetResponseSize() const = 0;
 
-  virtual DoubleDuration RunBenchmark(std::function<void()> Func) = 0;
+  virtual void RunBenchmark(std::function<void()> Func) = 0;
   virtual const std::string ResponseType() = 0;
 };
 

@@ -7,7 +7,9 @@ Config/DatabaseManager.cpp
 Config/Config.cpp
 
 Core/UUID.cpp
-Core/Geo.cpp
+Core/Location/Geolocation.cpp
+Core/Location/PlusCodes/codearea.cpp
+Core/Location/PlusCodes/openlocationcode.cpp
 Core/Responses/DatabaseResponse.cpp
 
 Models/LogModel.cpp

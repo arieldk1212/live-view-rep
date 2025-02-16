@@ -5,7 +5,9 @@ add_library(tests
 Config/Database/Database.cpp
 Config/Config/Config.cpp
 Config/Logger/Logger.cpp
+
 Core/UUID.cpp
+
 Models/AddressModel.cpp
 )
 

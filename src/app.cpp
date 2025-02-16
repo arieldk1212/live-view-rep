@@ -1,4 +1,5 @@
 #include "../inc/App.h"
+#include "Core/Benchmark.h"
 
 /**
  * @attention
@@ -35,7 +36,6 @@ int main() {
    * be used for fast managing actions. for modeling, use shared_ptr.
    */
   auto Manager = std::make_shared<DatabaseManager>(DatabaseConnectionString);
-
   AddressModel Addresses(Manager);
   Addresses.Init();
   auto Result = Addresses.Add(

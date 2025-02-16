@@ -15,7 +15,7 @@ public:
     return m_ResponseSize;
   }
 
-  DoubleDuration RunBenchmark(std::function<void()> Func) override;
+  void RunBenchmark(std::function<void()> Func) override;
   const std::string ResponseType() override { return "Response: Database"; }
 
 private:
