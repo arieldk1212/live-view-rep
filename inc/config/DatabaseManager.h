@@ -11,13 +11,13 @@
 #include <type_traits>
 #include <utility>
 
-using StringUnMap = std::unordered_map<std::string, std::string>;
-
 /**
  * @class DatabaseManager
  * @brief Manges the database models and operations, in front of the db itself.
  */
 class DatabaseManager {
+public:
+
 public:
   /**
    * @brief Constructs the DatabaseManager object, according to the database's

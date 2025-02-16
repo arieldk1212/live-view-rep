@@ -7,13 +7,16 @@
 class AddressModel : BaseModel {
   /**
    * @brief in here we need to init a logger for a certain address!
-   * separate here to entites and make a list inside the model of the data? if yes, how do we extract it?
+   * separate here to entites and make a list inside the model of the data? if
+   * yes, how do we extract it?
    */
 public:
   explicit AddressModel(std::shared_ptr<DatabaseManager> &Manager);
   ~AddressModel() override;
 
-  [[nodiscard]] const std::string GetTableName() const override { return m_TableName; }
+  [[nodiscard]] const std::string GetTableName() const override {
+    return m_TableName;
+  }
 
   pqxx::result Init() override;
   pqxx::result Add(const StringUnMap &Fields) override;
