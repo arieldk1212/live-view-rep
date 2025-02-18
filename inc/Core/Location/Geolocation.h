@@ -1,23 +1,27 @@
 #ifndef GEOLOCATION_H
 #define GEOLOCATION_H
 
+#include "PlusCodes/openlocationcode.h"
+
 #include <string>
 
 /**
- * @brief this file is responsible for the image, address geolocation, verification, also verifying with a gps.
- * also, add the plus codes functionallity to this class.
+ * @brief this file is responsible for the image, address geolocation,
+ * verification, also verifying with a gps.
  */
 
 class Geolocation {
 public:
-	Geolocation();
-	~Geolocation() = default;
+  Geolocation(double Latitude, double Longitude);
+  ~Geolocation() = default;
 
-	std::string FormattedGeo();
+  [[nodiscard]] const std::string GetPlusCode() const;
+  [[nodiscard]] std::string GetFormattedCoordinates() const;
 
 private:
-	std::string m_Longitude;
-	std::string m_Latitude;
+  double m_Longitude;
+  double m_Latitude;
+  std::string m_PlusCode;
 };
 
 #endif
