@@ -1,8 +1,7 @@
 #include "../../inc/Config/Database.h"
 
 DatabaseConnection::DatabaseConnection(const std::string &ConnectionString)
-    : m_DatabaseConnectionString{ConnectionString},
-      m_DatabaseConnection{m_DatabaseConnectionString},
+    : m_DatabaseConnection{ConnectionString},
       m_DatabaseNonTransaction{m_DatabaseConnection} {
   APP_INFO("DATABASE CONNECTION CREATED");
 }

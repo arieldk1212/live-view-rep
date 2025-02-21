@@ -17,13 +17,19 @@ pqxx::result AddressModel::Init() {
   return m_DatabaseManager->AddModel(m_TableName, m_AddressFields);
 }
 
-pqxx::result AddressModel::Add(const StringUnMap &Fields) {
+pqxx::result AddressModel::Add(StringUnMap &&Fields) {
   /**
    * @brief here create the logic of seperating the name to entities.
    * prob need to overload the function and make it rvalue to edit the fields
    * inside.
    * also add a uuid for each address.
    */
+  auto Adjustment = std::move(Fields);
+  /* init work here */
+  return m_DatabaseManager->InsertInto(m_TableName, Fields);
+}
+
+pqxx::result AddressModel::Add(const StringUnMap &Fields) {
   return m_DatabaseManager->InsertInto(m_TableName, Fields);
 }
 
