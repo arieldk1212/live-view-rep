@@ -11,7 +11,7 @@ public:
   explicit LogModel(std::shared_ptr<DatabaseManager> &Manager);
   ~LogModel() override;
 
-  const std::string GetTableName() const override { return m_TableName; }
+  const std::string &GetTableName() const override { return m_TableName; }
 
   pqxx::result Init() override;
   // pqxx::result Add(const StringUnMap &Fields) override;

@@ -1,12 +1,14 @@
 #include "../../inc/Config/Database.h"
 
 DatabaseConnection::DatabaseConnection(const std::string &ConnectionString)
-    : m_DatabaseConnection{ConnectionString},
-      m_DatabaseNonTransaction(m_DatabaseConnection) {
+    : m_DatabaseConnectionString{ConnectionString},
+      m_DatabaseConnection{m_DatabaseConnectionString},
+      m_DatabaseNonTransaction{m_DatabaseConnection} {
   APP_INFO("DATABASE CONNECTION CREATED");
 }
 
 DatabaseConnection::~DatabaseConnection() {
+  std::lock_guard<std::mutex> lock(m_DatabaseMutex);
   m_DatabaseConnection.close();
   APP_CRITICAL("DATABASE CONNECTION CLOSED");
 }
@@ -42,7 +44,6 @@ pqxx::result DatabaseConnection::CrQuery(const std::string &Query) {
     return {};
   }
   try {
-    std::lock_guard<std::mutex> lock(m_DatabaseMutex);
     return m_DatabaseNonTransaction.exec(Query);
   } catch (const std::exception &e) {
     APP_ERROR("CRQUERY - QUERY EXECUTION ERROR - " + std::string(e.what()));

@@ -17,7 +17,6 @@
  */
 class DatabaseManager {
 public:
-
 public:
   /**
    * @brief Constructs the DatabaseManager object, according to the database's
@@ -40,7 +39,7 @@ public:
    * @brief check the status of the database connection.
    * @return bool
    */
-  bool IsDatabaseConnected();
+  bool IsDatabaseConnected() const;
 
   /**
    * @brief  serializes the fields of the model, query preparation.

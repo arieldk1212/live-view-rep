@@ -16,7 +16,7 @@ public:
   ~Geolocation() = default;
 
   [[nodiscard]] const std::string GetPlusCode() const;
-  [[nodiscard]] std::string GetFormattedCoordinates() const;
+  [[nodiscard]] std::string GetCoordinates() const;
 
 private:
   double m_Longitude;

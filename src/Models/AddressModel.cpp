@@ -13,11 +13,16 @@ AddressModel::~AddressModel() {
 }
 
 pqxx::result AddressModel::Init() {
-  APP_INFO("ADDRESS TABLE CREATED VIA ADDRESS MODEL");
+  APP_INFO("ADDRESS TABLE CREATED");
   return m_DatabaseManager->AddModel(m_TableName, m_AddressFields);
 }
 
 pqxx::result AddressModel::Add(const StringUnMap &Fields) {
+  /**
+   * @brief here create the logic of seperating the name to entities.
+   * prob need to overload the function and make it rvalue to edit the fields
+   * inside.
+   */
   return m_DatabaseManager->InsertInto(m_TableName, Fields);
 }
 

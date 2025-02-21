@@ -1,5 +1,4 @@
 #include "../inc/App.h"
-#include "Core/Benchmark.h"
 
 /**
  * @attention

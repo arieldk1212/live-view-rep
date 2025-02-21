@@ -1,6 +1,7 @@
 #ifndef ADDRESS_MODEL_H
 #define ADDRESS_MODEL_H
 
+#include "../Core/Address/Address.h"
 #include "BaseModel.h"
 #include "Config/DatabaseCommands.h"
 
@@ -14,7 +15,7 @@ public:
   explicit AddressModel(std::shared_ptr<DatabaseManager> &Manager);
   ~AddressModel() override;
 
-  [[nodiscard]] const std::string GetTableName() const override {
+  [[nodiscard]] const std::string &GetTableName() const override {
     return m_TableName;
   }
 
@@ -24,17 +25,19 @@ public:
                       const std::string &Condition) override;
   pqxx::result Delete(const std::string &Condition) override;
 
+  std::optional<Address> GetEntity(const std::string &Condition);
+
 private:
   std::shared_ptr<DatabaseManager> m_DatabaseManager;
 
 private:
   std::string m_TableName;
-  // Entity m_AddressEntities;
   StringUnMap m_AddressFields = {
       {"addressname",
        DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
       {"addressnumber",
-       DatabaseCommandToString(DatabaseFieldCommands::IntField)}};
+       DatabaseCommandToString(DatabaseFieldCommands::IntField)},
+      {"entities", DatabaseCommandToString(DatabaseFieldCommands::TextArray)}};
 };
 
 #endif

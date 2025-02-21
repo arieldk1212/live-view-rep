@@ -41,6 +41,7 @@ private:
 private:
   std::mutex m_DatabaseMutex;
   pqxx::connection m_DatabaseConnection;
+  std::string m_DatabaseConnectionString;
   pqxx::nontransaction m_DatabaseNonTransaction;
   // pqxx::transaction<pqxx::isolation_level::read_committed,
   // pqxx::write_policy::read_write>

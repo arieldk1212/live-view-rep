@@ -11,7 +11,7 @@ Geolocation::Geolocation(double Latitude, double Longitude)
 }
 
 const std::string Geolocation::GetPlusCode() const { return m_PlusCode; }
-std::string Geolocation::GetFormattedCoordinates() const {
+std::string Geolocation::GetCoordinates() const {
   return "Latitude: " + std::to_string(m_Latitude) +
          " Longitude: " + std::to_string(m_Longitude);
 }

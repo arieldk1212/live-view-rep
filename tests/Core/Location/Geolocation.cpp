@@ -1,10 +1,11 @@
 #include "../../../inc/Core/Location/Geolocation.h"
 #include "../../Test.h"
 
-
 class GeolocationTest : public ::testing::Test {
 protected:
-  Geolocation location {35.689487, 139.691711};
+  const double latitude = 35.689487;
+  const double longitude = 139.691711;
+  Geolocation location{latitude, longitude};
 };
 
 TEST_F(GeolocationTest, GeolocationPlusCodeTest) {
@@ -17,5 +18,5 @@ TEST_F(GeolocationTest, GeolocationSizeOfTest) {
 }
 
 TEST_F(GeolocationTest, GeolocationCoordinatesTest) {
-  EXPECT_GT(sizeof(location.GetFormattedCoordinates()), 10);
+  EXPECT_GT(sizeof(location.GetCoordinates()), 10);
 }
