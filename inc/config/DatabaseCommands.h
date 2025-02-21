@@ -17,7 +17,8 @@ enum class DatabaseFieldCommands {
   IntField,
   CharField,
   VarChar100Field,
-  TextArray
+  TextArray,
+  UUID
 };
 
 enum class DatabaseQueryCommands {
@@ -45,6 +46,7 @@ const std::unordered_map<DatabaseFieldCommands, std::string>
         {DatabaseFieldCommands::IntField, "int"},
         {DatabaseFieldCommands::CharField, "char"},
         {DatabaseFieldCommands::VarChar100Field, "varchar(100)"},
+        {DatabaseFieldCommands::UUID, "uuid"},
         {DatabaseFieldCommands::TextArray, "text[]"}};
 
 const std::unordered_map<DatabaseQueryCommands, std::string>

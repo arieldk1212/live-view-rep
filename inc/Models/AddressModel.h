@@ -3,6 +3,8 @@
 
 #include "../Core/Address/Address.h"
 #include "BaseModel.h"
+#include "Config/DatabaseCommands.h"
+#include "Core/UUID.h"
 
 class AddressModel final : public BaseModel {
   /**
@@ -33,6 +35,7 @@ private:
 private:
   std::string m_TableName;
   StringUnMap m_AddressFields = {
+      {"addressid", DatabaseCommandToString(DatabaseFieldCommands::UUID)},
       {"addressname",
        DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
       {"addressnumber",
