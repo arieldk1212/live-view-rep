@@ -26,12 +26,12 @@ pqxx::result AddressModel::Add(StringUnMap &&Fields) {
    */
   auto Adjustment = std::move(Fields);
   /* init work here */
-  return m_DatabaseManager->InsertInto(m_TableName, Fields);
+  return m_DatabaseManager->InsertInto(m_TableName, Adjustment);
 }
 
-pqxx::result AddressModel::Add(const StringUnMap &Fields) {
-  return m_DatabaseManager->InsertInto(m_TableName, Fields);
-}
+// pqxx::result AddressModel::Add(const StringUnMap &Fields) {
+  // return m_DatabaseManager->InsertInto(m_TableName, Fields);
+// }
 
 pqxx::result AddressModel::Update(const StringUnMap &Fields,
                                   const std::string &Condition) {
