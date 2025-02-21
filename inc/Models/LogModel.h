@@ -6,7 +6,7 @@
 
 #include <chrono>
 
-class LogModel : BaseModel {
+class LogModel : public BaseModel {
 public:
   explicit LogModel(std::shared_ptr<DatabaseManager> &Manager);
   ~LogModel() override;

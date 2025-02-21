@@ -22,6 +22,7 @@ pqxx::result AddressModel::Add(const StringUnMap &Fields) {
    * @brief here create the logic of seperating the name to entities.
    * prob need to overload the function and make it rvalue to edit the fields
    * inside.
+   * also add a uuid for each address.
    */
   return m_DatabaseManager->InsertInto(m_TableName, Fields);
 }

@@ -2,6 +2,7 @@
 #define IMAGE_H
 
 #include <filesystem>
+#include <unordered_map>
 
 /**
  * @brief images will be saved in a different storage, possibly an S3 bucket or

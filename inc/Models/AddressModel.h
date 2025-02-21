@@ -3,9 +3,8 @@
 
 #include "../Core/Address/Address.h"
 #include "BaseModel.h"
-#include "Config/DatabaseCommands.h"
 
-class AddressModel : BaseModel {
+class AddressModel final : public BaseModel {
   /**
    * @brief in here we need to init a logger for a certain address!
    * separate here to entites and make a list inside the model of the data? if
