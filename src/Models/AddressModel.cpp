@@ -18,36 +18,10 @@ pqxx::result AddressModel::Init() {
 }
 
 pqxx::result AddressModel::Add(StringUnMap Fields) {
-  Fields.emplace("addressid", std::to_string(UUID::GenUUID()));
-  Fields.emplace("entities", "{'test1', 'test2'}");
+  Fields.emplace("entities", "{test1, test2}");
 
   return m_DatabaseManager->InsertInto(m_TableName, Fields);
 }
-
-pqxx::result AddressModel::Add(
-    std::initializer_list<std::pair<std::string, std::string>> list) {
-  StringUnMap Fields;
-  for (const auto &[key, value] : list) {
-    Fields.emplace(key, value);
-  }
-  return Add(std::move(Fields));
-}
-
-// pqxx::result AddressModel::Add(const StringUnMap &Fields) {
-//   auto ModifiedFields = Fields;
-//   ModifiedFields.emplace("addressid", std::to_string(UUID::GenUUID()));
-//   ModifiedFields.emplace("entities", "{'test1', 'test2'}");
-
-//   return m_DatabaseManager->InsertInto(m_TableName, ModifiedFields);
-// }
-
-// pqxx::result AddressModel::Add(StringUnMap &&Fields) {
-//   auto ModifiedFields = static_cast<StringUnMap>(std::move(Fields));
-//   ModifiedFields.emplace("addressid", std::to_string(UUID::GenUUID()));
-//   ModifiedFields.emplace("entities", "{'test1', 'test2'}");
-
-//   return m_DatabaseManager->InsertInto(m_TableName, ModifiedFields);
-// }
 
 pqxx::result AddressModel::Update(const StringUnMap &Fields,
                                   const std::string &Condition) {

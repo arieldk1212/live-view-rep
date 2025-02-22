@@ -20,10 +20,7 @@ public:
   }
 
   pqxx::result Init() override;
-  // pqxx::result Add(const StringUnMap &Fields) override;
-  // pqxx::result Add(StringUnMap &&Fields) override;
-  pqxx::result Add(StringUnMap Fields);
-  pqxx::result Add(std::initializer_list<std::pair<std::string, std::string>> list);
+  pqxx::result Add(StringUnMap Fields) override;
   pqxx::result Update(const StringUnMap &Fields,
                       const std::string &Condition) override;
   pqxx::result Delete(const std::string &Condition) override;
