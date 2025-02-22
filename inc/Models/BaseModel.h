@@ -13,8 +13,7 @@ public:
   virtual ~BaseModel() = 0;
   virtual const std::string &GetTableName() const = 0;
   virtual pqxx::result Init() = 0;
-  virtual pqxx::result Add(StringUnMap &&Fields) = 0;
-  // virtual pqxx::result Add(const StringUnMap &Fields) = 0;
+  virtual pqxx::result Add(const StringUnMap &Fields) = 0;
   virtual pqxx::result Update(const StringUnMap &Fields,
                               const std::string &Condition) = 0;
   virtual pqxx::result Delete(const std::string &Condition) = 0;
