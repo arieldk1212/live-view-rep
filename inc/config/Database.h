@@ -15,6 +15,11 @@ class DatabaseManager;
  */
 class DatabaseConnection {
 public:
+  using DatabaseTransaction =
+      pqxx::transaction<pqxx::isolation_level::read_committed,
+                        pqxx::write_policy::read_write>;
+
+public:
   explicit DatabaseConnection(const std::string &ConnectionString);
   ~DatabaseConnection();
 
@@ -37,14 +42,41 @@ private:
    * @return pqxx::result
    */
   pqxx::result CrQuery(const std::string &Query);
+  /**
+   * @brief overload function for handling user input, improving security
+   * issues.
+   * @tparam Args
+   * @param Query
+   * @param args
+   * @return pqxx::result
+   */
+  template <typename... Args>
+  pqxx::result CrQuery(const std::string &Query, Args &&...args) {
+    if (!IsDatabaseConnected()) {
+      APP_ERROR("CRQUERY - QUERY ERROR - DATABASE CONNECTION ERROR");
+      return {};
+    }
+    try {
+      return static_cast<pqxx::result>(m_DatabaseNonTransaction.exec_params(
+          Query, std::forward<Args>(args)...));
+    } catch (const std::exception &e) {
+      APP_ERROR("CRQUERY - QUERY EXECUTION ERROR - " + std::string(e.what()));
+      return {};
+    }
+  }
+
+  /**
+   * @brief query function that's based on a base transaction, via the
+   * m_DatabaseTransaction, created for write and update operations.
+   * @param Query
+   * @return pqxx::result
+   */
+  pqxx::result WQuery(const std::string &Query);
 
 private:
   std::mutex m_DatabaseMutex;
   pqxx::connection m_DatabaseConnection;
   pqxx::nontransaction m_DatabaseNonTransaction;
-  // pqxx::transaction<pqxx::isolation_level::read_committed,
-  // pqxx::write_policy::read_write>
-  // m_DatabaseNonTransaction;
 };
 
 #endif

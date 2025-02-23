@@ -158,6 +158,26 @@ private:
    * model editor above and in DatabaseModel.
    */
   pqxx::result MCrQuery(const std::string &TableName, const std::string &Query);
+  /**
+   * @brief overload for the function, improving security issues.
+   */
+  template <typename... Args>
+  pqxx::result MCrQuery(const std::string &TableName, const std::string &Query,
+                        Args &&...args) {
+    try {
+      pqxx::result Response =
+          m_DatabaseManager->CrQuery(Query, std::forward<Args>(args)...);
+      return Response;
+    } catch (pqxx::sql_error const &e) {
+      APP_ERROR("MCRQUERY ERROR AT TABLE - " + TableName + " " +
+                std::string(e.what()));
+      return {};
+    } catch (std::exception const &e) {
+      APP_ERROR("MCRQUERY GENERAL ERROR - " + std::string(e.what()));
+      return {};
+    }
+  }
+  pqxx::result MWQuery(const std::string &TableName, const std::string &Query);
   pqxx::result CreateTable(const std::string &TableName,
                            const StringUnMap &TableFields);
   pqxx::result GetTableData(const std::string &TableName);

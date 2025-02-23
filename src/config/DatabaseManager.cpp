@@ -181,9 +181,9 @@ pqxx::result DatabaseManager::DeleteRecord(const std::string &ModelName,
 }
 
 pqxx::result DatabaseManager::MCrQuery(const std::string &TableName,
-                                       const std::string &query) {
+                                       const std::string &Query) {
   try {
-    auto Response = m_DatabaseManager->CrQuery(query);
+    auto Response = m_DatabaseManager->CrQuery(Query);
     return Response;
   } catch (pqxx::sql_error const &e) {
     APP_ERROR("MCRQUERY ERROR AT TABLE - " + TableName + " " +
@@ -191,6 +191,21 @@ pqxx::result DatabaseManager::MCrQuery(const std::string &TableName,
     return {};
   } catch (std::exception const &e) {
     APP_ERROR("MCRQUERY GENERAL ERROR - " + std::string(e.what()));
+    return {};
+  }
+}
+
+pqxx::result DatabaseManager::MWQuery(const std::string &TableName,
+                                      const std::string &query) {
+  try {
+    auto Response = m_DatabaseManager->WQuery(query);
+    return Response;
+  } catch (pqxx::sql_error const &e) {
+    APP_ERROR("MWQUERY ERROR AT TABLE - " + TableName + " " +
+              std::string(e.what()));
+    return {};
+  } catch (std::exception const &e) {
+    APP_ERROR("MWQUERY GENERAL ERROR - " + std::string(e.what()));
     return {};
   }
 }
