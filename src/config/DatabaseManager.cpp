@@ -1,7 +1,7 @@
 #include "../../inc/Config/DatabaseManager.h"
 
 DatabaseManager::DatabaseManager(const std::string &DatabaseConnectionString)
-    : m_IsConnected(1) {
+    : m_IsConnected(true) {
   if (DatabaseConnectionString.empty()) {
     APP_CRITICAL("DATABASE MANAGER ERROR - EMPTY CONNECTION STRING");
     throw std::invalid_argument("Database Connection String Empty.");

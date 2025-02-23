@@ -43,7 +43,8 @@ pqxx::result DatabaseConnection::CrQuery(const std::string &Query) {
     return {};
   }
   try {
-    return m_DatabaseNonTransaction.exec(Query);
+    return m_DatabaseNonTransaction.exec_params(Query);
+    // return m_DatabaseNonTransaction.exec(Query);
   } catch (const std::exception &e) {
     APP_ERROR("CRQUERY - QUERY EXECUTION ERROR - " + std::string(e.what()));
     return {};

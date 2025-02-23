@@ -10,10 +10,10 @@ using StringUnMap = std::unordered_map<std::string, std::string>;
 
 class DatabaseManager;
 
+/**
+ * @warning This header file shouldn't be used directly!
+ */
 class DatabaseConnection {
-  /**
-   * @warning This header file shouldn't be used directly!
-   */
 public:
   explicit DatabaseConnection(const std::string &ConnectionString);
   ~DatabaseConnection();
