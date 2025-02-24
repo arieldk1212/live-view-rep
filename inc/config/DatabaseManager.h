@@ -121,7 +121,7 @@ public:
    */
   pqxx::result InsertInto(const std::string &ModelName,
                           const StringUnMap &Fields);
-  /**
+   /**
    * @brief updates the table's field value with a specific condition.
    * @param ModelName
    * @param FieldName

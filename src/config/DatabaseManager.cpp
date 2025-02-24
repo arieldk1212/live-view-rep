@@ -109,28 +109,33 @@ pqxx::result DatabaseManager::AlterColumn(const std::string &ModelName,
 
 pqxx::result DatabaseManager::InsertInto(const std::string &ModelName,
                                          const StringUnMap &Fields) {
+  int count = 0;
   std::string query;
-  std::string keys;
-  std::string values;
-  for (const auto &[key, value] : Fields) {
-    keys.append(key).append(", ");
-    values.append("'").append(value).append("', ");
-  }
-  if (!Fields.empty()) {
-    keys.pop_back();
-    keys.pop_back();
-    values.pop_back();
-    values.pop_back();
-  }
+  std::string values_count;
+  std::vector<std::string> values;
+  values.reserve(Fields.size());
+
   query.append(DatabaseCommandToString(DatabaseQueryCommands::InsertInto))
       .append(ModelName)
-      .append(" (")
-      .append(keys)
-      .append(") values (")
-      .append(values)
-      .append(");");
+      .append(" (");
+
+  for (const auto &[key, value] : Fields) {
+    count += 1;
+    query.append(key).append(", ");
+    values_count.append("$").append(std::to_string(count)).append(", ");
+    values.emplace_back(value);
+  }
+
+  if (!Fields.empty()) {
+    query.pop_back();
+    query.pop_back();
+    values_count.pop_back();
+    values_count.pop_back();
+  }
+
+  query.append(") values (").append(values_count).append(")");
   APP_INFO("DATA INSERTED TO TABLE - " + ModelName);
-  return MCrQuery(ModelName, query);
+  return MCrQuery(ModelName, query, values);
 }
 
 pqxx::result DatabaseManager::UpdateColumn(const std::string &ModelName,
@@ -183,8 +188,7 @@ pqxx::result DatabaseManager::DeleteRecord(const std::string &ModelName,
 pqxx::result DatabaseManager::MCrQuery(const std::string &TableName,
                                        const std::string &Query) {
   try {
-    auto Response = m_DatabaseManager->CrQuery(Query);
-    return Response;
+    return m_DatabaseManager->CrQuery(Query);
   } catch (pqxx::sql_error const &e) {
     APP_ERROR("MCRQUERY ERROR AT TABLE - " + TableName + " " +
               std::string(e.what()));
@@ -198,8 +202,7 @@ pqxx::result DatabaseManager::MCrQuery(const std::string &TableName,
 pqxx::result DatabaseManager::MWQuery(const std::string &TableName,
                                       const std::string &query) {
   try {
-    auto Response = m_DatabaseManager->WQuery(query);
-    return Response;
+    return m_DatabaseManager->WQuery(query);
   } catch (pqxx::sql_error const &e) {
     APP_ERROR("MWQUERY ERROR AT TABLE - " + TableName + " " +
               std::string(e.what()));
