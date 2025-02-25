@@ -11,6 +11,13 @@
 #include <type_traits>
 #include <utility>
 
+// namespace Utils {
+// template <typename T = std::string>
+// constexpr std::tuple<T, T> VectorToTuple(const std::vector<T> &Data) {
+//   return std::make_tuple(Data);
+// }
+// } // namespace Utils
+
 /**
  * @class DatabaseManager
  * @brief Manges the database models and operations, in front of the db itself.
@@ -121,7 +128,7 @@ public:
    */
   pqxx::result InsertInto(const std::string &ModelName,
                           const StringUnMap &Fields);
-   /**
+  /**
    * @brief updates the table's field value with a specific condition.
    * @param ModelName
    * @param FieldName
@@ -169,11 +176,11 @@ private:
           m_DatabaseManager->CrQuery(Query, std::forward<Args>(args)...);
       return Response;
     } catch (pqxx::sql_error const &e) {
-      APP_ERROR("MCRQUERY ERROR AT TABLE - " + TableName + " " +
+      APP_ERROR("MCRQUERY(PF) ERROR AT TABLE - " + TableName + " " +
                 std::string(e.what()));
       return {};
     } catch (std::exception const &e) {
-      APP_ERROR("MCRQUERY GENERAL ERROR - " + std::string(e.what()));
+      APP_ERROR("MCRQUERY(PF) GENERAL ERROR - " + std::string(e.what()));
       return {};
     }
   }

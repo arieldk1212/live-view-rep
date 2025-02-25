@@ -112,30 +112,27 @@ pqxx::result DatabaseManager::InsertInto(const std::string &ModelName,
   int count = 0;
   std::string query;
   std::string values_count;
-  std::vector<std::string> values;
-  values.reserve(Fields.size());
+  pqxx::params params;
 
   query.append(DatabaseCommandToString(DatabaseQueryCommands::InsertInto))
       .append(ModelName)
       .append(" (");
-
   for (const auto &[key, value] : Fields) {
     count += 1;
     query.append(key).append(", ");
     values_count.append("$").append(std::to_string(count)).append(", ");
-    values.emplace_back(value);
+    params.append(value);
   }
-
   if (!Fields.empty()) {
     query.pop_back();
     query.pop_back();
     values_count.pop_back();
     values_count.pop_back();
   }
-
   query.append(") values (").append(values_count).append(")");
+
   APP_INFO("DATA INSERTED TO TABLE - " + ModelName);
-  return MCrQuery(ModelName, query, values);
+  return MCrQuery(ModelName, query, params);
 }
 
 pqxx::result DatabaseManager::UpdateColumn(const std::string &ModelName,
