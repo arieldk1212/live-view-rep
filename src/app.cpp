@@ -39,9 +39,9 @@ int main() {
   Addresses.Init();
   auto Result = Addresses.Add(
       {{"addressname", "hamaasdasdasdasd"}, {"addressnumber", "18"}});
-  Addresses.Update({{"addressname", "holon"}}, "addressnumber=18");
+  Addresses.Update({{"addressname", "holon"}}, "addressnumber", 18);
   Addresses.Update({{"addressname", "hn"}, {"addressnumber", "20"}},
-                   "addressnumber=18");
+                   "addressnumber", 18);
   Addresses.Delete("addressnumber=20");
 
   Manager->RemoveModel(Addresses.GetTableName());

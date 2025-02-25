@@ -55,7 +55,7 @@ TEST_F(AddressModelTest, AddressUpdateColumnRecordTest) {
   Address.Add({{"addressname", "hamaasdasdasdasd"}, {"addressnumber", "18"}});
 
   auto PreData = Manager->GetModelData("Address");
-  Address.Update({{"addressname", "holon"}}, "addressnumber=18");
+  Address.Update({{"addressname", "holon"}}, "addressnumber", 18);
   auto PostData = Manager->GetModelData("Address");
 
   EXPECT_NE(PreData, PostData);
@@ -68,7 +68,7 @@ TEST_F(AddressModelTest, AddressUpdateColumnsRecordTest) {
 
   auto PreData = Manager->GetModelData("Address");
   Address.Update({{"addressname", "holon"}, {"addressnumber", "20"}},
-                 "addressnumber=18");
+                 "addressnumber", 18);
   auto PostData = Manager->GetModelData("Address");
 
   EXPECT_NE(PreData, PostData);

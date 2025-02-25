@@ -113,7 +113,6 @@ pqxx::result DatabaseManager::InsertInto(const std::string &ModelName,
   std::string query;
   std::string values_count;
   pqxx::params params;
-
   query.append(DatabaseCommandToString(DatabaseQueryCommands::InsertInto))
       .append(ModelName)
       .append(" (");
@@ -130,44 +129,44 @@ pqxx::result DatabaseManager::InsertInto(const std::string &ModelName,
     values_count.pop_back();
   }
   query.append(") values (").append(values_count).append(")");
-
   APP_INFO("DATA INSERTED TO TABLE - " + ModelName);
   return MCrQuery(ModelName, query, params);
 }
 
 pqxx::result DatabaseManager::UpdateColumn(const std::string &ModelName,
                                            const std::string &FieldName,
-                                           const std::string &NewFieldValue,
-                                           const std::string &Condition) {
+                                           const std::string &Condition,
+                                           const pqxx::params &Params) {
   std::string query;
   query.append(DatabaseCommandToString(DatabaseQueryCommands::Update))
       .append(ModelName)
       .append(" set ")
       .append(FieldName)
-      .append(" = '")
-      .append(NewFieldValue)
-      .append("' where ")
+      .append("=$1 where ")
       .append(Condition)
-      .append(";");
+      .append("=$2");
   APP_INFO("COLUMN DATA UPDATED - " + ModelName);
-  return MCrQuery(ModelName, query);
+  return MCrQuery(ModelName, query, Params);
 }
 
 pqxx::result DatabaseManager::UpdateColumns(const std::string &ModelName,
                                             const StringUnMap &Fields,
-                                            const std::string &Condition) {
+                                            const std::string &Condition,
+                                            const pqxx::params &Params) {
+  int count = 0;
   std::string query;
   query.append(DatabaseCommandToString(DatabaseQueryCommands::Update))
       .append(ModelName)
       .append(" set ");
   for (const auto &[key, value] : Fields) {
-    query.append(key).append(" = '").append(value).append("', ");
+    count += 1;
+    query.append(key).append("=$").append(std::to_string(count)).append(", ");
   }
   query.pop_back();
   query.pop_back();
-  query += " where " + Condition + ";";
+  query += " where " + Condition + "=$" + std::to_string(++count);
   APP_INFO("COLUMNS DATA UPDATED - " + ModelName);
-  return MCrQuery(ModelName, query);
+  return MCrQuery(ModelName, query, Params);
 }
 
 pqxx::result DatabaseManager::DeleteRecord(const std::string &ModelName,

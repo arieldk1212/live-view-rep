@@ -138,8 +138,8 @@ public:
    */
   pqxx::result UpdateColumn(const std::string &ModelName,
                             const std::string &FieldName,
-                            const std::string &NewFieldValue,
-                            const std::string &Condition);
+                            const std::string &Condition,
+                            const pqxx::params &Params);
   /**
    * @brief updates the table's multiple fields values with a specific
    * condition.
@@ -150,7 +150,8 @@ public:
    */
   pqxx::result UpdateColumns(const std::string &ModelName,
                              const StringUnMap &Fields,
-                             const std::string &Condition);
+                             const std::string &Condition,
+                             const pqxx::params &Params);
   /**
    * @brief delete a record from the table.
    * @param ModelName

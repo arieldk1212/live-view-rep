@@ -21,8 +21,24 @@ public:
 
   pqxx::result Init() override;
   pqxx::result Add(StringUnMap Fields) override;
-  pqxx::result Update(const StringUnMap &Fields,
-                      const std::string &Condition) override;
+  template <typename T>
+  pqxx::result Update(const StringUnMap &Fields, const std::string &Condition,
+                      T &&arg) {
+    pqxx::params params;
+    if (Fields.size() == 1) {
+      auto field = Fields.begin();
+      params.append(field->second);
+      params.append(std::forward<T>(arg));
+      return m_DatabaseManager->UpdateColumn(m_TableName, field->first,
+                                             Condition, params);
+    }
+    for (const auto &[key, value] : Fields) {
+      params.append(value);
+    }
+    params.append(std::forward<T>(arg));
+    return m_DatabaseManager->UpdateColumns(m_TableName, Fields, Condition,
+                                            params);
+  }
   pqxx::result Delete(const std::string &Condition) override;
 
   std::optional<Address> GetEntity(const std::string &Condition);
