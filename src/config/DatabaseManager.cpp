@@ -59,12 +59,6 @@ pqxx::result DatabaseManager::GetModelData(const std::string &ModelName) {
   return GetTableData(ModelName);
 }
 
-pqxx::result DatabaseManager::GetModelData(const std::string &ModelName,
-                                           const std::string &FieldName,
-                                           const std::string &FieldValue) {
-  return GetTableData(ModelName, FieldName, FieldValue);
-}
-
 pqxx::result DatabaseManager::AddColumn(const std::string &ModelName,
                                         const std::string &FieldName,
                                         const std::string &FieldType) {
@@ -170,15 +164,16 @@ pqxx::result DatabaseManager::UpdateColumns(const std::string &ModelName,
 }
 
 pqxx::result DatabaseManager::DeleteRecord(const std::string &ModelName,
-                                           const std::string &Condition) {
+                                           const std::string &Condition,
+                                           const pqxx::params &Params) {
   std::string query;
   query.append("delete from ")
       .append(ModelName)
       .append(" where ")
       .append(Condition)
-      .append(";");
+      .append("=$1");
   APP_INFO("RECORD DATA DELETED IN - " + ModelName);
-  return MCrQuery(ModelName, query);
+  return MCrQuery(ModelName, query, Params);
 }
 
 pqxx::result DatabaseManager::MCrQuery(const std::string &TableName,
@@ -236,27 +231,6 @@ pqxx::result DatabaseManager::GetTableData(const std::string &TableName) {
     return MCrQuery(TableName, query);
   } catch (const std::exception &e) {
     APP_ERROR("ERROR AT GETTABLEDATA1 FUNCTION - " + TableName + " - " +
-              std::string(e.what()));
-    return {};
-  }
-}
-
-pqxx::result DatabaseManager::GetTableData(const std::string &TableName,
-                                           const std::string &TableFieldName,
-                                           const std::string &TableFieldValue) {
-  std::string query;
-  query.append(DatabaseCommandToString(DatabaseQueryCommands::SelectAll))
-      .append(TableName)
-      .append(" where ")
-      .append(TableFieldName)
-      .append("=")
-      .append("'")
-      .append(TableFieldValue)
-      .append("'");
-  try {
-    return MCrQuery(TableName, query);
-  } catch (const std::exception &e) {
-    APP_ERROR("ERROR AT GETTABLEDATA2 FUNCTION - " + TableName + " - " +
               std::string(e.what()));
     return {};
   }

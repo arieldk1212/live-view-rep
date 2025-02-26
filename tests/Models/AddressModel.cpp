@@ -80,7 +80,7 @@ TEST_F(AddressModelTest, AddressDeleteRecordTest) {
   Address.Add({{"addressname", "hamaasdasdasdasd"}, {"addressnumber", "18"}});
 
   auto PreData = Manager->GetModelData("Address");
-  Address.Delete("addressnumber=18");
+  Address.Delete("addressnumber", 18);
   auto PostData = Manager->GetModelData("Address");
 
   EXPECT_NE(PreData, PostData);

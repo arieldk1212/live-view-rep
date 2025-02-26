@@ -42,7 +42,7 @@ int main() {
   Addresses.Update({{"addressname", "holon"}}, "addressnumber", 18);
   Addresses.Update({{"addressname", "hn"}, {"addressnumber", "20"}},
                    "addressnumber", 18);
-  Addresses.Delete("addressnumber=20");
+  Addresses.Delete("addressnumber", 20);
 
   Manager->RemoveModel(Addresses.GetTableName());
 }

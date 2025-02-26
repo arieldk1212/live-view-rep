@@ -326,7 +326,7 @@ TEST_F(DatabaseTest, DatabaseDeleteRecordTest) {
   Manager->InsertInto(TestTableName, Data1);
   Manager->InsertInto(TestTableName, Data2);
   auto PreData = Manager->GetModelData(TestTableName);
-  Manager->DeleteRecord(TestTableName, "id=2");
+  Manager->DeleteRecord(TestTableName, "id", 2);
   auto AfterData = Manager->GetModelData(TestTableName);
 
   EXPECT_NE(AfterData, PreData);
