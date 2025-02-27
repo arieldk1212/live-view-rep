@@ -38,7 +38,9 @@ public:
    * @brief check the status of the database connection.
    * @return bool
    */
-  bool IsDatabaseConnected() const;
+  inline bool IsDatabaseConnected() const {
+    return m_DatabaseManager->IsDatabaseConnected();
+  }
 
   /**
    * @brief  serializes the fields of the model, query preparation.

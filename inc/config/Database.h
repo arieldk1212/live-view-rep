@@ -29,7 +29,9 @@ public:
   DatabaseConnection(DatabaseConnection &&) noexcept = delete;
   DatabaseConnection &operator=(DatabaseConnection &&) noexcept = delete;
 
-  bool IsDatabaseConnected();
+  inline bool IsDatabaseConnected() const {
+    return m_DatabaseConnection.is_open();
+  }
 
 private:
   friend class DatabaseManager;
@@ -60,7 +62,8 @@ private:
       return m_DatabaseNonTransaction.exec_params(Query,
                                                   std::forward<Args>(args)...);
     } catch (const std::exception &e) {
-      APP_ERROR("CRQUERY(PF) - QUERY EXECUTION ERROR - " + std::string(e.what()));
+      APP_ERROR("CRQUERY(PF) - QUERY EXECUTION ERROR - " +
+                std::string(e.what()));
       return {};
     }
   }

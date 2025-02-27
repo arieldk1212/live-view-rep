@@ -18,10 +18,6 @@ DatabaseManager::~DatabaseManager() {
   APP_CRITICAL("DATABASE MANAGER DESTROYED");
 }
 
-bool DatabaseManager::IsDatabaseConnected() const {
-  return m_DatabaseManager->IsDatabaseConnected();
-}
-
 std::string
 DatabaseManager::QuerySerialization(const StringUnMap &ModelFields) {
   std::string Response;
@@ -156,8 +152,10 @@ pqxx::result DatabaseManager::UpdateColumns(const std::string &ModelName,
     count += 1;
     query.append(key).append("=$").append(std::to_string(count)).append(", ");
   }
-  query.pop_back();
-  query.pop_back();
+  if (!Fields.empty()) {
+    query.pop_back();
+    query.pop_back();
+  }
   query += " where " + Condition + "=$" + std::to_string(++count);
   APP_INFO("COLUMNS DATA UPDATED - " + ModelName);
   return MCrQuery(ModelName, query, Params);

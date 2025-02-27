@@ -12,10 +12,6 @@ DatabaseConnection::~DatabaseConnection() {
   APP_CRITICAL("DATABASE CONNECTION CLOSED");
 }
 
-bool DatabaseConnection::IsDatabaseConnected() {
-  return m_DatabaseConnection.is_open();
-}
-
 pqxx::result DatabaseConnection::CrQuery(const std::string &Query) {
   if (!IsDatabaseConnected()) {
     APP_ERROR("CRQUERY - QUERY ERROR - DATABASE CONNECTION ERROR");
