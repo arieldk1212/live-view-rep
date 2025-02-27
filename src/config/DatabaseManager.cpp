@@ -251,13 +251,4 @@ pqxx::result DatabaseManager::DeleteTable(const std::string &TableName,
               std::string(e.what()));
     return {};
   }
-}
-
-/*************************/
-
-// DBManager::DBManager(std::string &&ConnectionString) noexcept
-//     : m_DatabaseConntectionPoolSize{1},
-//       m_DatabaseConnectionString{std::move(ConnectionString)} {
-//   m_DatabaseConnectionPool.emplace_back(
-//       std::make_unique<DatabaseManager>(m_DatabaseConnectionString));
-// }
+  }

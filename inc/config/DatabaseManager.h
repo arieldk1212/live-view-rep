@@ -211,37 +211,14 @@ private:
 
 private:
   bool m_IsConnected;
-  std::string m_DatabaseConnectionString;
+  std::string
+      m_DatabaseConnectionString; /** @todo remove it when pool is working. */
   std::unique_ptr<DatabaseConnection> m_DatabaseManager;
 
 private:
   /** @brief to create the connection pool we need, create a new connection,
    * add, remove, lock. */
-  // std::shared_ptr<DatabasePoolManager> m_DatabaseManager;
+  // std::shared_ptr<DatabasePool> m_Database;
 };
-
-/**
- * @class DatabaseConnectionPoolManager
- * @brief this class is reponsible for the database connection pool, currently
- * still in development.
- * @todo implement this class, adjust connections accordingly, study about
- * pool's more.
- */
-
-// class DBManager {
-// public:
-//   DBManager(std::string &&ConnectionString) noexcept;
-//   ~DBManager() = default;
-
-//   void AddConnection(std::unique_ptr<DatabaseConnection> Connection);
-//   void RemoveConnection(std::unique_ptr<DatabaseConnection> Connection);
-//   std::unique_ptr<DatabaseConnection> LockConnection();
-
-// private:
-//   size_t m_DatabaseConntectionPoolSize;
-//   std::mutex m_DatabaseConnectionPoolMutex;
-//   std::string m_DatabaseConnectionString;
-//   std::vector<std::unique_ptr<DatabaseManager>> m_DatabaseConnectionPool;
-// };
 
 #endif

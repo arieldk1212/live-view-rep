@@ -353,6 +353,7 @@ TEST_F(DatabaseTest, DatabasePerformanceTest) {
   Manager->AddModel(TestTableName, TestFieldsFirst);
   Manager1->AddModel("Test2", TestFieldsFirst);
   constexpr int LOOPS = 10000;
+  std::cout << "Number of Iterations: 10K\n";
   std::cout << "Insert Into Time:\n";
   {
     Benchmark here;

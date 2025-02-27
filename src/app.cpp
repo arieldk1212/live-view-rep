@@ -34,9 +34,13 @@ int main() {
    * can be set to unique_ptr, but can't create models with it, can
    * be used for fast managing actions. for modeling, use shared_ptr.
    */
+
   auto Manager = std::make_shared<DatabaseManager>(DatabaseConnectionString);
   AddressModel Addresses(Manager);
   Addresses.Init();
+  /**
+   * @brief if used by lvalue, move it to .Add function.
+   */
   auto Result = Addresses.Add(
       {{"addressname", "hamaasdasdasdasd"}, {"addressnumber", "18"}});
   Addresses.Update({{"addressname", "holon"}}, "addressnumber", 18);
