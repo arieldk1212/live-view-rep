@@ -3,6 +3,8 @@
 
 #include "DatabaseManager.h"
 
+#include <condition_variable>
+
 /**
  * @class DatabaseConnectionPoolManager
  * @brief this class is reponsible for the database connection pool, in dev.
@@ -27,8 +29,7 @@ public:
   };
 
 public:
-  DatabasePool(int PoolSize,
-               std::string_view DatabaseConnectionString) noexcept;
+  DatabasePool(int PoolSize, std::string &&DatabaseConnectionString) noexcept;
   ~DatabasePool();
 
   inline int GetPoolLimit() const { return m_DatabasePoolSize; }

@@ -29,8 +29,12 @@ public:
   DatabaseConnection(DatabaseConnection &&) noexcept = delete;
   DatabaseConnection &operator=(DatabaseConnection &&) noexcept = delete;
 
-  inline bool IsDatabaseConnected() const {
+  [[nodiscard]] inline bool IsDatabaseConnected() const {
     return m_DatabaseConnection.is_open();
+  }
+
+  [[nodiscard]] inline std::string GetConnectionString() const {
+    return m_DatabaseConnection.connection_string();
   }
 
 private:
@@ -77,7 +81,6 @@ private:
   pqxx::result WQuery(const std::string &Query);
 
 private:
-  std::mutex m_DatabaseMutex;
   pqxx::connection m_DatabaseConnection;
   pqxx::nontransaction m_DatabaseNonTransaction;
 };

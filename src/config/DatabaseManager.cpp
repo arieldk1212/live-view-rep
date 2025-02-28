@@ -6,9 +6,8 @@ DatabaseManager::DatabaseManager(const std::string &DatabaseConnectionString)
     APP_CRITICAL("DATABASE MANAGER ERROR - EMPTY CONNECTION STRING");
     throw std::invalid_argument("Database Connection String Empty.");
   }
-  m_DatabaseConnectionString = DatabaseConnectionString;
   m_DatabaseManager =
-      std::make_unique<DatabaseConnection>(m_DatabaseConnectionString);
+      std::make_unique<DatabaseConnection>(DatabaseConnectionString);
   APP_INFO("DATABASE MANAGER CREATED");
 }
 
@@ -251,4 +250,4 @@ pqxx::result DatabaseManager::DeleteTable(const std::string &TableName,
               std::string(e.what()));
     return {};
   }
-  }
+}

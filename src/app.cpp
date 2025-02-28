@@ -1,4 +1,5 @@
 #include "../inc/App.h"
+#include "Core/Benchmark.h"
 
 /**
  * @attention
@@ -34,7 +35,10 @@ int main() {
    * can be set to unique_ptr, but can't create models with it, can
    * be used for fast managing actions. for modeling, use shared_ptr.
    */
-
+  {
+    // Benchmark here;
+    auto Manager = std::make_shared<DatabaseManager>(DatabaseConnectionString);
+  }
   auto Manager = std::make_shared<DatabaseManager>(DatabaseConnectionString);
   AddressModel Addresses(Manager);
   Addresses.Init();

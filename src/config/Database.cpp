@@ -7,7 +7,6 @@ DatabaseConnection::DatabaseConnection(const std::string &ConnectionString)
 }
 
 DatabaseConnection::~DatabaseConnection() {
-  std::lock_guard<std::mutex> lock(m_DatabaseMutex);
   m_DatabaseConnection.close();
   APP_CRITICAL("DATABASE CONNECTION CLOSED");
 }

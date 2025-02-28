@@ -1,9 +1,9 @@
 #include "../../inc/Config/DatabasePool.h"
 
 DatabasePool::DatabasePool(int PoolSize,
-                           std::string_view DatabaseConnectionString) noexcept
+                           std::string &&DatabaseConnectionString) noexcept
     : m_DatabasePoolSize(PoolSize),
-      m_DatabaseConnectionString(DatabaseConnectionString) {
+      m_DatabaseConnectionString(std::move(DatabaseConnectionString)) {
   for (int i = 0; i < PoolSize; i++) {
     m_DatabasePool.emplace_back(
         std::make_shared<DatabaseManager>(m_DatabaseConnectionString));

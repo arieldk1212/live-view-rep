@@ -38,8 +38,15 @@ public:
    * @brief check the status of the database connection.
    * @return bool
    */
-  inline bool IsDatabaseConnected() const {
+  [[nodiscard]] inline bool IsDatabaseConnected() const {
     return m_DatabaseManager->IsDatabaseConnected();
+  }
+  /**
+   * @brief Get the Connection String object
+   * @return std::string
+   */
+  [[nodiscard]] inline std::string GetConnectionString() const {
+    return m_DatabaseManager->GetConnectionString();
   }
 
   /**
@@ -211,8 +218,6 @@ private:
 
 private:
   bool m_IsConnected;
-  std::string
-      m_DatabaseConnectionString; /** @todo remove it when pool is working. */
   std::unique_ptr<DatabaseConnection> m_DatabaseManager;
 
 private:
