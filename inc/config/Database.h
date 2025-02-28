@@ -20,7 +20,7 @@ public:
                         pqxx::write_policy::read_write>;
 
 public:
-  explicit DatabaseConnection(const std::string &ConnectionString);
+  explicit DatabaseConnection(const std::string &ConnectionString) noexcept;
   ~DatabaseConnection();
 
   DatabaseConnection(const DatabaseConnection &) = delete;

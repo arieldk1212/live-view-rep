@@ -21,7 +21,7 @@ public:
    * @brief Constructs the DatabaseManager object, according to the database's
    * connection string.
    */
-  DatabaseManager(const std::string &DatabaseConnectionString);
+  DatabaseManager(const std::string &DatabaseConnectionString) noexcept;
   /**
    * @brief Deconstructs the DatabaseManager object, clearing the database
    * models.
@@ -218,7 +218,7 @@ private:
 
 private:
   bool m_IsConnected;
-  uint64_t m_ConnectionBandwidth;
+  // uint64_t m_ConnectionBandwidth;
   std::unique_ptr<DatabaseConnection> m_DatabaseManager;
 };
 

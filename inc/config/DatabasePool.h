@@ -13,31 +13,44 @@
  * connections, optimize queries per given time, and monitor!
 
  * example:
-  std::shared_ptr<DatabasePool> Manager = std::make_shared<DatabasePool>(5);
+  Shared<DatabasePool> Manager = std::make_shared<DatabasePool>(5);
   auto connection_ptr = Manager->get_connection();
   auto limit = Manager->get_pool_limit();
   Manager->disconnect(&connection_ptr);
+ * alternative example:
+  Shared<DatabasePool> Manager = std::make_shared<DatabasePool>(5);
+  auto conn = Manager->GetConnection();
+  ...
+  ...
+  ...
+  Manager->shutdown();
  */
 
 class DatabasePool {
 public:
-  DatabasePool(int PoolSize, std::string &&DatabaseConnectionString) noexcept;
+  template <typename T> using Shared = std::shared_ptr<T>;
+  using SharedManager = Shared<DatabaseManager>;
+
+public:
+  DatabasePool(int PoolSize, std::string &&DatabaseConnectionString);
   ~DatabasePool();
+
+  void Shutdown();
 
   inline int GetPoolLimit() const { return m_DatabasePoolSize; }
   inline std::string GetConnectionString() const { return m_DatabaseString; }
 
-  std::shared_ptr<DatabaseManager> &
+  SharedManager &
   GetFreeConnectionByBandwidth(); /* check who's free, gets him. */
   void Recycle(); /* recycle connection, dont disconnect frequently. */
 
-  void SingularConsumption(std::shared_ptr<DatabaseManager> DatabaseManager);
-  void Consumptions(); /* status about all connections. */
-  void ConnectionsStatus();
+  void SingularConsumption(SharedManager DatabaseManager);
+  void Consumptions();      /* status about all connections. */
+  void ConnectionsStatus(); /* by connection strings? */
 
-  void GetConnection(std::shared_ptr<DatabaseManager> DatabaseManager);
-  void ReturnConnection(std::shared_ptr<DatabaseManager> DatabaseManager);
-  void Disconnect(std::shared_ptr<DatabaseManager> DatabaseManager);
+  SharedManager &GetConnection();
+  void ReturnConnection(SharedManager DatabaseManager);
+  void Disconnect(SharedManager DatabaseManager);
 
 private:
   std::mutex m_Mutex;
@@ -46,7 +59,7 @@ private:
 private:
   int m_DatabasePoolSize;
   std::string m_DatabaseString;
-  std::vector<std::shared_ptr<DatabaseManager>> m_DatabasePool;
+  std::vector<SharedManager> m_DatabasePool;
 };
 
 #endif

@@ -2,7 +2,6 @@
 #include "../../Test.h"
 
 #include <future>
-#include <gtest/gtest.h>
 #include <memory>
 #include <stdio.h>
 #include <stdlib.h>

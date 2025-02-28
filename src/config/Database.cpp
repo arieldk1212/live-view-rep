@@ -1,6 +1,7 @@
 #include "../../inc/Config/Database.h"
 
-DatabaseConnection::DatabaseConnection(const std::string &ConnectionString)
+DatabaseConnection::DatabaseConnection(
+    const std::string &ConnectionString) noexcept
     : m_DatabaseConnection{ConnectionString},
       m_DatabaseNonTransaction{m_DatabaseConnection} {
   APP_INFO("DATABASE CONNECTION CREATED");
