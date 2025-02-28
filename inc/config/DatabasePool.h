@@ -21,33 +21,31 @@
 
 class DatabasePool {
 public:
-  struct Connection {
-    uint64_t m_ConnectionBandwidth;
-    size_t m_ConnectionHits; /* increases to find anomaly if one connection gets
-                                overused.*/
-    std::unique_ptr<DatabaseManager> m_Connection;
-  };
-
-public:
   DatabasePool(int PoolSize, std::string &&DatabaseConnectionString) noexcept;
   ~DatabasePool();
 
   inline int GetPoolLimit() const { return m_DatabasePoolSize; }
+  inline std::string GetConnectionString() const { return m_DatabaseString; }
 
-  std::unique_ptr<Connection> &
+  std::shared_ptr<DatabaseManager> &
   GetFreeConnectionByBandwidth(); /* check who's free, gets him. */
-  void Recycle();
+  void Recycle(); /* recycle connection, dont disconnect frequently. */
 
-  void SingularConsumption(std::unique_ptr<Connection> Connection);
-  void Consumptions();
+  void SingularConsumption(std::shared_ptr<DatabaseManager> DatabaseManager);
+  void Consumptions(); /* status about all connections. */
   void ConnectionsStatus();
-  void GetConnection(std::unique_ptr<Connection> Connection);
-  void Disconnect(std::unique_ptr<Connection> Connection);
+
+  void GetConnection(std::shared_ptr<DatabaseManager> DatabaseManager);
+  void ReturnConnection(std::shared_ptr<DatabaseManager> DatabaseManager);
+  void Disconnect(std::shared_ptr<DatabaseManager> DatabaseManager);
+
+private:
+  std::mutex m_Mutex;
+  std::condition_variable m_ConditionVariable;
 
 private:
   int m_DatabasePoolSize;
-  std::mutex m_DatabasePoolMutex;
-  std::string m_DatabaseConnectionString;
+  std::string m_DatabaseString;
   std::vector<std::shared_ptr<DatabaseManager>> m_DatabasePool;
 };
 

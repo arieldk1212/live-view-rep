@@ -218,12 +218,8 @@ private:
 
 private:
   bool m_IsConnected;
+  uint64_t m_ConnectionBandwidth;
   std::unique_ptr<DatabaseConnection> m_DatabaseManager;
-
-private:
-  /** @brief to create the connection pool we need, create a new connection,
-   * add, remove, lock. */
-  // std::shared_ptr<DatabasePool> m_Database;
 };
 
 #endif
