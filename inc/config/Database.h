@@ -6,8 +6,6 @@
 #include <mutex>
 #include <pqxx/pqxx>
 
-using StringUnMap = std::unordered_map<std::string, std::string>;
-
 class DatabaseManager;
 
 /**

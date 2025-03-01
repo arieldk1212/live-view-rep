@@ -120,8 +120,8 @@ pqxx::result DatabaseManager::InsertInto(const std::string &ModelName,
 }
 
 pqxx::result DatabaseManager::UpdateColumn(const std::string &ModelName,
-                                           const std::string &FieldName,
-                                           const std::string &Condition,
+                                           std::string_view FieldName,
+                                           std::string_view Condition,
                                            const pqxx::params &Params) {
   std::string query;
   query.append(DatabaseCommandToString(DatabaseQueryCommands::Update))
@@ -137,7 +137,7 @@ pqxx::result DatabaseManager::UpdateColumn(const std::string &ModelName,
 
 pqxx::result DatabaseManager::UpdateColumns(const std::string &ModelName,
                                             const StringUnMap &Fields,
-                                            const std::string &Condition,
+                                            std::string_view Condition,
                                             const pqxx::params &Params) {
   int count = 0;
   std::string query;
@@ -152,13 +152,14 @@ pqxx::result DatabaseManager::UpdateColumns(const std::string &ModelName,
     query.pop_back();
     query.pop_back();
   }
-  query += " where " + Condition + "=$" + std::to_string(++count);
+  query.append(" where ").append(Condition).append("=$").append(
+      std::to_string(++count));
   APP_INFO("COLUMNS DATA UPDATED - " + ModelName);
   return MCrQuery(ModelName, query, Params);
 }
 
 pqxx::result DatabaseManager::DeleteRecord(const std::string &ModelName,
-                                           const std::string &Condition,
+                                           std::string_view Condition,
                                            const pqxx::params &Params) {
   std::string query;
   query.append("delete from ")

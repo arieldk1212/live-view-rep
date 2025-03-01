@@ -36,10 +36,11 @@ void DatabasePool::Shutdown() {
   }
 }
 
-DatabasePool::SharedManager &DatabasePool::GetConnection() {
+std::optional<DatabasePool::SharedManager> DatabasePool::GetConnection() {
   for (SharedManager &Connection : m_DatabasePool) {
-    if (!Connection->IsDatabaseConnected()) {
+    if (Connection->IsDatabaseConnected()) {
       return Connection;
     }
   }
+  return std::nullopt;
 }

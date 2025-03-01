@@ -27,6 +27,11 @@ protected:
 };
 
 TEST_F(DatabasePoolTest, DatabasePoolCreationTest) {
-  // auto status = Manager->ConnectionsStatus;
-  // EXPECT_NE(Before.columns(), After.columns());
+  auto conn = Manager->GetConnection().value();
+  auto Status = conn->IsDatabaseConnected();
+  auto Result = conn->GetConnectionString();
+
+  EXPECT_FALSE(Result.empty());
+  EXPECT_GT(Result.length(), 5);
+  EXPECT_TRUE(Status);
 }

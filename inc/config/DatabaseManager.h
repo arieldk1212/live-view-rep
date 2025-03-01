@@ -11,6 +11,8 @@
 #include <type_traits>
 #include <utility>
 
+using StringUnMap = std::unordered_map<std::string, std::string>;
+
 /**
  * @class DatabaseManager
  * @brief Manges the database models and operations, in front of the db itself.
@@ -21,7 +23,8 @@ public:
    * @brief Constructs the DatabaseManager object, according to the database's
    * connection string.
    */
-  DatabaseManager(const std::string &DatabaseConnectionString) noexcept;
+  explicit DatabaseManager(
+      const std::string &DatabaseConnectionString) noexcept;
   /**
    * @brief Deconstructs the DatabaseManager object, clearing the database
    * models.
@@ -140,8 +143,8 @@ public:
    * @return pqxx::result
    */
   pqxx::result UpdateColumn(const std::string &ModelName,
-                            const std::string &FieldName,
-                            const std::string &Condition,
+                            std::string_view FieldName,
+                            std::string_view Condition,
                             const pqxx::params &Params);
   /**
    * @brief updates the table's multiple fields values with a specific
@@ -154,7 +157,7 @@ public:
    */
   pqxx::result UpdateColumns(const std::string &ModelName,
                              const StringUnMap &Fields,
-                             const std::string &Condition,
+                             std::string_view Condition,
                              const pqxx::params &Params);
   /**
    * @brief delete a record from the table.
@@ -163,7 +166,7 @@ public:
    * @param Params
    */
   pqxx::result DeleteRecord(const std::string &ModelName,
-                            const std::string &Condition,
+                            std::string_view Condition,
                             const pqxx::params &Params);
 
 private:
@@ -218,7 +221,6 @@ private:
 
 private:
   bool m_IsConnected;
-  // uint64_t m_ConnectionBandwidth;
   std::unique_ptr<DatabaseConnection> m_DatabaseManager;
 };
 
