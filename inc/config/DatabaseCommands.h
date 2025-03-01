@@ -70,7 +70,8 @@ const std::unordered_map<DatabaseQueryCommands, std::string>
         {DatabaseQueryCommands::DropTruncate, "truncate table "}};
 
 template <typename DatabaseCommandType>
-constexpr std::string DatabaseCommandToString(DatabaseCommandType Command) {
+constexpr std::optional<std::string>
+DatabaseCommandToString(DatabaseCommandType Command) {
   if constexpr (std::is_same_v<decltype(Command), DatabaseFieldCommands>) {
     auto it = DatabaseFieldStrings.find(Command);
     if (it != DatabaseFieldStrings.end()) {
@@ -84,7 +85,7 @@ constexpr std::string DatabaseCommandToString(DatabaseCommandType Command) {
     }
   }
   APP_ERROR("DATABASE COMMAND ERROR");
-  return "error";
+  return std::nullopt;
 }
 
 #endif
