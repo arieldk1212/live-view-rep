@@ -22,13 +22,13 @@ protected:
     Manager =
         std::make_shared<DatabasePool>(std::move(TestDatabaseConnectionString));
   }
-  void TearDown() override { Manager.reset(); }
 };
 
 TEST_F(DatabasePoolTest, DatabasePoolCreationTest) {
   auto conn = Manager->GetConnection();
   auto Status = conn->IsDatabaseConnected();
   auto Result = conn->GetConnectionString();
+  Manager->ReturnConnection(conn);
 
   EXPECT_FALSE(Result.empty());
   EXPECT_GT(Result.length(), 5);
