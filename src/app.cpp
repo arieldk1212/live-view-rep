@@ -34,22 +34,34 @@ int main() {
    * can be set to unique_ptr, but can't create models with it, can
    * be used for fast managing actions. for modeling, use shared_ptr.
    */
+  {
+    Benchmark Here;
+    constexpr int PoolSize{5};
+    DatabasePool Manager{PoolSize, std::move(DatabaseConnectionString)};
+    auto Connection1 = Manager.GetConnection().value();
+    auto Connection2 = Manager.GetConnection().value();
+    auto Connection3 = Manager.GetConnection().value();
+    auto Connection4 = Manager.GetConnection().value();
+    auto Connection5 = Manager.GetConnection().value();
+    // auto Connection5 = Manager.GetConnection().value();
+    // auto Connection6 = Manager.GetConnection().value();
+    // auto Connection7 = Manager.GetConnection().value();
+    // auto Connection8 = Manager.GetConnection().value();
 
-  constexpr int PoolSize{5};
-  DatabasePool Manager{PoolSize, std::move(DatabaseConnectionString)};
-  auto Connection = Manager.GetConnection().value();
+    AddressModel Addresses(Connection1);
+    Addresses.Init();
 
-  AddressModel Addresses(Connection);
-  Addresses.Init();
+    /** @brief if used by lvalue, move it to .Add function.  */
+    auto Result = Addresses.Add(
+        {{"addressname", "hamaasdasdasdasd"}, {"addressnumber", "18"}});
+    Addresses.Update({{"addressname", "holon"}}, "addressnumber", 18);
+    Addresses.Update({{"addressname", "hn"}, {"addressnumber", "20"}},
+                     "addressnumber", 18);
+    Addresses.Delete("addressnumber", 20);
 
-  /** @brief if used by lvalue, move it to .Add function.  */
-  auto Result = Addresses.Add(
-      {{"addressname", "hamaasdasdasdasd"}, {"addressnumber", "18"}});
-  Addresses.Update({{"addressname", "holon"}}, "addressnumber", 18);
-  Addresses.Update({{"addressname", "hn"}, {"addressnumber", "20"}},
-                   "addressnumber", 18);
-  Addresses.Delete("addressnumber", 20);
-
-  Connection->RemoveModel(Addresses.GetTableName());
-
+    Connection1->RemoveModel(Addresses.GetTableName());
+    Manager.Status();
+    AddressModel Address(Connection2);
+    Manager.Status();
+  }
 }

@@ -22,25 +22,22 @@ public:
   DatabasePool(int PoolSize, std::string &&DatabaseConnectionString);
   ~DatabasePool();
 
-  void Shutdown();
-
   inline int GetPoolLimit() const { return m_DatabasePoolSize; }
   inline std::string GetConnectionString() const { return m_DatabaseString; }
-
-  void Recycle(); /* recycle connection, dont disconnect frequently. */
-
-  void SingularConsumption(SharedManager Connection);
-  void Consumptions();      /* status about all connections. */
-  void ConnectionsStatus(); /* by connection strings? */
+  std::string Status(); /* by connection strings? */
 
   std::optional<SharedManager> GetConnection();
-  void
-  ReturnConnection(SharedManager Connection); /* dont need, its a shared ptr. */
-  void Disconnect(SharedManager Connection);
+  void Disconnect(); /* dont use this function */
+
+  void Consumptions(); /* status about all connections. */
+  void SingularConsumption(SharedManager Connection);
 
 private:
-  std::mutex m_Mutex;
-  std::condition_variable m_ConditionVariable;
+  void Shutdown();
+
+private:
+  std::mutex m_PoolMutex;
+  std::condition_variable m_PoolConditionVariable;
 
 private:
   int m_DatabasePoolSize;

@@ -36,11 +36,33 @@ void DatabasePool::Shutdown() {
   }
 }
 
+std::string DatabasePool::Status() {
+  int count = 0;
+  std::string Status;
+  for (const auto &Connection : m_DatabasePool) {
+    Status.append("Connection ")
+        .append(std::to_string(++count))
+        .append(" - Ref Count: ")
+        .append(std::to_string(Connection.use_count()))
+        .append(" Connection Status: ")
+        .append(std::to_string(Connection->IsDatabaseConnected()))
+        .append("\n");
+  }
+  std::cout << Status;
+  return Status;
+}
+
 std::optional<DatabasePool::SharedManager> DatabasePool::GetConnection() {
+  std::lock_guard<std::mutex> lock(m_PoolMutex);
   for (SharedManager &Connection : m_DatabasePool) {
-    if (Connection->IsDatabaseConnected()) {
+    if (Connection.use_count() < 2) {
       return Connection;
     }
   }
   return std::nullopt;
+}
+
+void DatabasePool::Disconnect() {
+  std::lock_guard<std::mutex> lock(m_PoolMutex);
+  DatabasePool::~DatabasePool();
 }
