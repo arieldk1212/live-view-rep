@@ -6,11 +6,9 @@
 #include <condition_variable>
 
 /**
- * @class DatabaseConnectionPoolManager
- * @brief this class is reponsible for the database connection pool, in dev.
+ * @class DatabasePool
  * @todo add logging into database here, each connection will log its status
- * about himself, implement cache, fixed number of
- * connections, optimize queries per given time, and monitor!
+ * about himself, implement cache, optimize queries per given time, and monitor!
  */
 
 class DatabasePool {
@@ -19,30 +17,28 @@ public:
   using SharedManager = Shared<DatabaseManager>;
 
 public:
-  DatabasePool(int PoolSize, std::string &&DatabaseConnectionString);
+  DatabasePool(std::string &&DatabaseConnectionString);
   ~DatabasePool();
 
+  SharedManager GetConnection();
+  void ReturnConnection(SharedManager &Connection);
+
   inline int GetPoolLimit() const { return m_DatabasePoolSize; }
-  inline std::string GetConnectionString() const { return m_DatabaseString; }
-  std::string Status(); /* by connection strings? */
+  inline const std::string &GetConnectionString() const {
+    return m_DatabaseString;
+  }
 
-  std::optional<SharedManager> GetConnection();
-  void Disconnect(); /* dont use this function */
-
-  void Consumptions(); /* status about all connections. */
-  void SingularConsumption(SharedManager Connection);
-
-private:
-  void Shutdown();
+  std::string ConnectionsReport();
+  std::string SingularConsumption(SharedManager &Connection);
 
 private:
   std::mutex m_PoolMutex;
   std::condition_variable m_PoolConditionVariable;
 
 private:
-  int m_DatabasePoolSize;
+  const int m_DatabasePoolSize{10};
   std::string m_DatabaseString;
-  std::vector<SharedManager> m_DatabasePool;
+  std::queue<SharedManager> m_DatabasePool;
 };
 
 #endif
