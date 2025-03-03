@@ -1,5 +1,6 @@
 #include "../inc/App.h"
 
+
 /**
  * @attention
  * this acts as the frontend of the application in "swift".
@@ -54,11 +55,11 @@ int main() {
 
   Connection->RemoveModel(Addresses.GetTableName());
 
-  Manager.ConnectionsReport();
+  // Manager.ConnectionsReport();
 
   // Manager.SingularConsumption(Connection);
   Manager.ReturnConnection(Connection);
 
-  Manager.ConnectionsReport();
+  // Manager.ConnectionsReport();
   // }
 }

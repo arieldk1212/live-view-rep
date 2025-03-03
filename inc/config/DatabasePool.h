@@ -23,11 +23,13 @@ public:
 
   SharedManager GetConnection();
   void ReturnConnection(SharedManager &Connection);
+  void RunWQuery(); /* apply a method to run query as pqxx worker */
 
   inline int GetPoolLimit() const { return m_DatabasePoolSize; }
   inline const std::string &GetConnectionString() const {
     return m_DatabaseString;
   }
+  inline size_t GetConnectionsState() const { return m_DatabasePool.size(); };
 
   std::string ConnectionsReport();
   std::string SingularConsumption(SharedManager &Connection);
