@@ -32,23 +32,28 @@ protected:
 
     auto ConnectionString = ThreadConn->GetConnectionString();
     EXPECT_FALSE(ConnectionString.empty());
-
-    ThreadConn->InsertInto(ModelName, {{"addressname", "hamarganit"}});
   }
 };
 
-TEST_F(DatabasePoolTest, DatabasePoolCreationTest) {
+TEST_F(DatabasePoolTest, DatabasePoolGeneralTest) {
   auto conn = Manager->GetManagerConnection();
   auto Status = conn->IsDatabaseConnected();
-  auto Result = conn->GetConnectionString();
+  auto String = conn->GetConnectionString();
+  auto Size = Manager->GetCurrentPoolSize();
+  auto MaxSize = Manager->GetPoolLimit();
   Manager->ReturnConnection(conn);
+  auto AfterSize = Manager->GetCurrentPoolSize();
 
-  EXPECT_FALSE(Result.empty());
-  EXPECT_GT(Result.length(), 5);
   EXPECT_TRUE(Status);
+  EXPECT_FALSE(String.empty());
+  EXPECT_GT(String.length(), 5);
+  EXPECT_EQ(Size, 9);
+  EXPECT_EQ(AfterSize, 10);
+  EXPECT_EQ(MaxSize, 10);
 }
 
-TEST_F(DatabasePoolTest, DatabasePoolTest) {
+TEST_F(DatabasePoolTest, DatabasePoolLimitTest) {
+  // std::vector<DatabasePool::SharedManager> connections(Manager->GetManagerConnection(), 10);
   auto conn1 = Manager->GetManagerConnection();
   auto conn2 = Manager->GetManagerConnection();
   auto conn3 = Manager->GetManagerConnection();
