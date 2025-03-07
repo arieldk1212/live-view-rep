@@ -10,7 +10,7 @@
 
 class DatabasePoolTest : public ::testing::Test {
 protected:
-  std::shared_ptr<DatabasePool> Manager;
+  std::unique_ptr<DatabasePool> Manager;
 
   void SetUp() override {
     std::string TestDatabaseConnectionString;
@@ -22,7 +22,7 @@ protected:
           Config::TestDatabaseToString("../../configs/config.json");
     }
     Manager =
-        std::make_shared<DatabasePool>(std::move(TestDatabaseConnectionString));
+        std::make_unique<DatabasePool>(std::move(TestDatabaseConnectionString));
   }
 
   void SingleThreadTask(std::string &ModelName) {
