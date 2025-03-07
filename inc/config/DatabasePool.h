@@ -102,8 +102,8 @@ private:
   std::condition_variable m_PoolConditionVariable;
 
 private:
-  Model::Schemes m_ModelSchemes;
   const int m_DatabasePoolSize{10};
+  Model::Schemes m_ModelSchemes;
   std::string m_DatabaseString;
   std::queue<SharedManager> m_DatabasePool;
 };
