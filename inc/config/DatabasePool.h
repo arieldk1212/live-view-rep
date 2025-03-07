@@ -1,6 +1,7 @@
 #ifndef DATABASEPOOL_H
 #define DATABASEPOOL_H
 
+#include "../Models/Model.h"
 #include "DatabaseManager.h"
 
 #include <condition_variable>
@@ -14,22 +15,37 @@
 
 class DatabasePool {
 public:
-  template <typename T> using Shared = std::shared_ptr<T>;
+  template <typename Class> using Shared = std::shared_ptr<Class>;
   using SharedManager = Shared<DatabaseManager>;
+
+  template <typename ModelClass>
+  using UniquePtrModel = std::unique_ptr<ModelClass>;
+  template <typename ModelClass> using SharedPtrModel = Shared<ModelClass>;
 
 public:
   DatabasePool(std::string &&DatabaseConnectionString);
   ~DatabasePool();
 
-  SharedManager GetConnection();
+  void InitModels();
+
+  [[nodiscard]] SharedManager GetManagerConnection();
   void ReturnConnection(SharedManager &Connection);
+
+  template <typename ModelClass>
+  [[nodiscard]] UniquePtrModel<ModelClass> GetUniqueModelConnection() {
+    return std::make_unique<ModelClass>();
+  }
+
+  template <typename ModelClass>
+  [[nodiscard]] SharedPtrModel<ModelClass> GetSharedModelConnection() {
+    return std::make_shared<ModelClass>();
+  }
+
   void RunWQuery(); /* apply a method to run query as pqxx worker */
 
-  inline int GetPoolLimit() const { return m_DatabasePoolSize; }
-  inline const std::string &GetConnectionString() const {
-    return m_DatabaseString;
-  }
-  inline size_t GetConnectionsState() const { return m_DatabasePool.size(); };
+  [[nodiscard]] int GetPoolLimit();
+  [[nodiscard]] int GetCurrentPoolSize();
+  [[nodiscard]] const std::string &GetConnectionString();
 
   std::string ConnectionsReport();
   std::string SingularConsumption(SharedManager &Connection);
@@ -39,6 +55,7 @@ private:
   std::condition_variable m_PoolConditionVariable;
 
 private:
+  Model::Schemes m_ModelSchemes;
   const int m_DatabasePoolSize{10};
   std::string m_DatabaseString;
   std::queue<SharedManager> m_DatabasePool;

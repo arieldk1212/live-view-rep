@@ -24,10 +24,21 @@ protected:
     Manager =
         std::make_shared<DatabasePool>(std::move(TestDatabaseConnectionString));
   }
+
+  void SingleThreadTask(std::string &ModelName) {
+    auto ThreadConn = Manager->GetManagerConnection();
+    auto ConnectionStatus = ThreadConn->IsDatabaseConnected();
+    EXPECT_TRUE(ConnectionStatus);
+
+    auto ConnectionString = ThreadConn->GetConnectionString();
+    EXPECT_FALSE(ConnectionString.empty());
+
+    ThreadConn->InsertInto(ModelName, {{"addressname", "hamarganit"}});
+  }
 };
 
 TEST_F(DatabasePoolTest, DatabasePoolCreationTest) {
-  auto conn = Manager->GetConnection();
+  auto conn = Manager->GetManagerConnection();
   auto Status = conn->IsDatabaseConnected();
   auto Result = conn->GetConnectionString();
   Manager->ReturnConnection(conn);
@@ -38,24 +49,29 @@ TEST_F(DatabasePoolTest, DatabasePoolCreationTest) {
 }
 
 TEST_F(DatabasePoolTest, DatabasePoolTest) {
-  auto conn1 = Manager->GetConnection();
-  auto conn2 = Manager->GetConnection();
-  auto conn3 = Manager->GetConnection();
-  auto conn4 = Manager->GetConnection();
-  auto conn5 = Manager->GetConnection();
-  auto conn6 = Manager->GetConnection();
-  auto conn7 = Manager->GetConnection();
-  auto conn8 = Manager->GetConnection();
-  auto conn9 = Manager->GetConnection();
-  auto conn10 = Manager->GetConnection();
+  auto conn1 = Manager->GetManagerConnection();
+  auto conn2 = Manager->GetManagerConnection();
+  auto conn3 = Manager->GetManagerConnection();
+  auto conn4 = Manager->GetManagerConnection();
+  auto conn5 = Manager->GetManagerConnection();
+  auto conn6 = Manager->GetManagerConnection();
+  auto conn7 = Manager->GetManagerConnection();
+  auto conn8 = Manager->GetManagerConnection();
+  auto conn9 = Manager->GetManagerConnection();
+  auto conn10 = Manager->GetManagerConnection();
 
-  auto size = Manager->GetConnectionsState();
+  auto size = Manager->GetCurrentPoolSize();
 
   EXPECT_FALSE(size);
 }
 
-TEST_F(DatabasePoolTest, DatabaseMultiThreadTest) {
-  std::thread Thread;
-  for (int i = 0; i < 100; i++) {
-  }
-}
+// TEST_F(DatabasePoolTest, DatabaseMultiThreadTest) {
+//   auto MainConn = Manager->GetManagerConnection();
+//   // MainConn->AddModel("address");
+//   std::vector<std::thread> Threads;
+//   Threads.reserve(20);
+//   for (int i = 0; i < 100; i++) {
+//     // Threads.emplace_back(SingleThreadTask(),
+//     Manager->GetManagerConnection(), )
+//   }
+// }

@@ -21,7 +21,19 @@ DatabasePool::DatabasePool(std::string &&DatabaseConnectionString)
 
 DatabasePool::~DatabasePool() { APP_CRITICAL("DATABASE POOL DESTROYED"); }
 
-DatabasePool::SharedManager DatabasePool::GetConnection() {
+void DatabasePool::InitModels() {
+  auto Manager = GetManagerConnection();
+  {
+    std::scoped_lock<std::mutex> lock(m_PoolMutex);
+    for (const auto &[ModelName, Fields] : m_ModelSchemes.GetSchemes()) {
+      Manager->AddModel(ModelName, Fields);
+    }
+    APP_INFO("ALL MODELS TABLES CREATED IN DATABASE");
+  }
+  ReturnConnection(Manager);
+}
+
+DatabasePool::SharedManager DatabasePool::GetManagerConnection() {
   std::unique_lock<std::mutex> lock(m_PoolMutex);
   m_PoolConditionVariable.wait(lock,
                                [this]() { return !m_DatabasePool.empty(); });
@@ -36,6 +48,21 @@ void DatabasePool::ReturnConnection(SharedManager &Connection) {
     m_DatabasePool.push(std::move(Connection));
   }
   m_PoolConditionVariable.notify_one();
+}
+
+int DatabasePool::GetPoolLimit() {
+  std::lock_guard<std::mutex> lock(m_PoolMutex);
+  return m_DatabasePoolSize;
+}
+
+int DatabasePool::GetCurrentPoolSize() {
+  std::lock_guard<std::mutex> lock(m_PoolMutex);
+  return static_cast<int>(m_DatabasePool.size());
+}
+
+const std::string &DatabasePool::GetConnectionString() {
+  std::lock_guard<std::mutex> lock(m_PoolMutex);
+  return m_DatabaseString;
 }
 
 std::string DatabasePool::ConnectionsReport() {

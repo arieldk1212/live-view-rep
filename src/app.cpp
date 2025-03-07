@@ -1,5 +1,5 @@
 #include "../inc/App.h"
-
+#include "Models/AddressModel.h"
 
 /**
  * @attention
@@ -35,31 +35,30 @@ int main() {
    * can be set to unique_ptr, but can't create models with it, can
    * be used for fast managing actions. for modeling, use shared_ptr.
    */
-  // {
-  // Benchmark Here;
+  {
+    Benchmark Here;
 
-  DatabasePool Manager{std::move(DatabaseConnectionString)};
+    DatabasePool Pool{std::move(DatabaseConnectionString)};
 
-  auto Connection = Manager.GetConnection();
+    Pool.InitModels();
 
-  AddressModel Addresses(Connection);
-  Addresses.Init();
+    auto ManagerConnection = Pool.GetManagerConnection();
+    /* can init it not by pointer */
+    auto UniqueAddress = Pool.GetUniqueModelConnection<AddressModel>();
 
-  /** @brief if used by lvalue, move it to .Add function.  */
-  auto Result = Addresses.Add(
-      {{"addressname", "hamaasdasdasdasd"}, {"addressnumber", "18"}});
-  Addresses.Update({{"addressname", "holon"}}, "addressnumber", 18);
-  Addresses.Update({{"addressname", "hn"}, {"addressnumber", "20"}},
-                   "addressnumber", 18);
-  Addresses.Delete("addressnumber", 20);
+    /** @brief if used by lvalue, move it to .Add function.  */
+    auto Result = UniqueAddress->Add(
+        ManagerConnection,
+        {{"addressname", "hamaasdasdasdasd"}, {"addressnumber", "18"}});
+    UniqueAddress->Update(ManagerConnection, {{"addressname", "holon"}},
+                          "addressnumber", 18);
+    UniqueAddress->Update(ManagerConnection,
+                          {{"addressname", "hn"}, {"addressnumber", "20"}},
+                          "addressnumber", 18);
+    UniqueAddress->Delete(ManagerConnection, "addressnumber", 20);
 
-  Connection->RemoveModel(Addresses.GetTableName());
+    ManagerConnection->RemoveModel(UniqueAddress->GetTableName());
 
-  // Manager.ConnectionsReport();
-
-  // Manager.SingularConsumption(Connection);
-  Manager.ReturnConnection(Connection);
-
-  // Manager.ConnectionsReport();
-  // }
+    Pool.ReturnConnection(ManagerConnection);
+  }
 }
