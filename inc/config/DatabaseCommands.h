@@ -12,16 +12,16 @@
  * the ORM.
  */
 
-enum class DatabaseFieldCommands {
-  SerialPrimaryKeyField,
+enum class DatabaseFieldCommands : std::uint8_t {
+  UUID,
   IntField,
   CharField,
-  VarChar100Field,
   TextArray,
-  UUID
+  VarChar100Field,
+  SerialPrimaryKeyField,
 };
 
-enum class DatabaseQueryCommands {
+enum class DatabaseQueryCommands : std::uint8_t {
   SelectAll,
   AlterRole,
   AlterColumn,
