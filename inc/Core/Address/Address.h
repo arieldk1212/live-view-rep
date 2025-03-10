@@ -14,7 +14,7 @@
 
 class Address {
 public:
-  Address(SharedManager &Manager, const std::string &IDQuery);
+  Address(SharedManager &Manager, std::string IDQuery);
   ~Address() = default;
 
   [[nodiscard]] const std::map<std::string, std::string> &

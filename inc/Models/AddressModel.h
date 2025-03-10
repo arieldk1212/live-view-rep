@@ -89,8 +89,7 @@ public:
    * @param ID
    * @return Address
    */
-  [[nodiscard]] Address GetAddressData(SharedManager &Manager,
-                                       const std::string &ID);
+  Address GetAddressData(SharedManager &Manager, const std::string &ID);
 
 private:
   std::string m_TableName;

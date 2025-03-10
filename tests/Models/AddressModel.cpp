@@ -130,26 +130,16 @@ TEST_F(AddressModelTest, AddressAddressTest) {
                         {"addressdistrict", "center"},
                         {"country", "israel"}});
 
-  // auto AddressID = Address.GetAddressID(Manager, "hamaasdasdasdasd", "18");
-  // EXPECT_EQ(AddressID.length(), 36);
+  auto AddressID = Address.GetAddressID(Manager, "hamaasdasdasdasd", "18");
+  EXPECT_EQ(AddressID.length(), 36);
 
-  // auto ValidAddress =
-  //     Address.GetAddressData(Manager, AddressID).GetAddressValues();
+  auto ValidAddress =
+      Address.GetAddressData(Manager, AddressID).GetAddressValues();
 
-  // EXPECT_EQ(ValidAddress["addressid"], AddressID);
-  // EXPECT_EQ(ValidAddress["addressname"], "hamaasdasdasdasd");
-  // EXPECT_EQ(ValidAddress["addressnumber"], "18");
-
-  // EXPECT_THROW({ Address.GetAddressData(Manager, "123123"); },
-  // std::exception); EXPECT_THROW(
-  //     { Address.GetAddressData(Manager, "asdasdasd123123"); },
-  //     std::exception);
-  // EXPECT_THROW(
-  //     { Address.GetAddressData(Manager, "asdasdasd"); }, std::exception);
-  // EXPECT_THROW(
-  //     {
-  //       Address.GetAddressData(Manager,
-  //       "8f22xxxx-axx3-xxaa-a1x9-4x851xx8fxf5");
-  //     },
-  //     std::exception);
+  EXPECT_EQ(ValidAddress["addressid"], AddressID);
+  EXPECT_EQ(ValidAddress["addressname"], "hamaasdasdasdasd");
+  EXPECT_EQ(ValidAddress["addressnumber"], "18");
+  EXPECT_EQ(ValidAddress["addresscity"], "holon");
+  EXPECT_EQ(ValidAddress["addressdistrict"], "center");
+  EXPECT_EQ(ValidAddress["country"], "israel");
 }

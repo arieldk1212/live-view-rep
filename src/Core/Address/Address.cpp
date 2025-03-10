@@ -1,6 +1,6 @@
 #include "../../../inc/Core/Address/Address.h"
 
-Address::Address(SharedManager &Manager, const std::string &IDQuery) {
+Address::Address(SharedManager &Manager, std::string IDQuery) {
   auto Result = Manager->GetModelData("Address", "addressid", IDQuery);
   if (!Result.empty()) {
     for (int i = 0; i < Result.columns(); i++) {
