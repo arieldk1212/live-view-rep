@@ -46,9 +46,12 @@ int main() {
     auto UniqueAddress = Pool.GetUniqueModelConnection<AddressModel>();
 
     /** @brief if used by lvalue, move it to .Add function.  */
-    auto Result = UniqueAddress->Add(
-        ManagerConnection,
-        {{"addressname", "hamaasdasdasdasd"}, {"addressnumber", "18"}});
+    auto Result = UniqueAddress->Add(ManagerConnection,
+                                     {{"addressname", "hamaasdasdasdasd"},
+                                      {"addressnumber", "18"},
+                                      {"addresscity", "holon"},
+                                      {"addressdistrict", "center"},
+                                      {"country", "israel"}});
     UniqueAddress->Update(ManagerConnection, {{"addressname", "holon"}},
                           "addressnumber", 18);
     UniqueAddress->Update(ManagerConnection,

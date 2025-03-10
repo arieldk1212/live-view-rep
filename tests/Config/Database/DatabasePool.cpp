@@ -42,7 +42,10 @@ protected:
       auto AddressConn = Manager->GetUniqueModelConnection<AddressModel>();
       for (int i = 0; i < AddCounts; i++) {
         AddressConn->Add(ThreadConn, {{"addressname", "hamaasdasdasdasd"},
-                                      {"addressnumber", "18"}});
+                                      {"addressnumber", "18"},
+                                      {"addresscity", "holon"},
+                                      {"addressdistrict", "center"},
+                                      {"country", "israel"}});
       }
       SuccessfulHits++;
 
@@ -98,9 +101,12 @@ TEST_F(DatabasePoolTest, DatabasePoolInitModelsTest) {
 
   auto PreData = ConnectionTest->GetModelData("Address");
 
-  UniqueAddressModelConn->Add(
-      ConnectionTest,
-      {{"addressname", "hamaasdasdasdasd"}, {"addressnumber", "18"}});
+  UniqueAddressModelConn->Add(ConnectionTest,
+                              {{"addressname", "hamaasdasdasdasd"},
+                               {"addressnumber", "18"},
+                               {"addresscity", "holon"},
+                               {"addressdistrict", "center"},
+                               {"country", "israel"}});
 
   auto PostData = ConnectionTest->GetModelData("Address");
 

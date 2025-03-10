@@ -16,6 +16,12 @@ public:
 
   [[nodiscard]] const std::string &GetTableName() const { return m_TableName; }
 
+  /**
+   * @brief add record to Address table.
+   * @param Manager
+   * @param Fields
+   * @return pqxx::result
+   */
   pqxx::result Add(SharedManager &Manager, StringUnMap Fields);
 
   /**
@@ -34,6 +40,15 @@ public:
     return Result[0]["addressid"].template as<std::string>();
   }
 
+  /**
+   * @brief update a record in the Address table.
+   * @tparam T
+   * @param Manager
+   * @param Fields
+   * @param Condition
+   * @param arg
+   * @return pqxx::result
+   */
   template <typename T>
   pqxx::result Update(SharedManager &Manager, const StringUnMap &Fields,
                       const std::string &Condition, T &&arg) {
@@ -52,6 +67,14 @@ public:
     return Manager->UpdateColumns(m_TableName, Fields, Condition, params);
   }
 
+  /**
+   * @brief delete a record in the Address table.
+   * @tparam T
+   * @param Manager
+   * @param Condition
+   * @param arg
+   * @return pqxx::result
+   */
   template <typename T>
   pqxx::result Delete(SharedManager &Manager, const std::string &Condition,
                       T &&arg) {
@@ -60,7 +83,14 @@ public:
     return Manager->DeleteRecord(m_TableName, Condition, params);
   }
 
-  [[nodiscard]] Address GetAddressData(SharedManager &Manager, std::string ID);
+  /**
+   * @brief Get the Address Data object
+   * @param Manager
+   * @param ID
+   * @return Address
+   */
+  [[nodiscard]] Address GetAddressData(SharedManager &Manager,
+                                       const std::string &ID);
 
 private:
   std::string m_TableName;

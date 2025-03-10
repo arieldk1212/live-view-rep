@@ -15,9 +15,11 @@
 enum class DatabaseFieldCommands : std::uint8_t {
   UUID,
   IntField,
+  IntNotNullField,
   CharField,
   TextArray,
   VarChar100Field,
+  VarChar100NotNullField,
   SerialPrimaryKeyField,
 };
 
@@ -44,8 +46,11 @@ const std::unordered_map<DatabaseFieldCommands, std::string>
     DatabaseFieldStrings = {
         {DatabaseFieldCommands::SerialPrimaryKeyField, "serial primary key"},
         {DatabaseFieldCommands::IntField, "int"},
+        {DatabaseFieldCommands::IntNotNullField, "int not null"},
         {DatabaseFieldCommands::CharField, "char"},
         {DatabaseFieldCommands::VarChar100Field, "varchar(100)"},
+        {DatabaseFieldCommands::VarChar100NotNullField,
+         "varchar(100) not null"},
         {DatabaseFieldCommands::UUID, "uuid DEFAULT gen_random_uuid() unique"},
         {DatabaseFieldCommands::TextArray, "text[]"}};
 

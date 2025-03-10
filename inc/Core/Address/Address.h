@@ -14,23 +14,16 @@
 
 class Address {
 public:
-  Address(SharedManager &Manager, std::string IDQuery);
+  Address(SharedManager &Manager, const std::string &IDQuery);
   ~Address() = default;
 
-  [[nodiscard]] const std::string &GetIDQuery() const {
-    return m_AddressIDQuery;
-  }
-  [[nodiscard]] const std::string &GetAddressName() const {
-    return m_AddressName;
-  }
-  [[nodiscard]] const std::string &GetAddressData() const {
+  [[nodiscard]] const std::map<std::string, std::string> &
+  GetAddressValues() const {
     return m_AddressData;
   }
 
 private:
-  std::string m_AddressIDQuery;
-  std::string m_AddressData;
-  std::string m_AddressName;
+  std::map<std::string, std::string> m_AddressData;
 };
 
 #endif

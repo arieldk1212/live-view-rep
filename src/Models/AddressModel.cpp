@@ -9,11 +9,11 @@ AddressModel::~AddressModel() {
 }
 
 pqxx::result AddressModel::Add(SharedManager &Manager, StringUnMap Fields) {
-  Fields.emplace("addressdata", "{test1, test2}");
-
+  // Fields.emplace("addressdata", "{holon, center, israel}");
   return Manager->InsertInto(m_TableName, Fields);
 }
 
-Address AddressModel::GetAddressData(SharedManager &Manager, std::string ID) {
-  return Address(Manager, std::move(ID));
+Address AddressModel::GetAddressData(SharedManager &Manager,
+                                     const std::string &ID) {
+  return Address(Manager, ID);
 }
