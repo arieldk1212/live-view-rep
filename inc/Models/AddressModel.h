@@ -18,6 +18,22 @@ public:
 
   pqxx::result Add(SharedManager &Manager, StringUnMap Fields);
 
+  /**
+   * @brief Get the Address ID.
+   * @tparam Args
+   * @param Manager
+   * @param args (addressname, addressnumber)
+   * @return std::string
+   */
+  template <typename... Args>
+  [[nodiscard]] std::string GetAddressID(SharedManager &Manager,
+                                         Args &&...args) {
+    auto Result =
+        Manager->GetModelDataArgs(m_TableName, "addressname", "addressnumber",
+                                  std::forward<Args>(args)...);
+    return Result[0]["addressid"].template as<std::string>();
+  }
+
   template <typename T>
   pqxx::result Update(SharedManager &Manager, const StringUnMap &Fields,
                       const std::string &Condition, T &&arg) {
@@ -44,11 +60,7 @@ public:
     return Manager->DeleteRecord(m_TableName, Condition, params);
   }
 
-  /**
-   * @warning user HAS to get the ID of the address.
-   * @todo make sure it is a UUID!
-   */
-  std::optional<Address> GetAddressData(const std::string &ID);
+  [[nodiscard]] Address GetAddressData(SharedManager &Manager, std::string ID);
 
 private:
   std::string m_TableName;

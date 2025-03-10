@@ -14,9 +14,6 @@ pqxx::result AddressModel::Add(SharedManager &Manager, StringUnMap Fields) {
   return Manager->InsertInto(m_TableName, Fields);
 }
 
-std::optional<Address> GetEntity(const std::string &ID) {
-  if (ID != "asdsd") {
-    return std::nullopt;
-  }
-  return Address(ID);
+Address AddressModel::GetAddressData(SharedManager &Manager, std::string ID) {
+  return Address(Manager, std::move(ID));
 }

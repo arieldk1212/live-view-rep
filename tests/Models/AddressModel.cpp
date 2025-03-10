@@ -1,6 +1,7 @@
 #include "../../inc/Models/AddressModel.h"
 #include "../../inc/Config/DatabasePool.h"
 #include "../Test.h"
+#include <gtest/gtest.h>
 
 class AddressModelTest : public ::testing::Test {
 protected:
@@ -104,4 +105,29 @@ TEST_F(AddressModelTest, AddressPerformanceTest) {
   }
 
   EXPECT_EQ(1, 1);
+}
+
+TEST_F(AddressModelTest, AddressAddressTest) {
+  AddressModel Address;
+  Address.Add(Manager,
+              {{"addressname", "hamaasdasdasdasd"}, {"addressnumber", "18"}});
+
+  auto AddressID = Address.GetAddressID(Manager, "hamaasdasdasdasd", "18");
+  EXPECT_EQ(AddressID.length(), 36);
+
+  auto ValidAddress = Address.GetAddressData(Manager, AddressID);
+  EXPECT_EQ(ValidAddress.GetIDQuery(), AddressID);
+  EXPECT_EQ(ValidAddress.GetAddressData(), "{test1,test2}");
+  EXPECT_EQ(ValidAddress.GetAddressName(), "hamaasdasdasdasd");
+
+  EXPECT_THROW({ Address.GetAddressData(Manager, "123123"); }, std::exception);
+  EXPECT_THROW(
+      { Address.GetAddressData(Manager, "asdasdasd123123"); }, std::exception);
+  EXPECT_THROW(
+      { Address.GetAddressData(Manager, "asdasdasd"); }, std::exception);
+  EXPECT_THROW(
+      {
+        Address.GetAddressData(Manager, "8f22xxxx-axx3-xxaa-a1x9-4x851xx8fxf5");
+      },
+      std::exception);
 }
