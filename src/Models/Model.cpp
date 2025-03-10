@@ -8,7 +8,8 @@ Schemes::Schemes() {
        DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
       {"addressnumber",
        DatabaseCommandToString(DatabaseFieldCommands::IntField)},
-      {"entities", DatabaseCommandToString(DatabaseFieldCommands::TextArray)}};
+      {"addressdata",
+       DatabaseCommandToString(DatabaseFieldCommands::TextArray)}};
 
   m_Schemes["Address"] = AddressScheme;
 }

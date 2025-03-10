@@ -16,13 +16,11 @@ public:
 
   [[nodiscard]] const std::string &GetTableName() const { return m_TableName; }
 
-  pqxx::result Add(std::shared_ptr<DatabaseManager> &Manager,
-                   StringUnMap Fields);
+  pqxx::result Add(SharedManager &Manager, StringUnMap Fields);
 
   template <typename T>
-  pqxx::result Update(std::shared_ptr<DatabaseManager> &Manager,
-                      const StringUnMap &Fields, const std::string &Condition,
-                      T &&arg) {
+  pqxx::result Update(SharedManager &Manager, const StringUnMap &Fields,
+                      const std::string &Condition, T &&arg) {
     pqxx::params params;
     if (Fields.size() == 1) {
       auto field = Fields.begin();
@@ -39,14 +37,18 @@ public:
   }
 
   template <typename T>
-  pqxx::result Delete(std::shared_ptr<DatabaseManager> &Manager,
-                      const std::string &Condition, T &&arg) {
+  pqxx::result Delete(SharedManager &Manager, const std::string &Condition,
+                      T &&arg) {
     pqxx::params params;
     params.append(std::forward<T>(arg));
     return Manager->DeleteRecord(m_TableName, Condition, params);
   }
 
-  std::optional<Address> GetEntity(const std::string &Condition);
+  /**
+   * @warning user HAS to get the ID of the address.
+   * @todo make sure it is a UUID!
+   */
+  std::optional<Address> GetAddressData(const std::string &ID);
 
 private:
   std::string m_TableName;

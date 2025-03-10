@@ -8,9 +8,15 @@ AddressModel::~AddressModel() {
   APP_CRITICAL("ADDRESS MODEL RESOURCE DESTROYED");
 }
 
-pqxx::result AddressModel::Add(std::shared_ptr<DatabaseManager> &Manager,
-                               StringUnMap Fields) {
-  Fields.emplace("entities", "{test1, test2}");
+pqxx::result AddressModel::Add(SharedManager &Manager, StringUnMap Fields) {
+  Fields.emplace("addressdata", "{test1, test2}");
 
   return Manager->InsertInto(m_TableName, Fields);
+}
+
+std::optional<Address> GetEntity(const std::string &ID) {
+  if (ID != "asdsd") {
+    return std::nullopt;
+  }
+  return Address(ID);
 }

@@ -11,7 +11,6 @@
 #include <type_traits>
 #include <utility>
 
-using StringUnMap = std::unordered_map<std::string, std::string>;
 
 /**
  * @class DatabaseManager

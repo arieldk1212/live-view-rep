@@ -17,23 +17,25 @@
 
 /**
  * @brief address api that returns a new instance of this class with the
- * entities (db array) of a specific address,
+ * entities (db array) of a specific address, representation of the Address
+ * Block.
  */
 
 class Address {
 public:
-  explicit Address(const std::string &
-                       QueryCondition); /* condition of which address to get. */
+  explicit Address(const std::string &IDQuery); /* set the vector here */
   ~Address() = default;
 
-  const std::vector<std::string> &
-  GetEntities(const std::string &QueryCondition) const;
-  void ChangeEntities(std::shared_ptr<DatabaseManager> &Manager);
+  const std::string &GetAffiliationCondition() const {
+    return m_AddressIDQuery;
+  }
+  const std::string &GetAddressName() const { return m_AddressIDQuery; }
+  const std::vector<std::string> &GetEntities() const { return m_AddressData; }
 
 private:
   std::string m_AddressName;
-  std::string m_AddressQueryCondition;
-  std::vector<std::string> m_AddressEntities;
+  std::string m_AddressIDQuery;
+  std::vector<std::string> m_AddressData;
 };
 
 #endif

@@ -46,7 +46,7 @@ const std::unordered_map<DatabaseFieldCommands, std::string>
         {DatabaseFieldCommands::IntField, "int"},
         {DatabaseFieldCommands::CharField, "char"},
         {DatabaseFieldCommands::VarChar100Field, "varchar(100)"},
-        {DatabaseFieldCommands::UUID, "uuid DEFAULT gen_random_uuid()"},
+        {DatabaseFieldCommands::UUID, "uuid DEFAULT gen_random_uuid() unique"},
         {DatabaseFieldCommands::TextArray, "text[]"}};
 
 const std::unordered_map<DatabaseQueryCommands, std::string>
