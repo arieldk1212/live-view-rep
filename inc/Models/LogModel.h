@@ -9,9 +9,9 @@ public:
   LogModel();
   ~LogModel();
 
-  const std::string &GetTableName() const { return m_TableName; }
+  [[nodiscard]] const std::string &GetTableName() const { return m_TableName; }
 
-  pqxx::result Add(const StringUnMap &Fields);
+  pqxx::result Add(SharedManager &Manager, const StringUnMap &Fields);
 
 private:
   std::string m_TableName;

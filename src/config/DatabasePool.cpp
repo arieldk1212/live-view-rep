@@ -30,6 +30,7 @@ void DatabasePool::InitModels() {
     }
     APP_INFO("ALL MODELS TABLES CREATED IN DATABASE");
   }
+  Manager->InitTimezone();
   ReturnConnection(Manager);
 }
 

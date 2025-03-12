@@ -6,7 +6,7 @@
 #include <pqxx/pqxx>
 
 namespace Model {
-struct Schemes {
+class Schemes {
 public:
   using SchemeMap = std::unordered_map<std::string, std::string>;
 

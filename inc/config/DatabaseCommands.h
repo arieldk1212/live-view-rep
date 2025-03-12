@@ -21,6 +21,7 @@ enum class DatabaseFieldCommands : std::uint8_t {
   VarChar100Field,
   VarChar100NotNullField,
   SerialPrimaryKeyField,
+  TimestampField,
 };
 
 enum class DatabaseQueryCommands : std::uint8_t {
@@ -44,15 +45,16 @@ enum class DatabaseQueryCommands : std::uint8_t {
 
 const std::unordered_map<DatabaseFieldCommands, std::string>
     DatabaseFieldStrings = {
-        {DatabaseFieldCommands::SerialPrimaryKeyField, "serial primary key"},
+        {DatabaseFieldCommands::UUID, "uuid DEFAULT gen_random_uuid() unique"},
         {DatabaseFieldCommands::IntField, "int"},
         {DatabaseFieldCommands::IntNotNullField, "int not null"},
         {DatabaseFieldCommands::CharField, "char"},
+        {DatabaseFieldCommands::TextArray, "text[]"},
         {DatabaseFieldCommands::VarChar100Field, "varchar(100)"},
         {DatabaseFieldCommands::VarChar100NotNullField,
          "varchar(100) not null"},
-        {DatabaseFieldCommands::UUID, "uuid DEFAULT gen_random_uuid() unique"},
-        {DatabaseFieldCommands::TextArray, "text[]"}};
+        {DatabaseFieldCommands::SerialPrimaryKeyField, "serial primary key"},
+        {DatabaseFieldCommands::TimestampField, "timestamp"}};
 
 const std::unordered_map<DatabaseQueryCommands, std::string>
     DatabaseQueryCommandsStrings = {

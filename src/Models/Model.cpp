@@ -18,6 +18,19 @@ Schemes::Schemes() {
   //  DatabaseCommandToString(DatabaseFieldCommands::TextArray)}};
 
   m_Schemes["Address"] = AddressScheme;
+
+  SchemeMap LogScheme = {
+      {"logid",
+       DatabaseCommandToString(DatabaseFieldCommands::SerialPrimaryKeyField)},
+      {"logtimestamp",
+       DatabaseCommandToString(DatabaseFieldCommands::TimestampField)},
+      {"loglevel",
+       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
+       {"logmsg",
+        DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
+  };
+
+  m_Schemes["Log"] = LogScheme;
 }
 
 Schemes::SchemeMap Schemes::GetSchema(const std::string &ModelName) const {

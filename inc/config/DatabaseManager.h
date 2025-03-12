@@ -52,6 +52,11 @@ public:
   }
 
   /**
+   * @brief Inits the database timezone.
+   */
+  void InitTimezone();
+
+  /**
    * @brief  serializes the fields of the model, query preparation.
    * @param ModelFields
    * @return std::string

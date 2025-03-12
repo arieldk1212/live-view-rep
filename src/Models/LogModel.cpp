@@ -4,6 +4,8 @@ LogModel::LogModel() : m_TableName("Log") {
   APP_INFO("LOGGER MODEL RESOURCE CREATED");
 }
 
-LogModel::~LogModel() {
-  APP_CRITICAL("LOGGER MODEL RESOURCE DESTYOYED");
+LogModel::~LogModel() { APP_CRITICAL("LOGGER MODEL RESOURCE DESTYOYED"); }
+
+pqxx::result LogModel::Add(SharedManager &Manager, const StringUnMap &Fields) {
+  return Manager->InsertInto(m_TableName, Fields);
 }

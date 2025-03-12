@@ -13,6 +13,15 @@ DatabaseManager::~DatabaseManager() {
   APP_CRITICAL("DATABASE MANAGER DESTROYED");
 }
 
+void DatabaseManager::InitTimezone() {
+  try {
+    m_DatabaseManager->CrQuery("set timezone = 'Asia/Jerusalem'");
+    APP_INFO("DATABASE TIMEZONE SETTED TO - Asia/Jerusalem");
+  } catch (const std::exception &e) {
+    APP_ERROR("DATABASE TIMEZONE SET ERROR - " + std::string(e.what()));
+  }
+}
+
 std::string
 DatabaseManager::QuerySerialization(const StringUnMap &ModelFields) {
   std::string Response;
