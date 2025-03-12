@@ -14,7 +14,7 @@ pqxx::result AddressModel::Add(SharedManager &Manager, StringUnMap Fields) {
   auto Country = Fields["country"];
 
   auto ValidateAddress = Addresses::GetAddress(Address);
-  auto ValidateCountry = Countries::GetCountry(Address);
+  auto ValidateCountry = Countries::GetCountry(Country);
 
   Addresses::ValidateAddress(ValidateAddress);
   Countries::ValidateCountry(ValidateCountry);
