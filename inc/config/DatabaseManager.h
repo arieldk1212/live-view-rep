@@ -34,6 +34,8 @@ public:
   DatabaseManager(DatabaseManager &&other) noexcept = delete;
   DatabaseManager &operator=(DatabaseManager &&other) noexcept = delete;
 
+  operator bool() const { return m_IsConnected; }
+
   /**
    * @brief check the status of the database connection.
    * @return bool
