@@ -13,7 +13,8 @@
  */
 
 enum class DatabaseFieldCommands : std::uint8_t {
-  UUID,
+  UUIDUnique,
+  UUIDPrimaryKey,
   IntField,
   IntNotNullField,
   CharField,
@@ -22,6 +23,14 @@ enum class DatabaseFieldCommands : std::uint8_t {
   VarChar100NotNullField,
   SerialPrimaryKeyField,
   TimestampField,
+  LogEnumNotNullField,
+
+  AddressIDRef,
+  LogIDRef,
+
+  AddressIDRelation,
+  LogIDRelation,
+  AddressIDLogIDRelation,
 };
 
 enum class DatabaseQueryCommands : std::uint8_t {
@@ -45,7 +54,10 @@ enum class DatabaseQueryCommands : std::uint8_t {
 
 const std::unordered_map<DatabaseFieldCommands, std::string>
     DatabaseFieldStrings = {
-        {DatabaseFieldCommands::UUID, "uuid DEFAULT gen_random_uuid() unique"},
+        {DatabaseFieldCommands::UUIDUnique,
+         "uuid unique default gen_random_uuid()"},
+        {DatabaseFieldCommands::UUIDPrimaryKey,
+         "uuid primary key default gen_random_uuid()"},
         {DatabaseFieldCommands::IntField, "int"},
         {DatabaseFieldCommands::IntNotNullField, "int not null"},
         {DatabaseFieldCommands::CharField, "char"},
@@ -54,7 +66,17 @@ const std::unordered_map<DatabaseFieldCommands, std::string>
         {DatabaseFieldCommands::VarChar100NotNullField,
          "varchar(100) not null"},
         {DatabaseFieldCommands::SerialPrimaryKeyField, "serial primary key"},
-        {DatabaseFieldCommands::TimestampField, "timestamp"}};
+        {DatabaseFieldCommands::TimestampField,
+         "timestamp default current_timestamp "},
+        {DatabaseFieldCommands::LogEnumNotNullField, "log_level not null"},
+
+        {DatabaseFieldCommands::AddressIDRef, "uuid references address"},
+        {DatabaseFieldCommands::LogIDRef, "integer references log"},
+
+        {DatabaseFieldCommands::AddressIDRelation, "primary key (addressid)"},
+        {DatabaseFieldCommands::LogIDRelation, "primary key (logid)"},
+        {DatabaseFieldCommands::AddressIDLogIDRelation,
+         "primary key (addressid, logid)"}};
 
 const std::unordered_map<DatabaseQueryCommands, std::string>
     DatabaseQueryCommandsStrings = {

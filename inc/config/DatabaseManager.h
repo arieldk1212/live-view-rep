@@ -57,6 +57,11 @@ public:
   void InitTimezone();
 
   /**
+   * @brief Inits the logleves enum in database.
+   */
+  void InitLogLevel();
+
+  /**
    * @brief  serializes the fields of the model, query preparation.
    * @param ModelFields
    * @return std::string
