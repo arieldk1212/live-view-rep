@@ -25,16 +25,16 @@ Schemes::Schemes() {
       {"loglevel",
        DatabaseCommandToString(DatabaseFieldCommands::LogEnumNotNullField)},
       {"logmsg",
-       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)}};
+       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
+      {"addressid",
+       DatabaseCommandToString(DatabaseFieldCommands::AddressIDRef)}};
   m_Schemes["Log"] = LogScheme;
 
-  SchemeMap AddressLogScheme = {
-      {"addressid",
-       DatabaseCommandToString(DatabaseFieldCommands::AddressIDRef)},
-      {"logid", DatabaseCommandToString(DatabaseFieldCommands::LogIDRef)},
-      {"level",
-       DatabaseCommandToString(DatabaseFieldCommands::LogEnumNotNullField)}};
-  m_Schemes["AddressLog"] = AddressLogScheme;
+  // SchemeMap AddressLogScheme = {
+
+  //     {"level",
+  //      DatabaseCommandToString(DatabaseFieldCommands::LogEnumNotNullField)}};
+  // m_Schemes["AddressLog"] = AddressLogScheme;
 }
 
 Schemes::SchemeMap Schemes::GetSchema(const std::string &ModelName) const {

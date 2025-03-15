@@ -63,6 +63,7 @@ int main() {
     UniqueAddress->Delete(ManagerConnection, "addressnumber", 20);
 
     ManagerConnection->RemoveModel(UniqueAddress->GetTableName());
+    ManagerConnection->RemoveModel("Log");
 
     Pool.ReturnConnection(ManagerConnection);
   }

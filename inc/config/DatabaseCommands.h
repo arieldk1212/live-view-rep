@@ -70,8 +70,10 @@ const std::unordered_map<DatabaseFieldCommands, std::string>
          "timestamp default current_timestamp "},
         {DatabaseFieldCommands::LogEnumNotNullField, "log_level not null"},
 
-        {DatabaseFieldCommands::AddressIDRef, "uuid references address"},
-        {DatabaseFieldCommands::LogIDRef, "integer references log"},
+        {DatabaseFieldCommands::AddressIDRef,
+         "uuid references address on delete cascade"},
+        {DatabaseFieldCommands::LogIDRef,
+         "integer references log on delete restrict"},
 
         {DatabaseFieldCommands::AddressIDRelation, "primary key (addressid)"},
         {DatabaseFieldCommands::LogIDRelation, "primary key (logid)"},
