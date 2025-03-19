@@ -17,7 +17,7 @@ Schemes::Schemes() {
        DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)}};
   m_Schemes["Address"] = AddressScheme;
 
-  SchemeMap LogScheme = {
+  SchemeMap AddressLogScheme = {
       {"addressid", "uuid"},
       {"", DatabaseCommandToString(DatabaseFieldCommands::FkAddress)},
       {"logtimestamp",
@@ -26,7 +26,7 @@ Schemes::Schemes() {
        DatabaseCommandToString(DatabaseFieldCommands::LogEnumNotNullField)},
       {"logmsg",
        DatabaseCommandToString(DatabaseFieldCommands::VarChar100NotNullField)}};
-  m_Schemes["Log"] = LogScheme;
+  m_Schemes["AddressLog"] = AddressLogScheme;
 }
 
 Schemes::SchemeMap Schemes::GetSchema(const std::string &ModelName) const {

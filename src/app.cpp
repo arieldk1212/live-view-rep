@@ -44,6 +44,7 @@ int main() {
     auto ManagerConnection = Pool.GetManagerConnection();
 
     auto UniqueAddress = Pool.GetUniqueModelConnection<AddressModel>();
+    auto UniqueAddressLog = Pool.GetUniqueModelConnection<LogModel>();
     {
       Benchmark here;
       auto Result = UniqueAddress->Add(ManagerConnection,
@@ -62,8 +63,8 @@ int main() {
                           "addressnumber", 18);
     UniqueAddress->Delete(ManagerConnection, "addressnumber", 20);
 
-    ManagerConnection->RemoveModel("Log");
-    // ManagerConnection->RemoveModel(UniqueAddress->GetTableName());
+    ManagerConnection->RemoveModel(UniqueAddressLog->GetTableName());
+    ManagerConnection->RemoveModel(UniqueAddress->GetTableName());
 
     Pool.ReturnConnection(ManagerConnection);
   }

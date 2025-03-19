@@ -25,9 +25,6 @@ enum class DatabaseFieldCommands : std::uint8_t {
   TimestampField,
   LogEnumNotNullField,
 
-  AddressIDRef,
-  LogIDRef,
-
   FkAddress,
 };
 
@@ -67,13 +64,9 @@ const std::unordered_map<DatabaseFieldCommands, std::string>
          "timestamp default current_timestamp "},
         {DatabaseFieldCommands::LogEnumNotNullField, "log_level not null"},
 
-        {DatabaseFieldCommands::AddressIDRef,
-         "uuid not null references address on delete cascade"},
-        {DatabaseFieldCommands::LogIDRef,
-         "integer references log on delete restrict"},
         {DatabaseFieldCommands::FkAddress,
          "constraint fkaddress foreign key (addressid) references "
-         "address(addressid)"}};
+         "address(addressid) on delete cascade"}};
 
 const std::unordered_map<DatabaseQueryCommands, std::string>
     DatabaseQueryCommandsStrings = {
