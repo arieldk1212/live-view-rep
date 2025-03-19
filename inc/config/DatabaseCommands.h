@@ -13,7 +13,7 @@
  */
 
 enum class DatabaseFieldCommands : std::uint8_t {
-  UUIDUnique,
+  PrimaryKey,
   UUIDPrimaryKey,
   IntField,
   IntNotNullField,
@@ -28,9 +28,7 @@ enum class DatabaseFieldCommands : std::uint8_t {
   AddressIDRef,
   LogIDRef,
 
-  AddressIDRelation,
-  LogIDRelation,
-  AddressIDLogIDRelation,
+  FkAddress,
 };
 
 enum class DatabaseQueryCommands : std::uint8_t {
@@ -54,8 +52,7 @@ enum class DatabaseQueryCommands : std::uint8_t {
 
 const std::unordered_map<DatabaseFieldCommands, std::string>
     DatabaseFieldStrings = {
-        {DatabaseFieldCommands::UUIDUnique,
-         "uuid unique default gen_random_uuid()"},
+        {DatabaseFieldCommands::PrimaryKey, "primary key"},
         {DatabaseFieldCommands::UUIDPrimaryKey,
          "uuid primary key default gen_random_uuid()"},
         {DatabaseFieldCommands::IntField, "int"},
@@ -71,14 +68,12 @@ const std::unordered_map<DatabaseFieldCommands, std::string>
         {DatabaseFieldCommands::LogEnumNotNullField, "log_level not null"},
 
         {DatabaseFieldCommands::AddressIDRef,
-         "uuid references address on delete cascade"},
+         "uuid not null references address on delete cascade"},
         {DatabaseFieldCommands::LogIDRef,
          "integer references log on delete restrict"},
-
-        {DatabaseFieldCommands::AddressIDRelation, "primary key (addressid)"},
-        {DatabaseFieldCommands::LogIDRelation, "primary key (logid)"},
-        {DatabaseFieldCommands::AddressIDLogIDRelation,
-         "primary key (addressid, logid)"}};
+        {DatabaseFieldCommands::FkAddress,
+         "constraint fkaddress foreign key (addressid) references "
+         "address(addressid)"}};
 
 const std::unordered_map<DatabaseQueryCommands, std::string>
     DatabaseQueryCommandsStrings = {
