@@ -17,6 +17,17 @@ Schemes::Schemes() {
        DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)}};
   m_Schemes["Address"] = AddressScheme;
 
+  SchemeMap LogScheme = {
+      {"logid",
+       DatabaseCommandToString(DatabaseFieldCommands::SerialPrimaryKeyField)},
+      {"logtimestamp",
+       DatabaseCommandToString(DatabaseFieldCommands::TimestampField)},
+      {"loglevel",
+       DatabaseCommandToString(DatabaseFieldCommands::LogEnumNotNullField)},
+      {"logmsg",
+       DatabaseCommandToString(DatabaseFieldCommands::VarChar100NotNullField)}};
+  m_Schemes["Log"] = LogScheme;
+
   SchemeMap AddressLogScheme = {
       {"addressid", "uuid"},
       {"", DatabaseCommandToString(DatabaseFieldCommands::FkAddress)},
