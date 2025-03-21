@@ -18,7 +18,7 @@ struct CountryHeader {
  * @param CountryName
  * @return const CountryHeader
  */
-inline const CountryHeader GetCountry(const std::string &CountryName) {
+inline CountryHeader GetCountry(const std::string &CountryName) {
   return std::move(Common::GetHeader<CountryHeader>(CountryName));
 }
 

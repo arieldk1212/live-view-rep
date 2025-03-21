@@ -66,7 +66,7 @@ const std::unordered_map<DatabaseFieldCommands, std::string>
 
         {DatabaseFieldCommands::FkAddress,
          "constraint fkaddress foreign key (addressid) references "
-         "address(addressid) on delete cascade"}};
+         "address(addressid) on delete set null"}};
 
 const std::unordered_map<DatabaseQueryCommands, std::string>
     DatabaseQueryCommandsStrings = {

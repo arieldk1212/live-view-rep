@@ -45,16 +45,22 @@ int main() {
 
     auto UniqueAddress = Pool.GetUniqueModelConnection<AddressModel>();
     auto UniqueAddressLog = Pool.GetUniqueModelConnection<AddressLogModel>();
-    {
-      Benchmark here;
-      auto Result = UniqueAddress->Add(ManagerConnection,
-                                       {{"addressname", "hamaasdasdasdasd"},
-                                        {"addressnumber", "18"},
-                                        {"addresscity", "holon"},
-                                        {"addressdistrict", "center"},
-                                        {"country", "israel"}});
-    }
+    auto UniqueLog = Pool.GetUniqueModelConnection<LogModel>();
+
+    auto Result = UniqueAddress->Add(ManagerConnection,
+                                     {{"addressname", "hamaasdasdasdasd"},
+                                      {"addressnumber", "18"},
+                                      {"addresscity", "holon"},
+                                      {"addressdistrict", "center"},
+                                      {"country", "israel"}});
+
+    auto AddressID = UniqueAddress->GetAddressID(ManagerConnection,
+                                                 "hamaasdasdasdasd", "18");
+
     /** @brief if used by lvalue, move it to .Add function.  */
+    UniqueAddressLog->GetModel()->Add(
+        ManagerConnection,
+        {{"addressid", AddressID}, {"loglevel", "DEBUG"}, {"logmsg", "test"}});
 
     UniqueAddress->Update(ManagerConnection, {{"addressname", "holon"}},
                           "addressnumber", 18);
@@ -66,6 +72,10 @@ int main() {
     ManagerConnection->RemoveModel(
         UniqueAddressLog->GetModel()->GetTableName());
     ManagerConnection->RemoveModel(UniqueAddress->GetTableName());
+
+    UniqueLog->GetModel()->Add(
+        ManagerConnection,
+        {{"loglevel", "DEBUG"}, {"logmsg", "Test From Main"}});
 
     Pool.ReturnConnection(ManagerConnection);
   }

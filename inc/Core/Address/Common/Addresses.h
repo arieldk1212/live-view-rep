@@ -18,7 +18,7 @@ struct AddressHeader {
  * @param AddressName
  * @return const AddressHeader
  */
-inline const AddressHeader GetAddress(const std::string &AddressName) {
+inline AddressHeader GetAddress(const std::string &AddressName) {
   return std::move(Common::GetHeader<AddressHeader>(AddressName));
 }
 
