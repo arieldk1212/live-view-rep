@@ -1,9 +1,10 @@
 #ifndef ADDRESS_MODEL_H
 #define ADDRESS_MODEL_H
 
-#include "../Core/Address/Address.h"
-#include "../Core/Address/Common/Addresses.h"
-#include "../Core/Address/Common/Countries.h"
+#include "BaseLogModel.h"
+#include "Core/Address/Address.h"
+#include "Core/Address/Common/Addresses.h"
+#include "Core/Address/Common/Countries.h"
 #include "Model.h"
 
 class AddressModel final {
@@ -55,18 +56,35 @@ public:
   pqxx::result Update(SharedManager &Manager, const StringUnMap &Fields,
                       const std::string &Condition, T &&arg) {
     pqxx::params params;
+    /** @todo need to add another addressid function, here we change the address
+     * name but need to get the old one to make it happen */
+    AddressLogModel AddressLog;
+    auto Address = Fields.at("addressname");
+    auto AddressNumber = std::to_string(arg);
+    auto AddressID = GetAddressID(Manager, Address, AddressNumber);
+
     if (Fields.size() == 1) {
       auto field = Fields.begin();
       params.append(field->second);
       params.append(std::forward<T>(arg));
-      return Manager->UpdateColumn(m_TableName, field->first, Condition,
-                                   params);
+      auto Result =
+          Manager->UpdateColumn(m_TableName, field->first, Condition, params);
+      std::string LogMsg = "Address Data Updated For - " + Address + " " +
+                           AddressNumber + ", Old - " + field->second;
+      // AddressLog.GetModel()->Add(
+      //     Manager,
+      //     {{"addressid", AddressID}, {"loglevel", "INFO"}, {"logmsg",
+      //     LogMsg}});
+      return Result;
     }
+
     for (const auto &[key, value] : Fields) {
       params.append(value);
     }
     params.append(std::forward<T>(arg));
-    return Manager->UpdateColumns(m_TableName, Fields, Condition, params);
+    auto Result =
+        Manager->UpdateColumns(m_TableName, Fields, Condition, params);
+    return Result;
   }
 
   /**

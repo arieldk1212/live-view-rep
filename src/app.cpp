@@ -8,7 +8,7 @@
  * maybe instead of main have a function that starts the threading or dbpool,
  * make it a library. communicate with the swift with grpc? graphql? what to
  * choose?? (probably pool for saving and limiting actions). for now act as a
- * int main() appliaction until we reach that bridge..
+ * int main() application until we reach that bridge..
  */
 
 int main() {
@@ -17,6 +17,7 @@ int main() {
    * @warning when not in build, debug is in build/src
    * therefore the debugger is in /build/src, the terminal also needs
    * to be there to run without path errors.
+   * @attention cmake location is in build/src
    */
   std::filesystem::path ConfigPath = "../../configs/config.json";
 
@@ -50,32 +51,33 @@ int main() {
     auto Result = UniqueAddress->Add(ManagerConnection,
                                      {{"addressname", "hamaasdasdasdasd"},
                                       {"addressnumber", "18"},
-                                      {"addresscity", "holon"},
+                                      {"addresscity", "city"},
                                       {"addressdistrict", "center"},
-                                      {"country", "israel"}});
-
-    auto AddressID = UniqueAddress->GetAddressID(ManagerConnection,
-                                                 "hamaasdasdasdasd", "18");
+                                      {"country", "ctr"}});
 
     /** @brief if used by lvalue, move it to .Add function.  */
-    UniqueAddressLog->GetModel()->Add(
-        ManagerConnection,
-        {{"addressid", AddressID}, {"loglevel", "DEBUG"}, {"logmsg", "test"}});
+    auto AddressID = UniqueAddress->GetAddressID(ManagerConnection,
+                                                 "hamaasdasdasdasd", "18");
+    // UniqueAddressLog->GetModel()->Add(
+    //     ManagerConnection,
+    //     {{"addressid", AddressID}, {"loglevel", "DEBUG"}, {"logmsg",
+    //     "test"}});
 
-    UniqueAddress->Update(ManagerConnection, {{"addressname", "holon"}},
+    UniqueAddress->Update(ManagerConnection, {{"addressname", "cityyy"}},
                           "addressnumber", 18);
     UniqueAddress->Update(ManagerConnection,
                           {{"addressname", "hn"}, {"addressnumber", "20"}},
                           "addressnumber", 18);
     UniqueAddress->Delete(ManagerConnection, "addressnumber", 20);
 
-    ManagerConnection->RemoveModel(
-        UniqueAddressLog->GetModel()->GetTableName());
-    ManagerConnection->RemoveModel(UniqueAddress->GetTableName());
-
     UniqueLog->GetModel()->Add(
         ManagerConnection,
         {{"loglevel", "DEBUG"}, {"logmsg", "Test From Main"}});
+
+    ManagerConnection->RemoveModel(
+        UniqueAddressLog->GetModel()->GetTableName());
+    ManagerConnection->RemoveModel(UniqueAddress->GetTableName());
+    ManagerConnection->RemoveModel(UniqueLog->GetModel()->GetTableName());
 
     Pool.ReturnConnection(ManagerConnection);
   }
