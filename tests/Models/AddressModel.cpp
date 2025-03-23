@@ -47,7 +47,7 @@ TEST_F(AddressModelTest, AddressAddRecordTest) {
   auto PreData = ManagerConnection->GetModelData("Address");
   Address->Add(ManagerConnection, {{"addressname", "hamaasdasdasdasd"},
                                    {"addressnumber", "18"},
-                                   {"addresscity", "holon"},
+                                   {"addresscity", "lol"},
                                    {"addressdistrict", "center"},
                                    {"country", "israel"}});
   auto PostData = ManagerConnection->GetModelData("Address");
@@ -59,13 +59,13 @@ TEST_F(AddressModelTest, AddressUpdateColumnRecordTest) {
   auto Address = Pool->GetUniqueModelConnection<AddressModel>();
   Address->Add(ManagerConnection, {{"addressname", "hamaasdasdasdasd"},
                                    {"addressnumber", "18"},
-                                   {"addresscity", "holon"},
+                                   {"addresscity", "lol"},
                                    {"addressdistrict", "center"},
                                    {"country", "israel"}});
 
   auto PreData = ManagerConnection->GetModelData("Address");
-  Address->Update(ManagerConnection, {{"addressname", "holon"}},
-                  "addressnumber", 18);
+  Address->Update(ManagerConnection, {{"addressname", "lol"}}, "addressnumber",
+                  18);
   auto PostData = ManagerConnection->GetModelData("Address");
 
   EXPECT_NE(PreData, PostData);
@@ -75,13 +75,13 @@ TEST_F(AddressModelTest, AddressUpdateColumnsRecordTest) {
   auto Address = Pool->GetUniqueModelConnection<AddressModel>();
   Address->Add(ManagerConnection, {{"addressname", "hamaasdasdasdasd"},
                                    {"addressnumber", "18"},
-                                   {"addresscity", "holon"},
+                                   {"addresscity", "lol"},
                                    {"addressdistrict", "center"},
                                    {"country", "israel"}});
 
   auto PreData = ManagerConnection->GetModelData("Address");
   Address->Update(ManagerConnection,
-                  {{"addressname", "holon"}, {"addressnumber", "20"}},
+                  {{"addressname", "lol"}, {"addressnumber", "20"}},
                   "addressnumber", 18);
   auto PostData = ManagerConnection->GetModelData("Address");
 
@@ -92,7 +92,7 @@ TEST_F(AddressModelTest, AddressDeleteRecordTest) {
   auto Address = Pool->GetUniqueModelConnection<AddressModel>();
   Address->Add(ManagerConnection, {{"addressname", "hamaasdasdasdasd"},
                                    {"addressnumber", "18"},
-                                   {"addresscity", "holon"},
+                                   {"addresscity", "lol"},
                                    {"addressdistrict", "center"},
                                    {"country", "israel"}});
 
@@ -114,7 +114,7 @@ TEST_F(AddressModelTest, AddressPerformanceTest) {
     for (int i = 0; i < LOOPS; i++) {
       Address->Add(ManagerConnection, {{"addressname", "hamaasdasdasdasd"},
                                        {"addressnumber", "18"},
-                                       {"addresscity", "holon"},
+                                       {"addresscity", "lol"},
                                        {"addressdistrict", "center"},
                                        {"country", "israel"}});
     }
@@ -127,7 +127,7 @@ TEST_F(AddressModelTest, AddressAddressTest) {
   auto Address = Pool->GetUniqueModelConnection<AddressModel>();
   Address->Add(ManagerConnection, {{"addressname", "hamaasdasdasdasd"},
                                    {"addressnumber", "18"},
-                                   {"addresscity", "holon"},
+                                   {"addresscity", "lol"},
                                    {"addressdistrict", "center"},
                                    {"country", "israel"}});
 
@@ -141,7 +141,7 @@ TEST_F(AddressModelTest, AddressAddressTest) {
   EXPECT_EQ(ValidAddress["addressid"], AddressID);
   EXPECT_EQ(ValidAddress["addressname"], "hamaasdasdasdasd");
   EXPECT_EQ(ValidAddress["addressnumber"], "18");
-  EXPECT_EQ(ValidAddress["addresscity"], "holon");
+  EXPECT_EQ(ValidAddress["addresscity"], "lol");
   EXPECT_EQ(ValidAddress["addressdistrict"], "center");
   EXPECT_EQ(ValidAddress["country"], "israel");
 }

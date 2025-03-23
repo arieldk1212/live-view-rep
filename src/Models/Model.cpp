@@ -14,9 +14,9 @@ Schemes::Schemes() {
       {"addressdistrict",
        DatabaseCommandToString(DatabaseFieldCommands::VarChar100NotNullField)},
       {"country",
-       DatabaseCommandToString(DatabaseFieldCommands::VarChar100NotNullField)},
-      {"addressfullname",
-       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)}};
+       DatabaseCommandToString(DatabaseFieldCommands::VarChar100NotNullField)}};
+  // {"addressfullname",
+  //  DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)}};
   m_Schemes["Address"] = AddressScheme;
 
   SchemeMap LogScheme = {
