@@ -1,4 +1,4 @@
-#include "../../inc/Models/AddressModel.h"
+#include "Models/AddressModel.h"
 
 AddressModel::AddressModel() : m_TableName("Address") {
   APP_INFO("ADDRESS MODEL RESOURCE CREATED");
@@ -11,7 +11,6 @@ AddressModel::~AddressModel() {
 pqxx::result AddressModel::Add(SharedManager &Manager, StringUnMap Fields) {
   auto Country = Fields.at("country");
   auto Address = Fields.at("addressname");
-  auto AddressNumber = Fields.at("addressnumber");
 
   auto ValidateAddress = Addresses::GetAddress(Address);
   auto ValidateCountry = Countries::GetCountry(Country);
@@ -20,6 +19,9 @@ pqxx::result AddressModel::Add(SharedManager &Manager, StringUnMap Fields) {
   Countries::ValidateCountry(ValidateCountry);
 
   if (!ValidateAddress && !ValidateCountry) {
+    /**
+     * @attention in frontend, check for result validation with try.
+     */
     return {};
   }
 
@@ -28,17 +30,11 @@ pqxx::result AddressModel::Add(SharedManager &Manager, StringUnMap Fields) {
    * null as default) with the correct fields, shortname/fullname. maybe even
    * do the same for the number? city? or maybe mix them all up together?
    */
-  AddressLogModel AddressLog;
 
-  auto Result = Manager->InsertInto(m_TableName, Fields);
-  auto AddressID = GetAddressID(Manager, Address, AddressNumber);
+  // Fields.at("addressfullname") = ValidateAddress.FullAddress;
+  // Fields.at("country") = ValidateCountry.FullCountry;
 
-  std::string LogMsg = "Address Created For - " + Address + " " + AddressNumber;
-  AddressLog.GetModel()->Add(
-      Manager,
-      {{"addressid", AddressID}, {"loglevel", "INFO"}, {"logmsg", LogMsg}});
-
-  return Result;
+  return Manager->InsertInto(m_TableName, Fields);
 }
 
 Address AddressModel::GetAddressData(SharedManager &Manager,

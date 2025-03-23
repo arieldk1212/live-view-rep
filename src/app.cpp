@@ -58,10 +58,9 @@ int main() {
     /** @brief if used by lvalue, move it to .Add function.  */
     auto AddressID = UniqueAddress->GetAddressID(ManagerConnection,
                                                  "hamaasdasdasdasd", "18");
-    // UniqueAddressLog->GetModel()->Add(
-    //     ManagerConnection,
-    //     {{"addressid", AddressID}, {"loglevel", "DEBUG"}, {"logmsg",
-    //     "test"}});
+    UniqueAddressLog->GetModel()->Add(
+        ManagerConnection,
+        {{"addressid", AddressID}, {"loglevel", "DEBUG"}, {"logmsg", "test"}});
 
     UniqueAddress->Update(ManagerConnection, {{"addressname", "cityyy"}},
                           "addressnumber", 18);
