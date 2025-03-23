@@ -1,8 +1,9 @@
-#include "../inc/App.h"
+#include "App.h"
+#include "Models/LocationModel.h"
 
 /**
  * @attention
- * this acts as the frontend of the application in "swift".
+ * this acts as the frontend of the application in swift.
  * in this main function we demonstrate how the backend's api is being held.
  * further tests will be run here.
  * maybe instead of main have a function that starts the threading or dbpool,
@@ -38,6 +39,9 @@ int main() {
   {
     Benchmark Here;
 
+    /**
+     * @attention should be a shared ptr
+     */
     DatabasePool Pool{std::move(DatabaseConnectionString)};
 
     Pool.InitModels();
@@ -47,6 +51,8 @@ int main() {
     auto UniqueAddress = Pool.GetUniqueModelConnection<AddressModel>();
     auto UniqueAddressLog = Pool.GetUniqueModelConnection<AddressLogModel>();
     auto UniqueLog = Pool.GetUniqueModelConnection<LogModel>();
+    auto UniqueAddressLocation =
+        Pool.GetUniqueModelConnection<AddressLocationModel>();
 
     auto Result = UniqueAddress->Add(ManagerConnection,
                                      {{"addressname", "hamaasdasdasdasd"},
@@ -55,9 +61,9 @@ int main() {
                                       {"addressdistrict", "center"},
                                       {"country", "ctr"}});
 
-    /** @brief if used by lvalue, move it to .Add function.  */
     auto AddressID = UniqueAddress->GetAddressID(ManagerConnection,
                                                  "hamaasdasdasdasd", "18");
+    /** @brief if used by lvalue, move it to "Add" function.  */
     UniqueAddressLog->GetModel()->Add(
         ManagerConnection,
         {{"addressid", AddressID}, {"loglevel", "DEBUG"}, {"logmsg", "test"}});
@@ -67,6 +73,30 @@ int main() {
     UniqueAddress->Update(ManagerConnection,
                           {{"addressname", "hn"}, {"addressnumber", "20"}},
                           "addressnumber", 18);
+    /**
+     * @brief this illustrated how to add an address location.
+    Geolocation AddressLocation{35.652832, 139.839478};
+    ManagerConnection->InsertInto(
+        "AddressLocation",
+        {{"addressid", AddressID},
+         {"latitude", std::to_string(AddressLocation.GetCoordinates().first)},
+         {"longitude", std::to_string(AddressLocation.GetCoordinates().second)},
+         {"pluscode", AddressLocation.GetPlusCode()}});
+    */
+    /**
+     * @todo where will it get the coordinates from? when will it be
+     * constructed?
+     * @todo test the LocationModel.h.. finish implementing and figuring out the
+     * solution.
+     */
+    Geolocation AddressLocation{35.652832, 139.839478};
+    UniqueAddressLocation->GetModel()->Add(
+        ManagerConnection,
+        {{"addressid", AddressID},
+         {"latitude", std::to_string(AddressLocation.GetCoordinates().first)},
+         {"longitude", std::to_string(AddressLocation.GetCoordinates().second)},
+         {"pluscode", AddressLocation.GetPlusCode()}});
+
     UniqueAddress->Delete(ManagerConnection, "addressnumber", 20);
 
     UniqueLog->GetModel()->Add(
@@ -75,6 +105,8 @@ int main() {
 
     ManagerConnection->RemoveModel(
         UniqueAddressLog->GetModel()->GetTableName());
+    ManagerConnection->RemoveModel(
+        UniqueAddressLocation->GetModel()->GetTableName());
     ManagerConnection->RemoveModel(UniqueAddress->GetTableName());
     ManagerConnection->RemoveModel(UniqueLog->GetModel()->GetTableName());
 
