@@ -26,14 +26,14 @@ private:
 
 class AddressLocationModel {
 public:
-  AddressLocationModel(double Lat, double Long);
+  AddressLocationModel();
   ~AddressLocationModel() = default;
 
   std::unique_ptr<LocationModel> &GetModel() { return Model; }
 
 private:
   std::unique_ptr<LocationModel> Model;
-  Geolocation ModelLocation;
+  // Geolocation ModelLocation;
 };
 
 #endif
