@@ -26,10 +26,12 @@ Geolocation::Geolocation(double Latitude, double Longitude)
 }
 
 std::string Geolocation::GetPlusCode() const { return m_PlusCode; }
+
 std::string Geolocation::GetCoordinatesString() const {
   return "Latitude: " + std::to_string(m_Latitude) +
          " Longitude: " + std::to_string(m_Longitude);
 }
+
 std::pair<double, double> Geolocation::GetCoordinates() const {
   return {m_Latitude, m_Longitude};
 }
