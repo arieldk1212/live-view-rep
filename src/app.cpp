@@ -85,6 +85,8 @@ int main() {
     /**
      * @todo where will it get the coordinates from? when will it be
      * constructed? -> probably third-party api (google?).
+     * the coordiantes will probably get inputted from apple's device via
+     * frontend.
      * @todo test the LocationModel.h.. finish implementing and figuring out the
      * solution.
      */
