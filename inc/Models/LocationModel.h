@@ -6,7 +6,7 @@
 #include "Model.h"
 
 /**
- * @todo add Geolocation instance inside? when do i get the coordinates from?
+ * @todo add Geolocation instance inside? where do i get the coordinates from?
  * test it.
  * @todo when will it be constructed?
  */
