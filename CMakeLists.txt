@@ -22,13 +22,16 @@ find_package(OpenSSL REQUIRED)
 find_package(PostgreSQL REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
 find_package(libpqxx CONFIG REQUIRED)
+find_package(aws-c-s3 CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
+
 
 list(APPEND project_libraries
 OpenSSL::SSL
 OpenSSL::Crypto
 libpqxx::pqxx
 PostgreSQL::PostgreSQL
+AWS::aws-c-s3
 spdlog::spdlog
 nlohmann_json::nlohmann_json
 )

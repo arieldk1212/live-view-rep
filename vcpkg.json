@@ -5,6 +5,7 @@
     "libpqxx",
     "nlohmann-json",
     "openssl",
-    "spdlog"
+    "spdlog",
+    "aws-c-s3"
   ]
 }
