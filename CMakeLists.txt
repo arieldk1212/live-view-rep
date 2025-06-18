@@ -12,8 +12,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g") # g for lldb help
 set(PostgreSQL_ADDITIONAL_VERSIONS "17")
 
 if (APPLE)
-  set(CMAKE_TOOLCHAIN_FILE "/Users/$ENV{USER}/Library/vcpkg/scripts/buildsystems/vcpkg.cmake")
-  set(CMAKE_PREFIX_PATH "/Users/$ENV{USER}/Library/vcpkg/installed/arm64-osx/share")
+  set(CMAKE_TOOLCHAIN_FILE "/Users/$ENV{USER}/vcpkg/scripts/buildsystems/vcpkg.cmake")
+  set(CMAKE_PREFIX_PATH "/Users/$ENV{USER}/vcpkg/installed/arm64-osx/share")
 endif()
 
 include_directories(inc)

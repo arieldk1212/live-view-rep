@@ -1,4 +1,4 @@
-#include "../../inc/Config/Config.h"
+#include "Config/Config.h"
 
 Json Config::ReadFile(const std::filesystem::path &Path) {
   try {
