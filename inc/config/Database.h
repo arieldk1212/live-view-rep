@@ -71,8 +71,8 @@ private:
       return {};
     }
     try {
-      return m_DatabaseNonTransaction.exec_params(Query,
-                                                  std::forward<Args>(args)...);
+      return m_DatabaseNonTransaction.exec(
+          Query, pqxx::params(std::forward<Args>(args)...));
     } catch (const std::exception &e) {
       APP_ERROR("CRQUERY(PF) - QUERY EXECUTION ERROR - " +
                 std::string(e.what()));
