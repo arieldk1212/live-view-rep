@@ -13,8 +13,8 @@
     { "name": "libpq", "version": "16.9" },
     { "name": "nlohmann-json", "version": "3.12.0" },
     { "name": "spdlog", "version": "1.15.3" },
-    { "name": "openssl", "version": "3.5.0", "port-version": "1" },
+    { "name": "openssl", "version": "3.5.0", "port-version": 1 },
     { "name": "aws-c-s3", "version": "0.7.13" },
-    { "name": "gtest", "version": "1.17.0", "port-version": "1" }
+    { "name": "gtest", "version": "1.17.0", "port-version": 1 }
   ]
 }
