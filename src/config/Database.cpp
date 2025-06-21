@@ -1,8 +1,9 @@
-#include "../../inc/Config/Database.h"
+#include "Config/Database.h"
 
-DatabaseConnection::DatabaseConnection(const std::string &ConnectionString)
+DatabaseConnection::DatabaseConnection(
+    const std::string &ConnectionString) noexcept
     : m_DatabaseConnection{ConnectionString},
-      m_DatabaseNonTransaction(m_DatabaseConnection) {
+      m_DatabaseNonTransaction{m_DatabaseConnection} {
   APP_INFO("DATABASE CONNECTION CREATED");
 }
 
@@ -11,12 +12,7 @@ DatabaseConnection::~DatabaseConnection() {
   APP_CRITICAL("DATABASE CONNECTION CLOSED");
 }
 
-bool DatabaseConnection::IsDatabaseConnected() {
-  return m_DatabaseConnection.is_open();
-}
-
 pqxx::result DatabaseConnection::CrQuery(const std::string &Query) {
-  std::lock_guard<std::mutex> lock(m_DatabaseMutex);
   if (!IsDatabaseConnected()) {
     APP_ERROR("CRQUERY - QUERY ERROR - DATABASE CONNECTION ERROR");
     return {};
@@ -29,11 +25,19 @@ pqxx::result DatabaseConnection::CrQuery(const std::string &Query) {
   }
 }
 
-// pqxx::result DatabaseConnection::UQuery(const std::string &Query) {
-//   if (IsDatabaseConnected()) {
-//     auto Result = m_DatabaseWorker.exec(Query);
-//     m_DatabaseWorker.commit();
-//     return Result;
-//   }
-//   return {};
-// }
+pqxx::result DatabaseConnection::WQuery(const std::string &Query) {
+  if (!IsDatabaseConnected()) {
+    APP_ERROR("WRQUERY - QUERY ERROR - DATABASE CONNECTION ERROR");
+    return {};
+  }
+  DatabaseTransaction Transaction{m_DatabaseConnection};
+  try {
+    auto Result = Transaction.exec(Query);
+    Transaction.commit();
+    return Result;
+  } catch (const std::exception &e) {
+    Transaction.abort();
+    APP_ERROR("WQUERY - QUERY EXECUTION ERROR - " + std::string(e.what()));
+    return {};
+  }
+}

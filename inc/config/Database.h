@@ -5,15 +5,31 @@
 
 #include <mutex>
 #include <pqxx/pqxx>
+#include <string_view>
 
 class DatabaseManager;
 
+using StringUnMap = std::unordered_map<std::string, std::string>;
+
+template <typename Class> using Shared = std::shared_ptr<Class>;
+using SharedManager = Shared<DatabaseManager>;
+
+template <typename ModelClass>
+using UniquePtrModel = std::unique_ptr<ModelClass>;
+
+template <typename ModelClass> using SharedPtrModel = Shared<ModelClass>;
+
+/**
+ * @warning This header file shouldn't be used directly!
+ */
 class DatabaseConnection {
-  /**
-   * @warning This header file shouldn't be used directly!
-   */
 public:
-  explicit DatabaseConnection(const std::string &ConnectionString);
+  using DatabaseTransaction =
+      pqxx::transaction<pqxx::isolation_level::read_committed,
+                        pqxx::write_policy::read_write>;
+
+public:
+  explicit DatabaseConnection(const std::string &ConnectionString) noexcept;
   ~DatabaseConnection();
 
   DatabaseConnection(const DatabaseConnection &) = delete;
@@ -22,7 +38,13 @@ public:
   DatabaseConnection(DatabaseConnection &&) noexcept = delete;
   DatabaseConnection &operator=(DatabaseConnection &&) noexcept = delete;
 
-  bool IsDatabaseConnected();
+  [[nodiscard]] inline bool IsDatabaseConnected() const {
+    return m_DatabaseConnection.is_open();
+  }
+
+  [[nodiscard]] inline std::string GetConnectionString() const {
+    return m_DatabaseConnection.connection_string();
+  }
 
 private:
   friend class DatabaseManager;
@@ -35,21 +57,41 @@ private:
    * @return pqxx::result
    */
   pqxx::result CrQuery(const std::string &Query);
+  /**
+   * @brief overload function for handling user input, improving security
+   * issues.
+   * @tparam Args
+   * @param Query
+   * @param args
+   * @return pqxx::result
+   */
+  template <typename... Args>
+  pqxx::result CrQuery(const std::string &Query, Args &&...args) {
+    if (!IsDatabaseConnected()) {
+      APP_ERROR("CRQUERY(PF) - QUERY ERROR - DATABASE CONNECTION ERROR");
+      return {};
+    }
+    try {
+      return m_DatabaseNonTransaction.exec(
+          std::string_view(Query), pqxx::params(std::forward<Args>(args)...));
+    } catch (const std::exception &e) {
+      APP_ERROR("CRQUERY(PF) - QUERY EXECUTION ERROR - " +
+                std::string(e.what()));
+      return {};
+    }
+  }
 
   /**
-   * @brief query function that's based on a transaction, via the
-   * m_DatabaseWorker, created for update and delete operetions, currently
-   * disabled due to no usage.
+   * @brief query function that's based on a base transaction, via the
+   * m_DatabaseTransaction, created for write and update operations.
    * @param Query
    * @return pqxx::result
    */
-  // pqxx::result UQuery(const std::string &Query);
+  pqxx::result WQuery(const std::string &Query);
 
 private:
-  std::mutex m_DatabaseMutex;
   pqxx::connection m_DatabaseConnection;
   pqxx::nontransaction m_DatabaseNonTransaction;
-  // pqxx::work m_DatabaseWorker{m_DatabaseConnection};
 };
 
 #endif

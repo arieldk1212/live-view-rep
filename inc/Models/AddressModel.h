@@ -1,31 +1,102 @@
 #ifndef ADDRESS_MODEL_H
 #define ADDRESS_MODEL_H
 
-#include "BaseModel.h"
-#include "Config/DatabaseCommands.h"
+#include "BaseLogModel.h"
+#include "Core/Address/Address.h"
+#include "Core/Address/Common/Addresses.h"
+#include "Core/Address/Common/Countries.h"
+#include "Model.h"
 
-class AddressModel : BaseModel {
+class AddressModel final {
+  /**
+   * @brief in here we need to init a logger for a certain address!
+   * separate here to entites and make a list inside the model of the data? if
+   * yes, how do we extract it?
+   */
 public:
-  explicit AddressModel(std::shared_ptr<DatabaseManager> &Manager);
-  ~AddressModel() override;
+  AddressModel();
+  ~AddressModel();
 
-  const std::string GetTableName() const override { return m_TableName; }
+  [[nodiscard]] const std::string &GetTableName() const { return m_TableName; }
 
-  pqxx::result Init() override;
-  pqxx::result Add(const StringUnMap &Fields) override;
-  // pqxx::result Update(const StringUnMap &Fields) override;
-  // pqxx::result Delete(const StringUnMap &Fields) override;
+  /**
+   * @brief add record to Address table.
+   * @param Manager
+   * @param Fields
+   * @return pqxx::result
+   */
+  pqxx::result Add(SharedManager &Manager, StringUnMap Fields);
 
-private:
-  std::shared_ptr<DatabaseManager> m_DatabaseManager;
+  /**
+   * @brief Get the Address ID.
+   * @tparam Args
+   * @param Manager
+   * @param args (addressname, addressnumber)
+   * @return std::string
+   */
+  template <typename... Args>
+  [[nodiscard]] std::string GetAddressID(SharedManager &Manager,
+                                         Args &&...args) {
+    auto Result =
+        Manager->GetModelDataArgs(m_TableName, "addressname", "addressnumber",
+                                  std::forward<Args>(args)...);
+    return Result[0]["addressid"].template as<std::string>();
+  }
+
+  /**
+   * @brief update a record in the Address table.
+   * @tparam T
+   * @param Manager
+   * @param Fields
+   * @param Condition
+   * @param arg
+   * @return pqxx::result
+   */
+  template <typename T>
+  pqxx::result Update(SharedManager &Manager, const StringUnMap &Fields,
+                      const std::string &Condition, T &&arg) {
+    pqxx::params params;
+    if (Fields.size() == 1) {
+      auto field = Fields.begin();
+      params.append(field->second);
+      params.append(std::forward<T>(arg));
+      return Manager->UpdateColumn(m_TableName, field->first, Condition,
+                                   params);
+    }
+
+    for (const auto &[key, value] : Fields) {
+      params.append(value);
+    }
+    params.append(std::forward<T>(arg));
+    return Manager->UpdateColumns(m_TableName, Fields, Condition, params);
+  }
+
+  /**
+   * @brief delete a record in the Address table.
+   * @tparam T
+   * @param Manager
+   * @param Condition
+   * @param arg
+   * @return pqxx::result
+   */
+  template <typename T>
+  pqxx::result Delete(SharedManager &Manager, const std::string &Condition,
+                      T &&arg) {
+    pqxx::params params;
+    params.append(std::forward<T>(arg));
+    return Manager->DeleteRecord(m_TableName, Condition, params);
+  }
+
+  /**
+   * @brief Get the Address Data object
+   * @param Manager
+   * @param ID
+   * @return Address
+   */
+  Address GetAddressData(SharedManager &Manager, const std::string &ID);
 
 private:
   std::string m_TableName;
-  StringUnMap m_AddressFields = {
-      {"addressname",
-       DatabaseCommandToString(DatabaseFieldCommands::VarChar100Field)},
-      {"addressnumber",
-       DatabaseCommandToString(DatabaseFieldCommands::IntField)}};
 };
 
 #endif

@@ -2,16 +2,23 @@ list(APPEND sources
 App.cpp
 
 Config/Logger.cpp
-Config/Database.cpp
-Config/DatabaseManager.cpp
 Config/Config.cpp
+Config/Database.cpp
+Config/DatabasePool.cpp
+Config/DatabaseManager.cpp
 
 Core/UUID.cpp
-Core/Geo.cpp
-Core/Responses/Response.cpp
+Core/Image.cpp
+Core/Address/Address.cpp
+Core/Responses/DatabaseResponse.cpp
+Core/Location/Geolocation.cpp
+Core/Location/PlusCodes/codearea.cpp
+Core/Location/PlusCodes/openlocationcode.cpp
 
-Models/LogModel.cpp
+Models/Model.cpp
+Models/BaseLogModel.cpp
 Models/AddressModel.cpp
+Models/LocationModel.cpp
 )
 
 add_library(src STATIC ${sources})

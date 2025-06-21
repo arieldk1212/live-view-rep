@@ -1,4 +1,4 @@
-#include "../../inc/Config/Config.h"
+#include "Config/Config.h"
 
 Json Config::ReadFile(const std::filesystem::path &Path) {
   try {
@@ -7,7 +7,6 @@ Json Config::ReadFile(const std::filesystem::path &Path) {
       throw std::ios_base::failure("Unable To Open Config File.");
     }
     auto Data = Json::parse(f);
-    // f.close();
     return Data;
   } catch (const Json::exception &e) {
     std::cerr << "JSON PARSING ERROR - " << e.what();
@@ -71,7 +70,6 @@ std::string Config::TestDatabaseToString(const std::filesystem::path &Path) {
 
 std::string Config::LoggingPathToString(const std::filesystem::path &Path) {
   auto JsonData = ReadFile(Path);
-  std::string Data;
   try {
     return std::string(JsonData["LOGGING"]["path"]);
   } catch (const Json::exception &e) {

@@ -1,14 +1,9 @@
-#include "../../inc/Config/DatabaseManager.h"
+#include "Config/DatabaseManager.h"
 
 DatabaseManager::DatabaseManager(const std::string &DatabaseConnectionString)
     : m_IsConnected(true) {
-  if (DatabaseConnectionString.empty()) {
-    APP_CRITICAL("DATABASE MANAGER ERROR - EMPTY CONNECTION STRING");
-    throw std::invalid_argument("Database Connection String Empty.");
-  }
-  m_DatabaseConnectionString = DatabaseConnectionString;
   m_DatabaseManager =
-      std::make_shared<DatabaseConnection>(m_DatabaseConnectionString);
+      std::make_unique<DatabaseConnection>(DatabaseConnectionString);
   APP_INFO("DATABASE MANAGER CREATED");
 }
 
@@ -18,8 +13,23 @@ DatabaseManager::~DatabaseManager() {
   APP_CRITICAL("DATABASE MANAGER DESTROYED");
 }
 
-bool DatabaseManager::IsDatabaseConnected() {
-  return m_DatabaseManager->IsDatabaseConnected();
+void DatabaseManager::InitTimezone() {
+  try {
+    m_DatabaseManager->CrQuery("set timezone = 'Asia/Jerusalem';");
+    APP_INFO("DATABASE TIMEZONE SETTED TO - Asia/Jerusalem");
+  } catch (const std::exception &e) {
+    APP_ERROR("DATABASE TIMEZONE SET ERROR - " + std::string(e.what()));
+  }
+}
+
+void DatabaseManager::InitLogLevel() {
+  try {
+    m_DatabaseManager->CrQuery("create type log_level as enum ('DEBUG', "
+                               "'INFO', 'WARN', 'ERROR', 'CRIT');");
+    APP_INFO("DATABASE LOG LEVEL ENUM CREATED");
+  } catch (const std::exception &e) {
+    APP_ERROR("DATABASE LOG LEVEL ERROR - " + std::string(e.what()));
+  }
 }
 
 std::string
@@ -57,12 +67,6 @@ pqxx::result DatabaseManager::TruncateModel(const std::string &ModelName) {
 
 pqxx::result DatabaseManager::GetModelData(const std::string &ModelName) {
   return GetTableData(ModelName);
-}
-
-pqxx::result DatabaseManager::GetModelData(const std::string &ModelName,
-                                           const std::string &FieldName,
-                                           const std::string &FieldValue) {
-  return GetTableData(ModelName, FieldName, FieldValue);
 }
 
 pqxx::result DatabaseManager::AddColumn(const std::string &ModelName,
@@ -109,92 +113,106 @@ pqxx::result DatabaseManager::AlterColumn(const std::string &ModelName,
 
 pqxx::result DatabaseManager::InsertInto(const std::string &ModelName,
                                          const StringUnMap &Fields) {
+  int count = 0;
   std::string query;
-  std::string keys;
-  std::string values;
-  for (const auto &[key, value] : Fields) {
-    keys.append(key).append(", ");
-    values.append("'").append(value).append("', ");
-  }
-  if (!Fields.empty()) {
-    keys.pop_back();
-    keys.pop_back();
-    values.pop_back();
-    values.pop_back();
-  }
+  std::string values_count;
+  pqxx::params params;
   query.append(DatabaseCommandToString(DatabaseQueryCommands::InsertInto))
       .append(ModelName)
-      .append(" (")
-      .append(keys)
-      .append(") values (")
-      .append(values)
-      .append(");");
+      .append(" (");
+  for (const auto &[key, value] : Fields) {
+    count += 1;
+    query.append(key).append(", ");
+    values_count.append("$").append(std::to_string(count)).append(", ");
+    params.append(value);
+  }
+  if (!Fields.empty()) {
+    query.pop_back();
+    query.pop_back();
+    values_count.pop_back();
+    values_count.pop_back();
+  }
+  query.append(") values (").append(values_count).append(")");
   APP_INFO("DATA INSERTED TO TABLE - " + ModelName);
-  return MCrQuery(ModelName, query);
+  return MCrQuery(ModelName, query, params);
 }
 
 pqxx::result DatabaseManager::UpdateColumn(const std::string &ModelName,
-                                           const std::string &FieldName,
-                                           const std::string &NewFieldValue,
-                                           const std::string &Condition) {
+                                           std::string_view FieldName,
+                                           std::string_view Condition,
+                                           const pqxx::params &Params) {
   std::string query;
   query.append(DatabaseCommandToString(DatabaseQueryCommands::Update))
       .append(ModelName)
       .append(" set ")
       .append(FieldName)
-      .append(" = '")
-      .append(NewFieldValue)
-      .append("' where ")
+      .append("=$1 where ")
       .append(Condition)
-      .append(";");
+      .append("=$2");
   APP_INFO("COLUMN DATA UPDATED - " + ModelName);
-  return MCrQuery(ModelName, query);
+  return MCrQuery(ModelName, query, Params);
 }
 
 pqxx::result DatabaseManager::UpdateColumns(const std::string &ModelName,
                                             const StringUnMap &Fields,
-                                            const std::string &Condition) {
+                                            std::string_view Condition,
+                                            const pqxx::params &Params) {
+  int count = 0;
   std::string query;
   query.append(DatabaseCommandToString(DatabaseQueryCommands::Update))
       .append(ModelName)
       .append(" set ");
   for (const auto &[key, value] : Fields) {
-    query.append(key).append(" = '").append(value).append("', ");
+    count += 1;
+    query.append(key).append("=$").append(std::to_string(count)).append(", ");
   }
-  query.pop_back();
-  query.pop_back();
-  query += " where " + Condition + ";";
+  if (!Fields.empty()) {
+    query.pop_back();
+    query.pop_back();
+  }
+  query.append(" where ").append(Condition).append("=$").append(
+      std::to_string(++count));
   APP_INFO("COLUMNS DATA UPDATED - " + ModelName);
-  return MCrQuery(ModelName, query);
+  return MCrQuery(ModelName, query, Params);
 }
 
-// pqxx::result DatabaseManager::MUQuery(const std::string &TableName,
-//                                     const std::string &query) {
-//   try {
-//     auto Response = m_DatabaseManager->UQuery(query);
-//     APP_INFO("UQUERRY COMMITTED AT - " + TableName);
-//     return Response;
-//   } catch (pqxx::sql_error const &e) {
-//     APP_ERROR("UQUERY ERROR AT TABLE - " + TableName + " " +
-//               std::string(e.what()));
-//     return {};
-//   } catch (std::exception const &e) {
-//     APP_ERROR("UQUERY GENERAL ERROR - " + std::string(e.what()));
-//     return {};
-//   }
-// }
+pqxx::result DatabaseManager::DeleteRecord(const std::string &ModelName,
+                                           std::string_view Condition,
+                                           const pqxx::params &Params) {
+  std::string query;
+  query.append("delete from ")
+      .append(ModelName)
+      .append(" where ")
+      .append(Condition)
+      .append("=$1");
+  APP_INFO("RECORD DATA DELETED IN - " + ModelName);
+  return MCrQuery(ModelName, query, Params);
+}
 
 pqxx::result DatabaseManager::MCrQuery(const std::string &TableName,
-                                       const std::string &query) {
+                                       const std::string &Query) {
   try {
-    auto Response = m_DatabaseManager->CrQuery(query);
-    return Response;
+    return m_DatabaseManager->CrQuery(Query);
   } catch (pqxx::sql_error const &e) {
     APP_ERROR("MCRQUERY ERROR AT TABLE - " + TableName + " " +
               std::string(e.what()));
     return {};
   } catch (std::exception const &e) {
     APP_ERROR("MCRQUERY GENERAL ERROR - " + std::string(e.what()));
+    return {};
+  }
+}
+
+pqxx::result DatabaseManager::MWQuery(const std::string &TableName,
+                                      const std::string &query) {
+  try {
+    return m_DatabaseManager->WQuery(query);
+  } catch (pqxx::sql_error const &e) {
+    APP_ERROR("MWQUERY ERROR AT TABLE - " + TableName + " " +
+              std::string(e.what()));
+    return {};
+  } catch (std::exception const &e) {
+    APP_ERROR("MWQUERY GENERAL ERROR - " + std::string(e.what()));
     return {};
   }
 }
@@ -226,27 +244,6 @@ pqxx::result DatabaseManager::GetTableData(const std::string &TableName) {
     return MCrQuery(TableName, query);
   } catch (const std::exception &e) {
     APP_ERROR("ERROR AT GETTABLEDATA1 FUNCTION - " + TableName + " - " +
-              std::string(e.what()));
-    return {};
-  }
-}
-
-pqxx::result DatabaseManager::GetTableData(const std::string &TableName,
-                                           const std::string &TableFieldName,
-                                           const std::string &TableFieldValue) {
-  std::string query;
-  query.append(DatabaseCommandToString(DatabaseQueryCommands::SelectAll))
-      .append(TableName)
-      .append(" where ")
-      .append(TableFieldName)
-      .append("=")
-      .append("'")
-      .append(TableFieldValue)
-      .append("'");
-  try {
-    return MCrQuery(TableName, query);
-  } catch (const std::exception &e) {
-    APP_ERROR("ERROR AT GETTABLEDATA2 FUNCTION - " + TableName + " - " +
               std::string(e.what()));
     return {};
   }

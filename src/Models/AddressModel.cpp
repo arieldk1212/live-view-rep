@@ -1,23 +1,43 @@
-#include "../../inc/Models/AddressModel.h"
+#include "Models/AddressModel.h"
 
-BaseModel::~BaseModel() {}
-
-AddressModel::AddressModel(std::shared_ptr<DatabaseManager> &Manager)
-    : m_DatabaseManager(Manager), m_TableName("Address") {
+AddressModel::AddressModel() : m_TableName("Address") {
   APP_INFO("ADDRESS MODEL RESOURCE CREATED");
 }
 
 AddressModel::~AddressModel() {
-  m_DatabaseManager.reset();
   APP_CRITICAL("ADDRESS MODEL RESOURCE DESTROYED");
 }
 
-pqxx::result AddressModel::Init() {
-  APP_INFO("ADDRESS TABLE CREATED VIA ADDRESS MODEL");
-  return m_DatabaseManager->AddModel(m_TableName, m_AddressFields);
+pqxx::result AddressModel::Add(SharedManager &Manager, StringUnMap Fields) {
+  auto Country = Fields.at("country");
+  auto Address = Fields.at("addressname");
+
+  auto ValidateAddress = Addresses::GetAddress(Address);
+  auto ValidateCountry = Countries::GetCountry(Country);
+
+  Addresses::ValidateAddress(ValidateAddress);
+  Countries::ValidateCountry(ValidateCountry);
+
+  if (!ValidateAddress && !ValidateCountry) {
+    /**
+     * @attention in frontend, check for result validation with try.
+     */
+    return {};
+  }
+
+  /**
+   * @todo after that, we can change the names or add a field (which will be
+   * null as default) with the correct fields, shortname/fullname. maybe even
+   * do the same for the number? city? or maybe mix them all up together?
+   */
+
+  // Fields.at("addressfullname") = ValidateAddress.FullAddress;
+  // Fields.at("country") = ValidateCountry.FullCountry;
+
+  return Manager->InsertInto(m_TableName, Fields);
 }
 
-pqxx::result AddressModel::Add(const StringUnMap &Fields) {
-  auto Result = m_DatabaseManager->InsertInto(m_TableName, Fields);
-  return Result;
+Address AddressModel::GetAddressData(SharedManager &Manager,
+                                     const std::string &ID) {
+  return Address(Manager, ID);
 }

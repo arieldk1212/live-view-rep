@@ -12,21 +12,24 @@
  * the ORM.
  */
 
-enum class DatabaseFieldCommands {
-  SerialPrimaryKeyField,
+enum class DatabaseFieldCommands : std::uint8_t {
+  PrimaryKey,
+  UUIDPrimaryKey,
   IntField,
+  IntNotNullField,
+  FloatFieldNotNull,
   CharField,
-  VarChar100Field
+  TextArray,
+  VarChar100Field,
+  VarChar100NotNullField,
+  SerialPrimaryKeyField,
+  TimestampField,
+  LogEnumNotNullField,
+
+  FkAddress,
 };
 
-const std::unordered_map<DatabaseFieldCommands, std::string>
-    DatabaseFieldStrings = {
-        {DatabaseFieldCommands::SerialPrimaryKeyField, "serial primary key"},
-        {DatabaseFieldCommands::IntField, "int"},
-        {DatabaseFieldCommands::CharField, "char"},
-        {DatabaseFieldCommands::VarChar100Field, "varchar(100)"}};
-
-enum class DatabaseQueryCommands {
+enum class DatabaseQueryCommands : std::uint8_t {
   SelectAll,
   AlterRole,
   AlterColumn,
@@ -44,6 +47,28 @@ enum class DatabaseQueryCommands {
   DropDrop,
   DropTruncate,
 };
+
+const std::unordered_map<DatabaseFieldCommands, std::string>
+    DatabaseFieldStrings = {
+        {DatabaseFieldCommands::PrimaryKey, "primary key"},
+        {DatabaseFieldCommands::UUIDPrimaryKey,
+         "uuid primary key default gen_random_uuid()"},
+        {DatabaseFieldCommands::IntField, "int"},
+        {DatabaseFieldCommands::IntNotNullField, "int not null"},
+        {DatabaseFieldCommands::FloatFieldNotNull, "float not null"},
+        {DatabaseFieldCommands::CharField, "char"},
+        {DatabaseFieldCommands::TextArray, "text[]"},
+        {DatabaseFieldCommands::VarChar100Field, "varchar(100)"},
+        {DatabaseFieldCommands::VarChar100NotNullField,
+         "varchar(100) not null"},
+        {DatabaseFieldCommands::SerialPrimaryKeyField, "serial primary key"},
+        {DatabaseFieldCommands::TimestampField,
+         "timestamp default current_timestamp "},
+        {DatabaseFieldCommands::LogEnumNotNullField, "log_level not null"},
+
+        {DatabaseFieldCommands::FkAddress,
+         "constraint fkaddress foreign key (addressid) references "
+         "address(addressid) on delete set null"}};
 
 const std::unordered_map<DatabaseQueryCommands, std::string>
     DatabaseQueryCommandsStrings = {
@@ -65,8 +90,8 @@ const std::unordered_map<DatabaseQueryCommands, std::string>
         {DatabaseQueryCommands::DropDrop, "drop table "},
         {DatabaseQueryCommands::DropTruncate, "truncate table "}};
 
-template <typename DatabaseCommand>
-constexpr std::string DatabaseCommandToString(DatabaseCommand Command) {
+template <typename DatabaseCommandType>
+constexpr std::string DatabaseCommandToString(DatabaseCommandType Command) {
   if constexpr (std::is_same_v<decltype(Command), DatabaseFieldCommands>) {
     auto it = DatabaseFieldStrings.find(Command);
     if (it != DatabaseFieldStrings.end()) {
@@ -80,7 +105,7 @@ constexpr std::string DatabaseCommandToString(DatabaseCommand Command) {
     }
   }
   APP_ERROR("DATABASE COMMAND ERROR");
-  return "error";
+  return "";
 }
 
 #endif
