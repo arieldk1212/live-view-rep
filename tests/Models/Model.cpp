@@ -21,7 +21,7 @@ TEST_F(ModelTest, ModelStatusTest) {
   auto ResultAddressLog = SchemeAddressLog.contains("addressid");
 
   auto SchemeAddressLocation = scheme->GetSchema("AddressLocation");
-  auto ResultAddressLocation = SchemeAddressLog.contains("addressid");
+  auto ResultAddressLocation = SchemeAddressLocation.contains("addressid");
 
   EXPECT_TRUE(ResultLog);
   EXPECT_TRUE(ResultAddress);
