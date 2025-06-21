@@ -1,6 +1,7 @@
 #include "Models/AddressModel.h"
 #include "../Test.h"
 #include "Config/DatabasePool.h"
+#include <gtest/gtest.h>
 
 class AddressModelTest : public ::testing::Test {
 protected:
@@ -52,7 +53,7 @@ TEST_F(AddressModelTest, AddressAddRecordTest) {
                                    {"country", "israel"}});
   auto PostData = ManagerConnection->GetModelData("Address");
 
-  EXPECT_NE(PreData, PostData);
+  EXPECT_FALSE(PreData == PostData);
 }
 
 TEST_F(AddressModelTest, AddressUpdateColumnRecordTest) {
@@ -68,7 +69,7 @@ TEST_F(AddressModelTest, AddressUpdateColumnRecordTest) {
                   18);
   auto PostData = ManagerConnection->GetModelData("Address");
 
-  EXPECT_NE(PreData, PostData);
+  EXPECT_FALSE(PreData == PostData);
 }
 
 TEST_F(AddressModelTest, AddressUpdateColumnsRecordTest) {
@@ -85,7 +86,7 @@ TEST_F(AddressModelTest, AddressUpdateColumnsRecordTest) {
                   "addressnumber", 18);
   auto PostData = ManagerConnection->GetModelData("Address");
 
-  EXPECT_NE(PreData, PostData);
+  EXPECT_FALSE(PreData == PostData);
 }
 
 TEST_F(AddressModelTest, AddressDeleteRecordTest) {
@@ -100,7 +101,7 @@ TEST_F(AddressModelTest, AddressDeleteRecordTest) {
   Address->Delete(ManagerConnection, "addressnumber", 18);
   auto PostData = ManagerConnection->GetModelData("Address");
 
-  EXPECT_NE(PreData, PostData);
+  EXPECT_FALSE(PreData == PostData);
 }
 
 TEST_F(AddressModelTest, AddressPerformanceTest) {
