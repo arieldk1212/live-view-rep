@@ -35,7 +35,7 @@ jobs:
       run: |
         git clone https://github.com/microsoft/vcpkg.git
         ./vcpkg/bootstrap-vcpkg.sh
-        ./vcpkg/vcpkg install --feature-flags=manifests
+        ./vcpkg/vcpkg install --feature-flags=manifests --disable-metrics=true
       working-directory: ${{ github.workspace }}
 
     - name: Configure CMake
