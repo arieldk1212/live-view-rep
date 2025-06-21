@@ -28,8 +28,10 @@ public:
   void Init();
   ImageResponse UploadToS3(const std::string &ImageUrl);
   ImageResponse DeleteFromS3(const std::string &ImageUrl);
-  const std::string GetS3URL() const { return m_ImageUrl; }
-  const std::filesystem::path GetImagePath() const { return m_ImageFolderPath; }
+  const std::string &GetS3URL() const { return m_ImageUrl; }
+  const std::filesystem::path &GetImagePath() const {
+    return m_ImageFolderPath;
+  }
 
 private:
   StringUnMap m_ImageRelation;

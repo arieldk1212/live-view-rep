@@ -5,6 +5,7 @@
 
 #include <mutex>
 #include <pqxx/pqxx>
+#include <string_view>
 
 class DatabaseManager;
 
